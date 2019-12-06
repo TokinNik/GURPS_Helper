@@ -5,6 +5,5 @@ import toothpick.config.Module
 class UIModule : Module() {
     init {
 
-
     }
 }

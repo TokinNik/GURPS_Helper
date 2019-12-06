@@ -22,6 +22,18 @@ class CharacterFragmentViewModel: ViewModel() {
     val characterById: LiveData<Character>
         get() = characterByIdEvent
 
+    val error: LiveData<Throwable>
+        get() = errorEvent
+
+    val deleteComplete: LiveData<Boolean>
+        get() = deleteCompleteEvent
+
+    private var charactersEvent: MutableLiveData<List<Character>> = MutableLiveData()
+
+    private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
+
+    private var deleteCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
+
     private var characterByIdEvent: MutableLiveData<Character> = MutableLiveData()
 
 
@@ -41,7 +53,7 @@ class CharacterFragmentViewModel: ViewModel() {
                 }
 
                 override fun onError(e: Throwable) {
-                    //err
+                    errorEvent.value = e
                 }
             })
     }
@@ -53,10 +65,10 @@ class CharacterFragmentViewModel: ViewModel() {
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError {
-                //Error action
+                errorEvent.value = it
             }
             .doOnComplete {
-                //Complete action
+                deleteCompleteEvent.value = true
             }
             .subscribe()
     }

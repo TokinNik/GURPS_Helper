@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
@@ -14,8 +15,11 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.example.testapp.R
 import com.example.testapp.db.entity.Character
+import com.example.testapp.ui.character.observe.CharacterFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_character_edit.*
 import toothpick.Toothpick
+import toothpick.ktp.delegate.inject
+import toothpick.smoothie.viewmodel.installViewModelBinding
 
 class CharacterEditFragment : Fragment() {
 
@@ -23,7 +27,7 @@ class CharacterEditFragment : Fragment() {
 
     private var mode: String = "update"//need enum?
 
-    private lateinit var viewModel: CharacterEditFragmentViewModel
+    private val viewModel: CharacterEditFragmentViewModel by inject()
 
     private val navController: NavController?
         get() = activity?.let { Navigation.findNavController(it, R.id.nav_host_fragment) }
@@ -37,17 +41,28 @@ class CharacterEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Toothpick.inject(this, Toothpick.openScope("APP"))
 
-        viewModel = ViewModelProviders.of(this).get(CharacterEditFragmentViewModel::class.java)
+        val scope = Toothpick.openScope("APP")
+        scope.installViewModelBinding<CharacterEditFragmentViewModel>(this)
+        scope.inject(this)
 
         mode = arguments?.getString("mode", "update") ?: "update"
         if (mode == "update"){
             val id = arguments?.getInt("id", 0) ?: 0
             viewModel.getCharacterById(id)
             observeCharacterById()
+            observeUpdateComplete()
+        } else {
+            observeAddComplete()
         }
 
+        observeErrors()
+
+        initOnClick()
+    }
+
+    private fun initOnClick()
+    {
         button_cancel.setOnClickListener {
             val bundle = Bundle()
             bundle.putInt("id", character.id)
@@ -74,6 +89,24 @@ class CharacterEditFragment : Fragment() {
         viewModel.characterById.observe(this, Observer {
             character = it
             setDataInFields(it)
+        })
+    }
+
+    private fun observeUpdateComplete() {
+        viewModel.updateComplete.observe(this, Observer {
+            Toast.makeText(activity, "updated", Toast.LENGTH_SHORT).show()
+        })
+    }
+    private fun observeAddComplete() {
+        viewModel.addComplete.observe(this, Observer {
+            Toast.makeText(activity, "added", Toast.LENGTH_SHORT).show()
+        })
+    }
+
+    private fun observeErrors() {
+        viewModel.error.observe(this, Observer {
+            Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
+            println("ERROR!!! $it")
         })
     }
 

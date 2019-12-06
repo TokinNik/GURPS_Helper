@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -13,6 +14,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
 import com.example.testapp.RxTest
+import com.example.testapp.SelectableData
 import com.example.testapp.db.entity.Character
 import com.example.testapp.ui.character.CharacterItem
 import com.xwray.groupie.GroupAdapter
@@ -22,13 +24,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.android.synthetic.main.item_character.*
+import kotlinx.coroutines.selects.select
 import toothpick.Toothpick
+import toothpick.ktp.delegate.inject
+import toothpick.smoothie.viewmodel.installViewModelBinding
 
 class StartFragment : Fragment() {
 
-    private lateinit var viewModel: StartFragmentViewModel
+    private val viewModel: StartFragmentViewModel by inject()
 
-    private var currentCharacter = 1
+    private var currentCharacter = Character()
+    private var currentSelect = -1
     private var maxCharacter = 1
 
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
@@ -47,15 +53,17 @@ class StartFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        Toothpick.inject(this, Toothpick.openScope("APP"))
-
-        viewModel = ViewModelProviders.of(this).get(StartFragmentViewModel::class.java)
+        val scope = Toothpick.openScope("APP")
+        scope.installViewModelBinding<StartFragmentViewModel>(this)
+        scope.inject(this)
 
         button_rx.setOnClickListener { onClickRx() }
         button_add.setOnClickListener { onClickAdd() }
         button_delete.setOnClickListener { onClickDelete() }
 
         observeCharacters()
+        observeErrors()
+        observeDeleteComplete()
 
         recyclerViewInit()
     }
@@ -73,8 +81,25 @@ class StartFragment : Fragment() {
 
     private fun recyclerViewInit() {
         groupAdapter.setOnItemClickListener { item, view ->
-            view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
-            currentCharacter = (item as CharacterItem).character.id
+
+            if ((item as CharacterItem).character.select) {
+                item.character.select = false
+                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
+            }
+            else {
+                item.character.select = true
+                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
+
+                if (currentSelect >= 0){
+                    val prevItem = groupAdapter.getGroupAtAdapterPosition(currentSelect) as CharacterItem
+                    prevItem.character.select = false
+                    prevItem.rootView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
+                }
+            }
+            currentCharacter = item.character.data
+            groupAdapter.notifyItemChanged(currentSelect)
+            currentSelect = groupAdapter.getAdapterPosition(item)
+            groupAdapter.notifyItemChanged(currentSelect)
         }
         recyclerView_characters.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -91,19 +116,21 @@ class StartFragment : Fragment() {
     private fun addItems(items: List<Character>)
     {
         groupAdapter.clear()
+
         for(i in items)
         {
             groupAdapter.apply {
                 add(
                     CharacterItem(
-                        character = i,
+                        character = SelectableData(i),
+                        colorActive = ContextCompat.getColor(context!!, R.color.colorAccent),
+                        colorInactive = ContextCompat.getColor(context!!, R.color.colorPrimary),
                         onClick = {
                             val bundle = Bundle()
-                            bundle.putInt("id", it.id)
+                            bundle.putInt("id", it.data.id)
                             navController.navigate(R.id.action_startFragment_to_characterFragment, bundle)
                         })
                 )
-
             }
         }
     }
@@ -135,6 +162,19 @@ class StartFragment : Fragment() {
         viewModel.characters.observe(this, Observer {
             addItems(it)
             maxCharacter = it.size
+        })
+    }
+
+    private fun observeDeleteComplete() {
+        viewModel.deleteComplete.observe(this, Observer {
+            Toast.makeText(activity, "deleted", Toast.LENGTH_SHORT).show()
+        })
+    }
+
+    private fun observeErrors() {
+        viewModel.error.observe(this, Observer {
+            Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
+            println("ERROR!!! $it")
         })
     }
 }

@@ -22,7 +22,17 @@ class StartFragmentViewModel: ViewModel() {
     val characters: LiveData<List<Character>>
         get() = charactersEvent
 
+    val error: LiveData<Throwable>
+        get() = errorEvent
+
+    val deleteComplete: LiveData<Boolean>
+        get() = deleteCompleteEvent
+
     private var charactersEvent: MutableLiveData<List<Character>> = MutableLiveData()
+
+    private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
+
+    private var deleteCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -40,26 +50,17 @@ class StartFragmentViewModel: ViewModel() {
             }.let(compositeDisposable::add)
     }
 
-    fun deleteCharacter(characterId: Int) {
+    fun deleteCharacter(character: Character) {
         Observable.create { emitter: ObservableEmitter<Int> ->
-            dbm.getDB().characterDao().getById(characterId)
-                .subscribe(object : DisposableSingleObserver<Character>(){
-                override fun onSuccess(t: Character) {
-                    dbm.db.characterDao().delete(t)
-                }
-
-                override fun onError(e: Throwable) {
-                    //err
-                }
-            })
+            dbm.db.characterDao().delete(character)
             emitter.onNext(1)
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError {
-                //Error action
+                errorEvent.value = it
             }
             .doOnComplete {
-                //Complete action
+                deleteCompleteEvent.value = true
             }
             .subscribe()
     }

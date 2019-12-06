@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
@@ -14,12 +15,14 @@ import com.example.testapp.R
 import com.example.testapp.db.entity.Character
 import kotlinx.android.synthetic.main.fragment_character.*
 import toothpick.Toothpick
+import toothpick.ktp.delegate.inject
+import toothpick.smoothie.viewmodel.installViewModelBinding
 
 class CharacterFragment : Fragment() {
 
     private lateinit var character: Character
 
-    private lateinit var viewModel: CharacterFragmentViewModel
+    private val viewModel: CharacterFragmentViewModel by inject()
 
     private val navController: NavController?
         get() = activity?.let { Navigation.findNavController(it, R.id.nav_host_fragment) }
@@ -31,23 +34,29 @@ class CharacterFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_character, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        Toothpick.inject(this, Toothpick.openScope("APP"))
+        val scope = Toothpick.openScope("APP")
+        scope.installViewModelBinding<CharacterFragmentViewModel>(this)
+        scope.inject(this)
 
-        viewModel = ViewModelProviders.of(this).get(CharacterFragmentViewModel::class.java)
+        observeCharacterById()
+        observeErrors()
+        observeDeleteComplete()
 
+        initOnClick()
+
+        val id = arguments?.getInt("id", 0) ?: 0
+        viewModel.getCharacterById(id)
+    }
+    private fun initOnClick()
+    {
         button_edit.setOnClickListener {
             val bundle = Bundle()
             bundle.putInt("id", character.id)
             navController?.navigate(R.id.action_characterFragment_to_characterEditFragment, bundle)
         }
-
-        observeCharacterById()
-
-        val id = arguments?.getInt("id", 0) ?: 0
-        viewModel.getCharacterById(id)
     }
 
     private fun observeCharacterById()
@@ -55,6 +64,19 @@ class CharacterFragment : Fragment() {
         viewModel.characterById.observe(this, Observer {
             character = it
             setDataInFields(it)
+        })
+    }
+
+    private fun observeDeleteComplete() {
+        viewModel.deleteComplete.observe(this, Observer {
+            Toast.makeText(activity, "deleted", Toast.LENGTH_SHORT).show()
+        })
+    }
+
+    private fun observeErrors() {
+        viewModel.error.observe(this, Observer {
+            Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
+            println("ERROR!!! $it")
         })
     }
 

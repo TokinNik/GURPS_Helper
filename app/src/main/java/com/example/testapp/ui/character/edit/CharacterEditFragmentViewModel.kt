@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.testapp.db.entity.Character
 import com.example.testapp.di.DBModelImpl
+import com.example.testapp.util.RollUtil
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,14 +20,34 @@ class CharacterEditFragmentViewModel(): ViewModel() {
 
     private val dbm: DBModelImpl by inject()
 
+    private val rollUtil: RollUtil by inject()
+
     val characterById: LiveData<Character>
         get() = characterByIdEvent
+
+    val error: LiveData<Throwable>
+        get() = errorEvent
+
+    val addComplete: LiveData<Boolean>
+        get() = addCompleteEvent
+
+    val updateComplete: LiveData<Boolean>
+        get() = updateCompleteEvent
+
+    private var charactersEvent: MutableLiveData<List<Character>> = MutableLiveData()
+
+    private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
+
+    private var addCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
+
+    private var updateCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
 
     private var characterByIdEvent: MutableLiveData<Character> = MutableLiveData()
 
     init {
         val appScope = Toothpick.openScope("APP")
         Toothpick.inject(this, appScope)
+        println(rollUtil.roll3D6())
     }
 
     fun getCharacterById(id: Int)
@@ -40,7 +61,7 @@ class CharacterEditFragmentViewModel(): ViewModel() {
                 }
 
                 override fun onError(e: Throwable) {
-                    //err
+                    errorEvent.value = e
                 }
             })
     }
@@ -52,10 +73,10 @@ class CharacterEditFragmentViewModel(): ViewModel() {
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError {
-                //Error action
+                errorEvent.value = it
             }
             .doOnComplete {
-                //Complete action
+                addCompleteEvent.value = true
             }
             .subscribe()
     }
@@ -67,10 +88,10 @@ class CharacterEditFragmentViewModel(): ViewModel() {
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError {
-                //Error action
+                errorEvent.value = it
             }
             .doOnComplete {
-                //Complete action
+                updateCompleteEvent.value = true
             }
             .subscribe()
     }
