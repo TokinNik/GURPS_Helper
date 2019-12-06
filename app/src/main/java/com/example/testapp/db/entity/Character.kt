@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "character")
 data class Character(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
-    val name: String = "name",
-    val st: Int = 10,
-    val dx: Int = 10,
-    val iq: Int = 10,
-    val ht: Int = 10
+    var name: String = "name",
+    var st: Int = 10,
+    var dx: Int = 10,
+    var iq: Int = 10,
+    var ht: Int = 10
 )

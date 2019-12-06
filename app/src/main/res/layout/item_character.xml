@@ -14,8 +14,16 @@
 
     <TextView
         android:id="@+id/textView_item_name"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_marginLeft="10dp"
-        tools:text="name" />
+        android:layout_marginStart="10dp"
+        tools:text="name"/>
+
+    <Button
+        android:id="@+id/button_observe"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="goto" />
 </LinearLayout>

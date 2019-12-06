@@ -1,4 +1,4 @@
-package com.example.testapp.ui
+package com.example.testapp.ui.character
 
 import com.example.testapp.R
 import com.example.testapp.db.entity.Character
@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.item_character.view.*
 
 
 class CharacterItem(
-    private val character: Character,
+    val character: Character,
     private val onClick: (character: Character) -> Unit
 ) : Item() {
 
@@ -17,7 +17,7 @@ class CharacterItem(
         viewHolder.apply {
             root.textView_item_id.text = character.id.toString()
             root.textView_item_name.text = character.name
-            root.setOnClickListener {
+            root.button_observe.setOnClickListener {
                 onClick.invoke(character)
             }
         }
