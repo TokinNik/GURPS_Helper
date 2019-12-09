@@ -95,17 +95,8 @@ class CharacterEditFragment : Fragment() {
         }
 
         button_accept.setOnClickListener {
-            if (mode == "update") {
-                onClickUpdate()
-                val bundle = Bundle()
-                bundle.putInt("id", character.id)
-                val optionsBuilder = NavOptions.Builder()
-                val options = optionsBuilder.setPopUpTo(R.id.characterFragment, false).build()
-                navController?.navigate(R.id.characterFragment, bundle, options)
-            } else {
-                onClickAdd()
-                navController?.navigateUp()
-            }
+            if (mode == "update") onClickUpdate() else onClickAdd()
+            navController?.navigateUp()
         }
 
         button_add_skill.setOnClickListener {
@@ -117,7 +108,6 @@ class CharacterEditFragment : Fragment() {
                 )
             )
             groupAdapter.notifyDataSetChanged()
-            //character.skills.plus(1)
         }
     }
 

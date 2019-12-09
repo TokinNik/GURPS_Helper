@@ -35,7 +35,5 @@ class MainActivity : AppCompatActivity() {
         Toothpick.inject(this, Toothpick.openScope("APP"))
 
         viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
-
-        navController.navigate(R.id.startFragment)
     }
 }
