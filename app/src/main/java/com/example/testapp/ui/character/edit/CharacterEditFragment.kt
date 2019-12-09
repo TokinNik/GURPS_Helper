@@ -20,6 +20,7 @@ import com.example.testapp.db.entity.Skill
 import com.example.testapp.ui.character.CharacterItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import com.xwray.groupie.Section
 import kotlinx.android.synthetic.main.fragment_character_edit.*
 import kotlinx.android.synthetic.main.fragment_character_edit.textView_dx
 import kotlinx.android.synthetic.main.fragment_character_edit.textView_ht
@@ -100,14 +101,9 @@ class CharacterEditFragment : Fragment() {
         }
 
         button_add_skill.setOnClickListener {
-            groupAdapter.add(
-                SkillItem(
-                    skill = SelectableData(Skill()),
-                    colorActive = ContextCompat.getColor(context!!, R.color.colorAccent),
-                    colorInactive = ContextCompat.getColor(context!!, R.color.colorPrimary)
-                )
-            )
-            groupAdapter.notifyDataSetChanged()
+            val bundle = Bundle()
+            bundle.putString("mode", "add")
+            navController?.navigate(R.id.action_characterEditFragment_to_editSkillFragment, bundle)
         }
     }
 
@@ -123,7 +119,7 @@ class CharacterEditFragment : Fragment() {
                 view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
 
                 if (currentSelect >= 0 && currentSelect != select){
-                    val prevItem = groupAdapter.getGroupAtAdapterPosition(currentSelect) as SkillItem
+                    val prevItem = groupAdapter.getGroupAtAdapterPosition(0).getItem(currentSelect) as SkillItem
                     prevItem.skill.select = false
                     prevItem.rootView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
                 }
@@ -152,8 +148,10 @@ class CharacterEditFragment : Fragment() {
     {
         viewModel.skillById.observe(this, Observer {
             groupAdapter.clear()
+            val section = Section()
+            section.setHeader(SkillsHeaderItem())
             for (item in it) {
-                groupAdapter.add(
+                section.add(
                     SkillItem(
                         skill = SelectableData(item),
                         colorActive = ContextCompat.getColor(context!!, R.color.colorAccent),
@@ -161,6 +159,7 @@ class CharacterEditFragment : Fragment() {
                     )
                 )
             }
+            groupAdapter.add(section)
         })
     }
 
@@ -199,7 +198,8 @@ class CharacterEditFragment : Fragment() {
         textView_ht.setText(ch.ht.toString())
 
 
-        viewModel.getSkillByIds(ch.skills)
+//        viewModel.getSkillByIds(ch.skills)
+        viewModel.getAllSkills()
     }
 
     private fun getCharacterFromFields(): Character{

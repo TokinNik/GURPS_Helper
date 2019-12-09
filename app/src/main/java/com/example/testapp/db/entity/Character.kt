@@ -2,8 +2,6 @@ package com.example.testapp.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import com.example.testapp.db.converter.SkillsConverter
 
 @Entity(tableName = "character")
 data class Character(

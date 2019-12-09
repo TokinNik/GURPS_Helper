@@ -18,12 +18,12 @@ interface SkillDao {
     fun getByIds(id: List<Int>): Single<List<Skill>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(character: Skill)
+    fun insert(skill: Skill)
 
     @Update
-    fun update(character: Skill)
+    fun update(skill: Skill)
 
     @Delete
-    fun delete(character: Skill)
+    fun delete(skill: Skill)
 
 }

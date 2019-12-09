@@ -28,8 +28,6 @@ class CharacterFragmentViewModel: ViewModel() {
     val deleteComplete: LiveData<Boolean>
         get() = deleteCompleteEvent
 
-    private var charactersEvent: MutableLiveData<List<Character>> = MutableLiveData()
-
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
 
     private var deleteCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
@@ -61,7 +59,7 @@ class CharacterFragmentViewModel: ViewModel() {
     fun deleteCharacter(character: Character) {
         Observable.create { emitter: ObservableEmitter<Int> ->
             dbm.db.characterDao().delete(character)
-            emitter.onNext(1)
+            emitter.onComplete()
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError {

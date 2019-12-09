@@ -55,8 +55,9 @@ class StartFragmentViewModel: ViewModel() {
     fun deleteCharacter(character: Character) {
         Observable.create { emitter: ObservableEmitter<Int> ->
             dbm.db.characterDao().delete(character)
-            emitter.onNext(1)
-        }.subscribeOn(Schedulers.io())
+            emitter.onComplete()
+        }
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError {
                 errorEvent.value = it
@@ -70,8 +71,9 @@ class StartFragmentViewModel: ViewModel() {
     fun addSkill(skill: Skill) {
         Observable.create { emitter: ObservableEmitter<Int> ->
             dbm.db.skillDao().insert(skill)
-            emitter.onNext(1)
-        }.subscribeOn(Schedulers.io())
+            emitter.onComplete()
+        }
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError {
                 errorEvent.value = it

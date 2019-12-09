@@ -64,7 +64,7 @@ class MainActivityViewModel(): ViewModel() {
     fun addCharacter(character: Character){
         Observable.create { emitter: ObservableEmitter<Int> ->
             dbm.db.characterDao().insert(character)
-            emitter.onNext(1)
+            emitter.onComplete()
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError {
@@ -79,7 +79,7 @@ class MainActivityViewModel(): ViewModel() {
     fun updateCharacter(character: Character) {
         Observable.create { emitter: ObservableEmitter<Int> ->
             dbm.db.characterDao().update(character)
-            emitter.onNext(1)
+            emitter.onComplete()
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError {
@@ -94,7 +94,7 @@ class MainActivityViewModel(): ViewModel() {
     fun deleteCharacter(character: Character) {
         Observable.create { emitter: ObservableEmitter<Int> ->
             dbm.db.characterDao().delete(character)
-            emitter.onNext(1)
+            emitter.onComplete()
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError {
