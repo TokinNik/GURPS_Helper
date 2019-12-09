@@ -7,16 +7,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
-import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
+import com.example.testapp.SelectableData
 import com.example.testapp.db.entity.Character
-import com.example.testapp.ui.character.observe.CharacterFragmentViewModel
+import com.example.testapp.db.entity.Skill
+import com.example.testapp.ui.character.CharacterItem
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_character_edit.*
+import kotlinx.android.synthetic.main.fragment_character_edit.textView_dx
+import kotlinx.android.synthetic.main.fragment_character_edit.textView_ht
+import kotlinx.android.synthetic.main.fragment_character_edit.textView_id
+import kotlinx.android.synthetic.main.fragment_character_edit.textView_iq
+import kotlinx.android.synthetic.main.fragment_character_edit.textView_name
+import kotlinx.android.synthetic.main.fragment_character_edit.textView_st
+import kotlinx.android.synthetic.main.fragment_start.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
@@ -27,7 +38,13 @@ class CharacterEditFragment : Fragment() {
 
     private var mode: String = "update"//need enum?
 
+    private var currentSkill = Skill()
+
+    private var currentSelect = -1
+
     private val viewModel: CharacterEditFragmentViewModel by inject()
+
+    private val groupAdapter = GroupAdapter<GroupieViewHolder>()
 
     private val navController: NavController?
         get() = activity?.let { Navigation.findNavController(it, R.id.nav_host_fragment) }
@@ -57,8 +74,14 @@ class CharacterEditFragment : Fragment() {
         }
 
         observeErrors()
-
+        observeSkillById()
         initOnClick()
+
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initRecyclerView()
     }
 
     private fun initOnClick()
@@ -76,12 +99,55 @@ class CharacterEditFragment : Fragment() {
                 onClickUpdate()
                 val bundle = Bundle()
                 bundle.putInt("id", character.id)
-                navController?.navigate(R.id.characterFragment, bundle)
+                val optionsBuilder = NavOptions.Builder()
+                val options = optionsBuilder.setPopUpTo(R.id.characterFragment, false).build()
+                navController?.navigate(R.id.characterFragment, bundle, options)
             } else {
                 onClickAdd()
                 navController?.navigateUp()
             }
         }
+
+        button_add_skill.setOnClickListener {
+            groupAdapter.add(
+                SkillItem(
+                    skill = SelectableData(Skill()),
+                    colorActive = ContextCompat.getColor(context!!, R.color.colorAccent),
+                    colorInactive = ContextCompat.getColor(context!!, R.color.colorPrimary)
+                )
+            )
+            groupAdapter.notifyDataSetChanged()
+            //character.skills.plus(1)
+        }
+    }
+
+    fun initRecyclerView(){
+        groupAdapter.setOnItemClickListener { item, view ->
+            val select = groupAdapter.getAdapterPosition(item)
+            if ((item as SkillItem).skill.select) {
+                item.skill.select = false
+                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
+            }
+            else {
+                item.skill.select = true
+                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
+
+                if (currentSelect >= 0 && currentSelect != select){
+                    val prevItem = groupAdapter.getGroupAtAdapterPosition(currentSelect) as SkillItem
+                    prevItem.skill.select = false
+                    prevItem.rootView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
+                }
+            }
+            currentSkill = item.skill.data
+            groupAdapter.notifyItemChanged(currentSelect)
+            currentSelect = select
+            groupAdapter.notifyItemChanged(currentSelect)
+        }
+        recyclerView_skills.apply {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = groupAdapter
+        }
+
     }
 
     private fun observeCharacterById()
@@ -89,6 +155,22 @@ class CharacterEditFragment : Fragment() {
         viewModel.characterById.observe(this, Observer {
             character = it
             setDataInFields(it)
+        })
+    }
+
+    private fun observeSkillById()
+    {
+        viewModel.skillById.observe(this, Observer {
+            groupAdapter.clear()
+            for (item in it) {
+                groupAdapter.add(
+                    SkillItem(
+                        skill = SelectableData(item),
+                        colorActive = ContextCompat.getColor(context!!, R.color.colorAccent),
+                        colorInactive = ContextCompat.getColor(context!!, R.color.colorPrimary)
+                    )
+                )
+            }
         })
     }
 
@@ -125,6 +207,9 @@ class CharacterEditFragment : Fragment() {
         textView_dx.setText(ch.dx.toString())
         textView_iq.setText(ch.iq.toString())
         textView_ht.setText(ch.ht.toString())
+
+
+        viewModel.getSkillByIds(ch.skills)
     }
 
     private fun getCharacterFromFields(): Character{

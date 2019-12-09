@@ -1,6 +1,5 @@
 package com.example.testapp.ui.character
 
-import android.graphics.Color
 import android.view.View
 import com.example.testapp.R
 import com.example.testapp.SelectableData

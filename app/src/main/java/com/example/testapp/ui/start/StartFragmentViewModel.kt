@@ -3,7 +3,9 @@ package com.example.testapp.ui.start
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.testapp.db.SkillsAndCharacterOnSt
 import com.example.testapp.db.entity.Character
+import com.example.testapp.db.entity.Skill
 import com.example.testapp.di.DBModelImpl
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -65,4 +67,33 @@ class StartFragmentViewModel: ViewModel() {
             .subscribe()
     }
 
+    fun addSkill(skill: Skill) {
+        Observable.create { emitter: ObservableEmitter<Int> ->
+            dbm.db.skillDao().insert(skill)
+            emitter.onNext(1)
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnError {
+                errorEvent.value = it
+            }
+            .doOnComplete {
+            }
+            .subscribe()
+    }
+
+    fun getSkillsAndCharOnST()//todo delete (test)
+    {
+        dbm.getDB().characterDao().getCharactersWithSkill("st")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : DisposableSingleObserver<List<SkillsAndCharacterOnSt>>(){
+                override fun onSuccess(t: List<SkillsAndCharacterOnSt>) {
+                    println("!!!!!!!!!!! $t ")
+                }
+
+                override fun onError(e: Throwable) {
+                    errorEvent.value = e
+                }
+            })
+    }
 }

@@ -8,12 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.testapp.R
 import com.example.testapp.db.entity.Character
 import kotlinx.android.synthetic.main.fragment_character.*
+import kotlinx.android.synthetic.main.fragment_character.textView_dx
+import kotlinx.android.synthetic.main.fragment_character.textView_ht
+import kotlinx.android.synthetic.main.fragment_character.textView_id
+import kotlinx.android.synthetic.main.fragment_character.textView_iq
+import kotlinx.android.synthetic.main.fragment_character.textView_name
+import kotlinx.android.synthetic.main.fragment_character.textView_st
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
@@ -82,10 +87,11 @@ class CharacterFragment : Fragment() {
 
     private fun setDataInFields(ch: Character) {
         textView_id.text = ch.id.toString()
-        textView_name.setText(ch.name)
-        textView_st.setText(ch.st.toString())
-        textView_dx.setText(ch.dx.toString())
-        textView_iq.setText(ch.iq.toString())
-        textView_ht.setText(ch.ht.toString())
+        textView_name.text = ch.name
+        textView_st.text = ch.st.toString()
+        textView_dx.text = ch.dx.toString()
+        textView_iq.text = ch.iq.toString()
+        textView_ht.text = ch.ht.toString()
+        textView_skills.text = ch.skills.toString()
     }
 }

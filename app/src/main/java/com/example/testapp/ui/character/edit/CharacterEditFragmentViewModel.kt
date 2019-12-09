@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.testapp.db.entity.Character
+import com.example.testapp.db.entity.Skill
 import com.example.testapp.di.DBModelImpl
 import com.example.testapp.util.RollUtil
 import io.reactivex.Observable
@@ -34,6 +35,9 @@ class CharacterEditFragmentViewModel(): ViewModel() {
     val updateComplete: LiveData<Boolean>
         get() = updateCompleteEvent
 
+    val skillById: LiveData<List<Skill>>
+        get() = skillByIdEvent
+
     private var charactersEvent: MutableLiveData<List<Character>> = MutableLiveData()
 
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
@@ -43,6 +47,8 @@ class CharacterEditFragmentViewModel(): ViewModel() {
     private var updateCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
 
     private var characterByIdEvent: MutableLiveData<Character> = MutableLiveData()
+
+    private var skillByIdEvent: MutableLiveData<List<Skill>> = MutableLiveData()
 
     init {
         val appScope = Toothpick.openScope("APP")
@@ -94,5 +100,21 @@ class CharacterEditFragmentViewModel(): ViewModel() {
                 updateCompleteEvent.value = true
             }
             .subscribe()
+    }
+
+    fun getSkillByIds(id: List<Int>)
+    {
+        dbm.getDB().skillDao().getByIds(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : DisposableSingleObserver<List<Skill>>(){
+                override fun onSuccess(t: List<Skill>) {
+                    skillByIdEvent.value = t
+                }
+
+                override fun onError(e: Throwable) {
+                    errorEvent.value = e
+                }
+            })
     }
 }

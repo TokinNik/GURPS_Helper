@@ -6,6 +6,23 @@
     tools:context=".ui.character.edit.CharacterEditFragment">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/button_accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Accept" />
+
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="378dp"
         android:layout_height="wrap_content"
@@ -26,7 +43,7 @@
             android:id="@+id/textView_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="name"
+            android:text="name"
             android:inputType="text" />
 
         <EditText
@@ -34,45 +51,45 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberSigned"
-            tools:text="10" />
+            android:text="10" />
 
         <EditText
             android:id="@+id/textView_dx"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberSigned"
-            tools:text="10" />
+            android:text="10" />
 
         <EditText
             android:id="@+id/textView_iq"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberSigned"
-            tools:text="10" />
+            android:text="10" />
 
         <EditText
             android:id="@+id/textView_ht"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberSigned"
-            tools:text="10" />
+            android:text="10" />
 
-        <LinearLayout
+        <Button
+            android:id="@+id/button_add_skill"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:text="Add skill" />
 
-            <Button
-                android:id="@+id/button_accept"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Accept" />
-
-            <Button
-                android:id="@+id/button_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cancel" />
-        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_skills"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            tools:itemCount="5"
+            tools:layoutManager="GridLayoutManager"
+            tools:listitem="@layout/item_skill"
+            />
 
     </LinearLayout>
 </FrameLayout>

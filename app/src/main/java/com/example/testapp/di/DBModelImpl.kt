@@ -13,7 +13,7 @@ class DBModelImpl @Inject constructor(private val application: Application) : DB
     MainDatabase::class.java,
     "database")
 //       .allowMainThreadQueries()
-//        .fallbackToDestructiveMigration()
+        .fallbackToDestructiveMigration()
         .build()
 
     override fun getDB(): MainDatabase = db

@@ -16,6 +16,7 @@ import com.example.testapp.R
 import com.example.testapp.RxTest
 import com.example.testapp.SelectableData
 import com.example.testapp.db.entity.Character
+import com.example.testapp.db.entity.Skill
 import com.example.testapp.ui.character.CharacterItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -35,7 +36,6 @@ class StartFragment : Fragment() {
 
     private var currentCharacter = Character()
     private var currentSelect = -1
-    private var maxCharacter = 1
 
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
 
@@ -47,6 +47,7 @@ class StartFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        println("--------------------------------------START")
         return inflater.inflate(R.layout.fragment_start, container, false)
     }
 
@@ -66,6 +67,28 @@ class StartFragment : Fragment() {
         observeDeleteComplete()
 
         recyclerViewInit()
+
+
+/*        viewModel.addSkill(Skill(
+            name = "skill_1",
+            mainAttribute = "st",
+            level = 1
+        ))
+        viewModel.addSkill(Skill(
+            name = "skill_2",
+            mainAttribute = "dx",
+            level = 1
+        ))
+        viewModel.addSkill(Skill(
+            name = "skill_3",
+            mainAttribute = "iq",
+            level = 1
+        ))
+        viewModel.addSkill(Skill(
+            name = "skill_4",
+            mainAttribute = "ht",
+            level = 1
+        ))*/
     }
 
     private fun onClickAdd() {
@@ -81,7 +104,7 @@ class StartFragment : Fragment() {
 
     private fun recyclerViewInit() {
         groupAdapter.setOnItemClickListener { item, view ->
-
+            val select = groupAdapter.getAdapterPosition(item)
             if ((item as CharacterItem).character.select) {
                 item.character.select = false
                 view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
@@ -90,7 +113,7 @@ class StartFragment : Fragment() {
                 item.character.select = true
                 view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
 
-                if (currentSelect >= 0){
+                if (currentSelect >= 0 && currentSelect != select){
                     val prevItem = groupAdapter.getGroupAtAdapterPosition(currentSelect) as CharacterItem
                     prevItem.character.select = false
                     prevItem.rootView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
@@ -98,7 +121,7 @@ class StartFragment : Fragment() {
             }
             currentCharacter = item.character.data
             groupAdapter.notifyItemChanged(currentSelect)
-            currentSelect = groupAdapter.getAdapterPosition(item)
+            currentSelect = select
             groupAdapter.notifyItemChanged(currentSelect)
         }
         recyclerView_characters.apply {
@@ -124,7 +147,7 @@ class StartFragment : Fragment() {
                     CharacterItem(
                         character = SelectableData(i),
                         colorActive = ContextCompat.getColor(context!!, R.color.colorAccent),
-                        colorInactive = ContextCompat.getColor(context!!, R.color.colorPrimary),
+                        colorInactive = ContextCompat.getColor(context!!, R.color.colorPrimary),//todo move to val?
                         onClick = {
                             val bundle = Bundle()
                             bundle.putInt("id", it.data.id)
@@ -161,7 +184,6 @@ class StartFragment : Fragment() {
     {
         viewModel.characters.observe(this, Observer {
             addItems(it)
-            maxCharacter = it.size
         })
     }
 
