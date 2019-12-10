@@ -94,4 +94,12 @@ class SkillEditFragmentViewModel(): ViewModel() {
             }
             .subscribe()
     }
+
+    fun clearEvents()
+    {
+        errorEvent =  MutableLiveData()
+        addCompleteEvent =  MutableLiveData()
+        updateCompleteEvent =  MutableLiveData()
+        skillByIdEvent =  MutableLiveData()
+    }
 }

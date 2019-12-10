@@ -46,6 +46,8 @@ class CharacterFragment : Fragment() {
         scope.installViewModelBinding<CharacterFragmentViewModel>(this)
         scope.inject(this)
 
+        viewModel.clearEvents()
+
         observeCharacterById()
         observeErrors()
         observeDeleteComplete()

@@ -98,4 +98,11 @@ class StartFragmentViewModel: ViewModel() {
                 }
             })
     }
+
+    fun clearEvents()
+    {
+        errorEvent =  MutableLiveData()
+        deleteCompleteEvent =  MutableLiveData()
+        charactersEvent =  MutableLiveData()
+    }
 }

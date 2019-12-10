@@ -43,6 +43,8 @@ class SkillEditFragment : Fragment() {
         scope.installViewModelBinding<SkillEditFragmentViewModel>(this)
         scope.inject(this)
 
+        viewModel.clearEvents()
+
         mode = arguments?.getString("mode", "update") ?: "update"
         if (mode == "update"){
             val id = arguments?.getInt("id", 0) ?: 0

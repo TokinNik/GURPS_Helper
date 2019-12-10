@@ -14,10 +14,10 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
-import com.example.testapp.SelectableData
+import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill
-import com.example.testapp.ui.character.CharacterItem
+import com.example.testapp.ui.skill.SkillItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
@@ -28,7 +28,6 @@ import kotlinx.android.synthetic.main.fragment_character_edit.textView_id
 import kotlinx.android.synthetic.main.fragment_character_edit.textView_iq
 import kotlinx.android.synthetic.main.fragment_character_edit.textView_name
 import kotlinx.android.synthetic.main.fragment_character_edit.textView_st
-import kotlinx.android.synthetic.main.fragment_start.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
@@ -63,6 +62,8 @@ class CharacterEditFragment : Fragment() {
         val scope = Toothpick.openScope("APP")
         scope.installViewModelBinding<CharacterEditFragmentViewModel>(this)
         scope.inject(this)
+
+        viewModel.clearEvents()
 
         mode = arguments?.getString("mode", "update") ?: "update"
         if (mode == "update"){
@@ -101,9 +102,7 @@ class CharacterEditFragment : Fragment() {
         }
 
         button_add_skill.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString("mode", "add")
-            navController?.navigate(R.id.action_characterEditFragment_to_editSkillFragment, bundle)
+
         }
     }
 
@@ -133,7 +132,6 @@ class CharacterEditFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = groupAdapter
         }
-
     }
 
     private fun observeCharacterById()
@@ -149,7 +147,6 @@ class CharacterEditFragment : Fragment() {
         viewModel.skillById.observe(this, Observer {
             groupAdapter.clear()
             val section = Section()
-            section.setHeader(SkillsHeaderItem())
             for (item in it) {
                 section.add(
                     SkillItem(

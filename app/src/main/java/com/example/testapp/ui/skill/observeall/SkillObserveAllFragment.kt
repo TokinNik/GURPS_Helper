@@ -12,10 +12,10 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
-import com.example.testapp.SelectableData
+import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Skill
-import com.example.testapp.ui.character.edit.SkillItem
-import com.example.testapp.ui.character.edit.SkillsHeaderItem
+import com.example.testapp.ui.skill.SkillItem
+import com.example.testapp.ui.skill.SkillsHeaderItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
@@ -51,9 +51,12 @@ class SkillObserveAllFragment : Fragment() {
         scope.installViewModelBinding<SkillObserveAllFragmentViewModel>(this)
         scope.inject(this)
 
+        viewModel.clearEvents()
+
         observeErrors()
         observeSkillById()
         observeSkills()
+        observeDeleteComplete()
 
         initOnClick()
         initRecyclerView()
@@ -102,7 +105,23 @@ class SkillObserveAllFragment : Fragment() {
         viewModel.skills.observe(this, Observer {
             groupAdapter.clear()
             val section = Section()
-            section.setHeader(SkillsHeaderItem())
+            section.setHeader(SkillsHeaderItem(
+                onClickAdd = {
+                    val bundle = Bundle()
+                    bundle.putString("mode", "add")
+                    navController?.navigate(
+                        R.id.action_skillObserveAllFragment_to_editSkillFragment,
+                        bundle
+                    )
+                },
+                onClickDelete = {
+                    if (currentSelect >= 0) {
+                        viewModel.deleteSkill(currentSkill)
+                        currentSkill = Skill()
+                        currentSelect = -1
+                    }
+                }
+            ))
             for (item in it) {
                 section.add(
                     SkillItem(
@@ -118,8 +137,14 @@ class SkillObserveAllFragment : Fragment() {
 
     private fun observeSkillById()
     {
-        viewModel.skillById.observe(this, Observer {
+        /*viewModel.skillById.observe(this, Observer {
 
+        })*/
+    }
+
+    private fun observeDeleteComplete() {
+        viewModel.deleteComplete.observe(this, Observer {
+            Toast.makeText(activity, "deleted", Toast.LENGTH_SHORT).show()
         })
     }
 

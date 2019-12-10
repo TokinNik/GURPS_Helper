@@ -1,8 +1,8 @@
-package com.example.testapp.ui.character.edit
+package com.example.testapp.ui.skill
 
 import android.view.View
 import com.example.testapp.R
-import com.example.testapp.SelectableData
+import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Skill
 
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder

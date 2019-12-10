@@ -71,4 +71,10 @@ class CharacterFragmentViewModel: ViewModel() {
             .subscribe()
     }
 
+    fun clearEvents()
+    {
+        errorEvent =  MutableLiveData()
+        deleteCompleteEvent =  MutableLiveData()
+        characterByIdEvent =  MutableLiveData()
+    }
 }

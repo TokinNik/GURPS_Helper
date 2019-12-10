@@ -29,8 +29,6 @@ import toothpick.Toothpick
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: MainActivityViewModel
-
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     private val navController: NavController
@@ -58,8 +56,6 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-        viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
     }
 
     override fun onSupportNavigateUp(): Boolean {

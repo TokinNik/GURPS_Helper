@@ -1,4 +1,4 @@
-package com.example.testapp
+package com.example.testapp.ui
 
 class SelectableData<T>(
     var data: T,

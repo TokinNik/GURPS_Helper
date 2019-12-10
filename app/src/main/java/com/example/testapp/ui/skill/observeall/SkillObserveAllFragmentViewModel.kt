@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.testapp.db.entity.Skill
 import com.example.testapp.di.DBModelImpl
+import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -26,11 +28,16 @@ class SkillObserveAllFragmentViewModel: ViewModel() {
     val skillById: LiveData<Skill>
         get() = skillByIdEvent
 
+    val deleteComplete: LiveData<Boolean>
+        get() = deleteCompleteEvent
+
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
 
     private var skillsEvent: MutableLiveData<List<Skill>> = MutableLiveData()
 
     private var skillByIdEvent: MutableLiveData<Skill> = MutableLiveData()
+
+    private var deleteCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -61,5 +68,29 @@ class SkillObserveAllFragmentViewModel: ViewModel() {
             .subscribe {
                 skillsEvent.value = it
             }.let(compositeDisposable::add)
+    }
+
+    fun deleteSkill(currentSkill: Skill) {
+        Observable.create { emitter: ObservableEmitter<Int> ->
+            dbm.db.skillDao().delete(currentSkill)
+            emitter.onComplete()
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnError {
+                errorEvent.value = it
+            }
+            .doOnComplete {
+                deleteCompleteEvent.value = true
+            }
+            .subscribe()
+    }
+
+    fun clearEvents()
+    {
+        errorEvent =  MutableLiveData()
+        deleteCompleteEvent =  MutableLiveData()
+        skillByIdEvent =  MutableLiveData()
+        skillsEvent =  MutableLiveData()
     }
 }

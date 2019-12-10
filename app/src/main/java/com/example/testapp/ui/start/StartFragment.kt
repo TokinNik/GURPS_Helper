@@ -8,15 +8,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
 import com.example.testapp.RxTest
-import com.example.testapp.SelectableData
+import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
-import com.example.testapp.db.entity.Skill
 import com.example.testapp.ui.character.CharacterItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -24,8 +22,6 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_start.*
-import kotlinx.android.synthetic.main.item_character.*
-import kotlinx.coroutines.selects.select
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
@@ -47,7 +43,6 @@ class StartFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        println("--------------------------------------START")
         return inflater.inflate(R.layout.fragment_start, container, false)
     }
 
@@ -57,6 +52,8 @@ class StartFragment : Fragment() {
         val scope = Toothpick.openScope("APP")
         scope.installViewModelBinding<StartFragmentViewModel>(this)
         scope.inject(this)
+
+        viewModel.clearEvents()
 
         button_rx.setOnClickListener { onClickRx() }
         button_add.setOnClickListener { onClickAdd() }
@@ -68,27 +65,8 @@ class StartFragment : Fragment() {
 
         recyclerViewInit()
 
+        viewModel.getItems()
 
-/*        viewModel.addSkill(Skill(
-            name = "skill_1",
-            mainAttribute = "st",
-            level = 1
-        ))
-        viewModel.addSkill(Skill(
-            name = "skill_2",
-            mainAttribute = "dx",
-            level = 1
-        ))
-        viewModel.addSkill(Skill(
-            name = "skill_3",
-            mainAttribute = "iq",
-            level = 1
-        ))
-        viewModel.addSkill(Skill(
-            name = "skill_4",
-            mainAttribute = "ht",
-            level = 1
-        ))*/
     }
 
     private fun onClickAdd() {
@@ -99,7 +77,9 @@ class StartFragment : Fragment() {
 
     private fun onClickDelete() {
         viewModel.deleteCharacter(currentCharacter)
-        updateItems()
+        currentCharacter = Character()
+        currentSelect = -1
+        //updateItems()
     }
 
     private fun recyclerViewInit() {
@@ -128,12 +108,6 @@ class StartFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = groupAdapter
         }
-        updateItems()
-    }
-
-    private fun updateItems()
-    {
-        viewModel.getItems()
     }
 
     private fun addItems(items: List<Character>)
@@ -160,7 +134,7 @@ class StartFragment : Fragment() {
 
     private fun onClickRx() {
         val observable = Observable.create(RxTest())
-
+        progressBar.visibility = View.VISIBLE
         val x = observable.subscribeOn(Schedulers.io())//??? x
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError { println(it) }
@@ -177,6 +151,7 @@ class StartFragment : Fragment() {
                 },
                 {
                     //dispose
+                    //it.dispose()
                 })
     }
 

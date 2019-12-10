@@ -127,4 +127,13 @@ class CharacterEditFragmentViewModel(): ViewModel() {
                 skillByIdEvent.value = it
             }.let(compositeDisposable::add)
     }
+
+    fun clearEvents()
+    {
+        errorEvent =  MutableLiveData()
+        addCompleteEvent =  MutableLiveData()
+        skillByIdEvent =  MutableLiveData()
+        characterByIdEvent =  MutableLiveData()
+        updateCompleteEvent =  MutableLiveData()
+    }
 }

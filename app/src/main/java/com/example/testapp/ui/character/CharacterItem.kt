@@ -2,7 +2,7 @@ package com.example.testapp.ui.character
 
 import android.view.View
 import com.example.testapp.R
-import com.example.testapp.SelectableData
+import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
