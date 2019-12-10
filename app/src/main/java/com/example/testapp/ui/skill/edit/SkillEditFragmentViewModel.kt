@@ -1,4 +1,4 @@
-package com.example.testapp.ui.skill
+package com.example.testapp.ui.skill.edit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

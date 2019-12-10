@@ -1,4 +1,4 @@
-package com.example.testapp.ui.skill
+package com.example.testapp.ui.skill.edit
 
 
 import android.os.Bundle
@@ -17,7 +17,7 @@ import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
 
-class EditSkillFragment : Fragment() {
+class SkillEditFragment : Fragment() {
 
     private var mode: String = "update"//need enum?
 

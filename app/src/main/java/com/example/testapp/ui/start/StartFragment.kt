@@ -39,8 +39,8 @@ class StartFragment : Fragment() {
 
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
 
-    private val navController: NavController
-        get() = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
+    private val navController: NavController?
+        get() = activity?.let { Navigation.findNavController(it, R.id.nav_host_fragment) }
 
 
     override fun onCreateView(
@@ -94,7 +94,7 @@ class StartFragment : Fragment() {
     private fun onClickAdd() {
         val bundle = Bundle()
         bundle.putString("mode", "add")
-        navController.navigate(R.id.action_startFragment_to_characterEditFragment, bundle)
+        navController?.navigate(R.id.action_startFragment_to_characterEditFragment, bundle)
     }
 
     private fun onClickDelete() {
@@ -151,7 +151,7 @@ class StartFragment : Fragment() {
                         onClick = {
                             val bundle = Bundle()
                             bundle.putInt("id", it.data.id)
-                            navController.navigate(R.id.action_startFragment_to_characterFragment, bundle)
+                            navController?.navigate(R.id.action_startFragment_to_characterFragment, bundle)
                         })
                 )
             }

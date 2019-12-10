@@ -48,7 +48,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_rx"
         tools:itemCount="10"
-        tools:layoutManager="GridLayoutManager"
+        tools:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/item_character" />
 
     <Button

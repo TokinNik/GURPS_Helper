@@ -21,6 +21,10 @@
             android:id="@+id/action_startFragment_to_characterEditFragment"
             app:destination="@id/characterEditFragment"
             app:launchSingleTop="true" />
+        <action
+            android:id="@+id/action_startFragment_to_skillObserveAllFragment"
+            app:destination="@id/skillObserveAllFragment"
+            app:launchSingleTop="true" />
     </fragment>
     <fragment
         android:id="@+id/characterFragment"
@@ -44,7 +48,11 @@
     </fragment>
     <fragment
         android:id="@+id/editSkillFragment"
-        android:name="com.example.testapp.ui.skill.EditSkillFragment"
+        android:name="com.example.testapp.ui.skill.edit.SkillEditFragment"
         android:label="fragment_edit_skill"
         tools:layout="@layout/fragment_skill_edit" />
+    <fragment
+        android:id="@+id/skillObserveAllFragment"
+        android:name="com.example.testapp.ui.skill.observeall.SkillObserveAllFragment"
+        android:label="SkillObserveAllFragment" />
 </navigation>
