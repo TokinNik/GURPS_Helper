@@ -11,7 +11,6 @@ import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableObserver
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import toothpick.Toothpick
@@ -36,8 +35,8 @@ class CharacterEditFragmentViewModel(): ViewModel() {
     val updateComplete: LiveData<Boolean>
         get() = updateCompleteEvent
 
-    val skillById: LiveData<List<Skill>>
-        get() = skillByIdEvent
+    val skillByIds: LiveData<List<Skill>>
+        get() = skillByIdsEvent
 
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
 
@@ -47,7 +46,7 @@ class CharacterEditFragmentViewModel(): ViewModel() {
 
     private var characterByIdEvent: MutableLiveData<Character> = MutableLiveData()
 
-    private var skillByIdEvent: MutableLiveData<List<Skill>> = MutableLiveData()
+    private var skillByIdsEvent: MutableLiveData<List<Skill>> = MutableLiveData()
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -110,7 +109,7 @@ class CharacterEditFragmentViewModel(): ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : DisposableSingleObserver<List<Skill>>(){
                 override fun onSuccess(t: List<Skill>) {
-                    skillByIdEvent.value = t
+                    skillByIdsEvent.value = t
                 }
 
                 override fun onError(e: Throwable) {
@@ -124,7 +123,7 @@ class CharacterEditFragmentViewModel(): ViewModel() {
         dbm.getDB().skillDao().getAll()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                skillByIdEvent.value = it
+                skillByIdsEvent.value = it
             }.let(compositeDisposable::add)
     }
 
@@ -132,7 +131,7 @@ class CharacterEditFragmentViewModel(): ViewModel() {
     {
         errorEvent =  MutableLiveData()
         addCompleteEvent =  MutableLiveData()
-        skillByIdEvent =  MutableLiveData()
+        skillByIdsEvent =  MutableLiveData()
         characterByIdEvent =  MutableLiveData()
         updateCompleteEvent =  MutableLiveData()
     }

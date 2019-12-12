@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -17,6 +18,7 @@ import com.example.testapp.R
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill
+import com.example.testapp.ui.character.choiseskill.ChoiceSkillFragment
 import com.example.testapp.ui.skill.SkillItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -69,14 +71,13 @@ class CharacterEditFragment : Fragment() {
         if (mode == "update"){
             val id = arguments?.getInt("id", 0) ?: 0
             viewModel.getCharacterById(id)
-            observeCharacterById()
-            observeUpdateComplete()
-        } else {
-            observeAddComplete()
         }
 
+        observeAddComplete()
+        observeCharacterById()
+        observeUpdateComplete()
         observeErrors()
-        observeSkillById()
+        observeSkillByIds()
         initOnClick()
 
     }
@@ -97,12 +98,24 @@ class CharacterEditFragment : Fragment() {
         }
 
         button_accept.setOnClickListener {
-            if (mode == "update") onClickUpdate() else onClickAdd()
-            navController?.navigateUp()
+            if (mode == "update"){
+                onClickUpdate()
+            } else {
+                onClickAdd()
+                //navController?.navigateUp()
+            }
         }
 
         button_add_skill.setOnClickListener {
-
+            val selectSkillDialog = ChoiceSkillFragment(character.skills)
+            selectSkillDialog.setTargetFragment(this, 1)
+            selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
+            selectSkillDialog.onClickAccept = {
+                character.skills = it
+                viewModel.getSkillByIds(it)
+                selectSkillDialog.dismiss()
+            }
+            selectSkillDialog.show(fragmentManager!!, null)
         }
     }
 
@@ -142,9 +155,9 @@ class CharacterEditFragment : Fragment() {
         })
     }
 
-    private fun observeSkillById()
+    private fun observeSkillByIds()
     {
-        viewModel.skillById.observe(this, Observer {
+        viewModel.skillByIds.observe(this, Observer {
             groupAdapter.clear()
             val section = Section()
             for (item in it) {
@@ -195,8 +208,8 @@ class CharacterEditFragment : Fragment() {
         textView_ht.setText(ch.ht.toString())
 
 
-//        viewModel.getSkillByIds(ch.skills)
-        viewModel.getAllSkills()
+        viewModel.getSkillByIds(ch.skills)
+//        viewModel.getAllSkills()
     }
 
     private fun getCharacterFromFields(): Character{

@@ -13,4 +13,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="dialogFragmentStyle" parent="android:Theme.Material.Light.DialogWhenLarge">
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowMinWidthMajor">75%</item>
+        <item name="android:windowMinWidthMinor">75%</item>
+    </style>
+
 </resources>
