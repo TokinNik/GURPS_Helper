@@ -4,7 +4,7 @@
     android:id="@+id/layout_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorWhite"
     android:layout_margin="5dp"
     android:padding="5dp">
 
@@ -32,9 +32,10 @@
         android:layout_marginStart="10dp"
         tools:text="name"/>
 
-    <Button
-        android:id="@+id/button_observe"
-        android:layout_width="100dp"
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:id="@+id/button_observe"
         android:text="goto" />
 </LinearLayout>

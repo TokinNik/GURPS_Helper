@@ -9,16 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/button_accept"
+        <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:id="@+id/button_accept"
             android:text="Accept" />
 
-        <Button
-            android:id="@+id/button_cancel"
+        <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:id="@+id/button_cancel"
             android:text="Cancel" />
     </LinearLayout>
 
@@ -74,10 +76,12 @@
             android:inputType="numberSigned"
             android:text="10" />
 
-        <Button
-            android:id="@+id/button_add_skill"
-            android:layout_width="match_parent"
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:id="@+id/button_add_skill"
+            android:layout_gravity="end"
             android:text="Add skill" />
 
         <androidx.recyclerview.widget.RecyclerView

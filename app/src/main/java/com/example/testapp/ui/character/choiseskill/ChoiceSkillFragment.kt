@@ -71,7 +71,7 @@ class ChoiceSkillFragment(
     }
 
     private fun initRecyclerView(){
-        groupAdapter.setOnItemClickListener { item, view ->
+        groupAdapter.setOnItemClickListener { item, _ ->
             if ((item as ChoiceSkillItem).skill.select) {
                 item.skill.select = false
             } else {

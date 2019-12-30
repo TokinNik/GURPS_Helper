@@ -121,12 +121,13 @@ class StartFragment : Fragment() {
                     CharacterItem(
                         character = SelectableData(i),
                         colorActive = ContextCompat.getColor(context!!, R.color.colorAccent),
-                        colorInactive = ContextCompat.getColor(context!!, R.color.colorPrimary),//todo move to val?
+                        colorInactive = ContextCompat.getColor(context!!, R.color.colorWhite),//todo move to val?
                         onClick = {
                             val bundle = Bundle()
                             bundle.putInt("id", it.data.id)
                             navController?.navigate(R.id.action_startFragment_to_characterFragment, bundle)
-                        })
+                        }
+                    )
                 )
             }
         }
@@ -138,10 +139,11 @@ class StartFragment : Fragment() {
         val x = observable.subscribeOn(Schedulers.io())//??? x
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError { println(it) }
-            .subscribe({
+            .subscribe(
+                {
                 textView.text = "Next = ${it}"
                 println(it)
-            },
+                },
                 {
                     textView.text = "Error!!!"
                 },
@@ -152,7 +154,8 @@ class StartFragment : Fragment() {
                 {
                     //dispose
                     //it.dispose()
-                })
+                }
+            )
     }
 
     private fun observeCharacters()

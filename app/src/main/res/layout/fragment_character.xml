@@ -58,10 +58,12 @@
             android:layout_height="wrap_content"
             tools:text="blablabla, okokok" />
 
-        <Button
-            android:id="@+id/button_edit"
-            android:layout_width="match_parent"
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:id="@+id/button_edit"
+            android:layout_gravity="end"
             android:text="Edit" />
     </LinearLayout>
 
