@@ -51,7 +51,9 @@ class MainActivity : AppCompatActivity() {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.startFragment, R.id.skillObserveAllFragment
+                R.id.startFragment,
+                R.id.skillObserveAllFragment,
+                R.id.battleFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

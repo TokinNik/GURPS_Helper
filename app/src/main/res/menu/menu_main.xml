@@ -9,5 +9,8 @@
         <item android:id="@+id/skillObserveAllFragment"
             android:title="All Skills"
             />
+        <item android:id="@+id/battleFragment"
+            android:title="Battle Manager"
+            />
     </group>
 </menu>

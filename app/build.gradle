@@ -31,7 +31,7 @@ android {
         jvmTarget = "1.8"
     }
 }
-ext{
+ext {
     room_version = "1.1.1"
     lifcycle_version = "1.1.1"
     navigation_version = "2.2.0-rc03"

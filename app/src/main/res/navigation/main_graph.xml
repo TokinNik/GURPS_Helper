@@ -25,6 +25,9 @@
             android:id="@+id/action_startFragment_to_skillObserveAllFragment"
             app:destination="@id/skillObserveAllFragment"
             app:launchSingleTop="true" />
+        <action
+            android:id="@+id/action_startFragment_to_battleFragment"
+            app:destination="@id/battleFragment" />
     </fragment>
     <fragment
         android:id="@+id/characterFragment"
@@ -66,4 +69,9 @@
         android:name="com.example.testapp.ui.character.choiseskill.ChoiceSkillFragment"
         android:label="fragment_choice_skill"
         tools:layout="@layout/fragment_choice_skill" />
+    <fragment
+        android:id="@+id/battleFragment"
+        android:name="com.example.testapp.ui.battle.BattleFragment"
+        android:label="fragment_battle"
+        tools:layout="@layout/fragment_battle" />
 </navigation>
