@@ -16,47 +16,12 @@
         android:layout_marginRight="16dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="123" />
 
-        <TextView
-            android:id="@+id/textView_name"
+        <include layout="@layout/card_character_all"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="name" />
+            />
 
-        <TextView
-            android:id="@+id/textView_st"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="10" />
-
-        <TextView
-            android:id="@+id/textView_dx"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="10" />
-
-        <TextView
-            android:id="@+id/textView_iq"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="10" />
-
-        <TextView
-            android:id="@+id/textView_ht"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="10" />
-
-        <TextView
-            android:id="@+id/textView_skills"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="blablabla, okokok" />
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"

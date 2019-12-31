@@ -12,13 +12,8 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.testapp.R
 import com.example.testapp.db.entity.Character
+import kotlinx.android.synthetic.main.card_character_all.*
 import kotlinx.android.synthetic.main.fragment_character.*
-import kotlinx.android.synthetic.main.fragment_character.textView_dx
-import kotlinx.android.synthetic.main.fragment_character.textView_ht
-import kotlinx.android.synthetic.main.fragment_character.textView_id
-import kotlinx.android.synthetic.main.fragment_character.textView_iq
-import kotlinx.android.synthetic.main.fragment_character.textView_name
-import kotlinx.android.synthetic.main.fragment_character.textView_st
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
