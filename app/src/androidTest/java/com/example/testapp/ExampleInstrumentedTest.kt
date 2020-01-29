@@ -2,6 +2,7 @@ package com.example.testapp
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.testapp.util.RollUtil
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,5 +21,11 @@ class ExampleInstrumentedTest {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.testapp", appContext.packageName)
+    }
+
+    @Test
+    fun rollTest() {
+        val rollvalue = RollUtil().roll3D6(+1)
+        assertTrue(rollvalue in 4..19)
     }
 }

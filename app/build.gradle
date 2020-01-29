@@ -6,6 +6,39 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'jacoco-android'
+
+jacoco {
+    toolVersion = "0.8.4"
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
+jacocoAndroidUnitTestReport {
+    csv.enabled false
+    html.enabled true
+    xml.enabled true
+}
+
+jacocoAndroidUnitTestReport {
+    excludes += [ '**/R.class',
+                           '**/R$*.class',
+                           '**/BuildConfig.*',
+                           '**/Manifest*.*',
+                           '**/AndroidManifest.xml',
+                           '**/*Test*.*',
+                           'android/**/*.*',
+                           'androidx/**/*.*',
+                           '**/*Fragment.*',
+                           '**/*Activity.*',
+                           '**/*Api.*',
+                           '**/di/**/*.class',
+                           '**/db/**/*.class',
+                           '**/ui/**/*.class' ]
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -22,6 +55,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            testCoverageEnabled = true
+        }
     }
     compileOptions {
         sourceCompatibility = 1.8
@@ -34,7 +70,7 @@ android {
 ext {
     room_version = "1.1.1"
     lifcycle_version = "1.1.1"
-    navigation_version = "2.2.0-rc03"
+    navigation_version = "2.2.0-rc04"
     toothpick_version = "3.0.0"
     groupie_version = "2.7.0"
 }
@@ -58,6 +94,7 @@ dependencies {
 
     implementation "android.arch.lifecycle:extensions:$lifcycle_version"
     implementation "android.arch.lifecycle:reactivestreams:$lifcycle_version"
+    //noinspection LifecycleAnnotationProcessorWithJava8
     kapt "android.arch.lifecycle:compiler:$lifcycle_version"
 
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
