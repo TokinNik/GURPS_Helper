@@ -83,12 +83,18 @@ class CharacterFragment : Fragment() {
     }
 
     private fun setDataInFields(ch: Character) {
-        textView_id.text = ch.id.toString()
-        textView_name.text = ch.name
-        textView_st.text = ch.st.toString()
-        textView_dx.text = ch.dx.toString()
-        textView_iq.text = ch.iq.toString()
-        textView_ht.text = ch.ht.toString()
+        character_card_id.text = ch.id.toString()
+        character_card_name.text = ch.name
+        character_card_st.text = ch.st.toString()
+        character_card_dx.text = ch.dx.toString()
+        character_card_iq.text = ch.iq.toString()
+        character_card_ht.text = ch.ht.toString()
+        character_card_hp.text = ch.hp.toString()
+        character_card_move.text = ch.move.toString()
+        character_card_speed.text = ch.speed.toString()
+        character_card_will.text = ch.will.toString()
+        character_card_per.text = ch.per.toString()
+        character_card_fp.text = ch.fp.toString()
         textView_skills.text = ch.skills.toString()
     }
 }

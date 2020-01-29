@@ -1,13 +1,299 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.character.edit.CharacterEditFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/character_edit_image"
+            android:layout_width="wrap_content"
+            android:layout_height="173dp"
+            android:layout_weight="1"
+            app:srcCompat="@mipmap/ic_launcher_round" />
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:flexDirection="row"
+            app:flexWrap="wrap">
+
+            <TextView
+                android:id="@+id/character_edit_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="Name: name" />
+
+            <TextView
+                android:id="@+id/character_edit__age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="Age: 22" />
+
+            <TextView
+                android:id="@+id/character_edit_player_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="Player name: Nik" />
+
+            <TextView
+                android:id="@+id/character_edit_world"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="World: world" />
+
+            <TextView
+                android:id="@+id/character_edit_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="State: state" />
+
+            <TextView
+                android:id="@+id/character_edit_eye"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="Eye: black" />
+
+            <TextView
+                android:id="@+id/character_edit_hairs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="Hairs: black" />
+
+            <TextView
+                android:id="@+id/character_edit_skin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="Skin: white" />
+
+            <TextView
+                android:id="@+id/character_edit_race"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="Race: human" />
+
+            <TextView
+                android:id="@+id/character_edit_sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="Sex: M" />
+
+            <TextView
+                android:id="@+id/character_edit_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="Weight: 60" />
+
+            <TextView
+                android:id="@+id/character_edit_height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="Height: 1.8" />
+
+            <TextView
+                android:id="@+id/character_edit_main_hand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="Main hand: right" />
+
+            <TextView
+                android:id="@+id/character_edit_tl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="TL: 0" />
+
+            <TextView
+                android:id="@+id/character_edit_sm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="SM: 0" />
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/character_edit_id_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/id"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/character_edit_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                tools:text="123" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/character_edit_st_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/st"
+                android:textStyle="bold" />
+
+            <include layout="@layout/stat_counter" android:id="@+id/character_edit_st_counter"/>
+
+            <TextView
+                android:id="@+id/character_edit_hp_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/hp"
+                android:textStyle="bold" />
+
+            <include layout="@layout/stat_counter" android:id="@+id/character_edit_hp_counter"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/character_edit_dx_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/dx"
+                android:textStyle="bold" />
+
+            <include layout="@layout/stat_counter" android:id="@+id/character_edit_dx_counter"/>
+
+            <TextView
+                android:id="@+id/character_edit_move_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/move"
+                android:textStyle="bold" />
+
+            <include layout="@layout/stat_counter" android:id="@+id/character_edit_move_counter"/>
+
+            <TextView
+                android:id="@+id/character_edit_speed_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/speed"
+                android:textStyle="bold" />
+
+            <include layout="@layout/stat_counter" android:id="@+id/character_edit_speed_counter"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/character_edit_iq_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/iq"
+                android:textStyle="bold" />
+
+            <include layout="@layout/stat_counter" android:id="@+id/character_edit_iq_counter"/>
+
+            <TextView
+                android:id="@+id/character_edit_will_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/will"
+                android:textStyle="bold" />
+
+            <include layout="@layout/stat_counter" android:id="@+id/character_edit_will_counter"/>
+
+            <TextView
+                android:id="@+id/character_edit_per_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/per"
+                android:textStyle="bold" />
+
+            <include layout="@layout/stat_counter" android:id="@+id/character_edit_per_counter"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/character_edit_ht_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/ht"
+                android:textStyle="bold" />
+
+            <include layout="@layout/stat_counter" android:id="@+id/character_edit_ht_counter"/>
+
+            <TextView
+                android:id="@+id/character_edit_fp_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/fp"
+                android:textStyle="bold" />
+
+            <include layout="@layout/stat_counter" android:id="@+id/character_edit_fp_counter"/>
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
@@ -26,55 +312,14 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="378dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textView_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="123" />
-
-        <EditText
-            android:id="@+id/textView_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="name"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/textView_st"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberSigned"
-            android:text="10" />
-
-        <EditText
-            android:id="@+id/textView_dx"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberSigned"
-            android:text="10" />
-
-        <EditText
-            android:id="@+id/textView_iq"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberSigned"
-            android:text="10" />
-
-        <EditText
-            android:id="@+id/textView_ht"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="numberSigned"
-            android:text="10" />
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
@@ -96,4 +341,4 @@
             />
 
     </LinearLayout>
-</FrameLayout>
+</LinearLayout>

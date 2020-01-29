@@ -7,6 +7,7 @@ import com.example.testapp.db.SkillsAndCharacterOnSt
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill
 import com.example.testapp.di.DBModelImpl
+import com.example.testapp.ui.RxViewModel
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,7 +18,7 @@ import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 
 
-class StartFragmentViewModel: ViewModel() {
+class StartFragmentViewModel: RxViewModel() {
 
     private val dbm: DBModelImpl by inject()
 
@@ -35,8 +36,6 @@ class StartFragmentViewModel: ViewModel() {
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
 
     private var deleteCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
-
-    private val compositeDisposable = CompositeDisposable()
 
     init {
         val appScope = Toothpick.openScope("APP")

@@ -18,8 +18,8 @@ import com.example.testapp.db.entity.Character
 import com.example.testapp.ui.character.CharacterItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_start.*
 import toothpick.Toothpick
@@ -32,6 +32,9 @@ class StartFragment : Fragment() {
 
     private var currentCharacter = Character()
     private var currentSelect = -1
+
+    private var counter = 1
+    private val disposeBag = CompositeDisposable()
 
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
 
@@ -69,6 +72,11 @@ class StartFragment : Fragment() {
 
     }
 
+    override fun onStop() {
+        super.onStop()
+        disposeBag.dispose()
+    }
+
     private fun onClickAdd() {
         val bundle = Bundle()
         bundle.putString("mode", "add")
@@ -76,9 +84,10 @@ class StartFragment : Fragment() {
     }
 
     private fun onClickDelete() {
-        viewModel.deleteCharacter(currentCharacter)
-        currentCharacter = Character()
-        currentSelect = -1
+        //viewModel.deleteCharacter(currentCharacter)
+        //currentCharacter = Character()
+        //currentSelect = -1
+        disposeBag.clear()
         //updateItems()
     }
 
@@ -134,28 +143,31 @@ class StartFragment : Fragment() {
     }
 
     private fun onClickRx() {
-        val observable = Observable.create(RxTest())
+        if (disposeBag.size() > 0)
+            return
         progressBar.visibility = View.VISIBLE
-        val x = observable.subscribeOn(Schedulers.io())//??? x
+        val rxt = RxTest()
+        rxt.rxTimerRoll()//rxCreateRollWithTime(5)
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnError { println(it) }
+            //.filter { it > 10 }
             .subscribe(
                 {
-                textView.text = "Next = ${it}"
+                textView.text = "Next = ${it} (${counter++})"
                 println(it)
                 },
                 {
                     textView.text = "Error!!!"
                 },
                 {
-                    textView.text = "Complete!!!"
+                    //textView.text = "Complete!!!"
                     progressBar.visibility = View.INVISIBLE
                 },
                 {
                     //dispose
                     //it.dispose()
                 }
-            )
+            ).let(disposeBag::add)
     }
 
     private fun observeCharacters()

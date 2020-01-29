@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">TestApp</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="st">ST</string>
+    <string name="dx">DX</string>
+    <string name="iq">IQ</string>
+    <string name="ht">HT</string>
+    <string name="hp">HP</string>
+    <string name="move">Move</string>
+    <string name="speed">Speed</string>
+    <string name="will">Will</string>
+    <string name="per">Per</string>
+    <string name="fp">FP</string>
+    <string name="id">ID</string>
+    <string name="skills">Skills</string>
+    <string name="minus">-</string>
+    <string name="plus">+</string>
+
 </resources>
