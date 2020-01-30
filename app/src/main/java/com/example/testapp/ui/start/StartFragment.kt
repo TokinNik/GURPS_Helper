@@ -17,6 +17,7 @@ import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
 import com.example.testapp.ui.character.CharacterItem
 import com.example.testapp.util.GCSParser
+import com.example.testapp.util.GurpsCalculations
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -80,7 +81,7 @@ class StartFragment : Fragment() {
     }
 
     private fun onClickAdd() {
-        val parser = GCSParser(activity!!)
+        val parser = GCSParser()
        // parser.parseGCStoLog("test")
         val character = parser.parseGCStoData("Valdemar Marshall")
         viewModel.addCharacter(character)

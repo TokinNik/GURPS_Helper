@@ -13,3 +13,9 @@ class RollUtil@Inject constructor(){
     fun roll3D6(negative: Int, positive: Int) = roll3D6() - negative + positive
 
 }
+
+class Dice(val k: Int = 1, val value: Int = 0) {
+    override fun toString(): String {
+        return "${k}k${if (value > 0) "+" else ""}${if (value != 0) value else ""}"
+    }
+}

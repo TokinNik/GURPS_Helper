@@ -1,11 +1,9 @@
 package com.example.testapp.util
 
-import android.R
 import android.content.Context
 import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
-import android.widget.Toast
 import com.example.testapp.db.entity.Character
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
@@ -14,9 +12,9 @@ import java.io.FileInputStream
 import java.io.InputStreamReader
 
 
-class GCSParser (private val context: Context) {
+class GCSParser {
 
-    val TAG = "GCS_PARSER"
+    private val TAG = "GCS_PARSER"
 
     fun parseGCStoLog(fileName: String) {
         try {

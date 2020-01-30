@@ -216,7 +216,7 @@ class CharacterEditFragment : Fragment() {
     }
 
     private fun setDataInFields(ch: Character) {
-        character_edit_id.text = ch.id.toString()
+        character_edit_id.text = ch.id.toString()//todo and this too
         character_edit_name.text = ch.name
         character_edit_player_name.text = ch.playerName
         character_edit_world.text = ch.world
@@ -248,7 +248,7 @@ class CharacterEditFragment : Fragment() {
 
     private fun getCharacterFromFields(): Character{
         return character.apply {
-            name = character_edit_name.text.toString()
+            name = character_edit_name.text.toString()//todo and this too
             world = character_edit_world.text.toString()
             tl = character_edit_tl.text.toString()
             age = character_edit_age.text.toString()
