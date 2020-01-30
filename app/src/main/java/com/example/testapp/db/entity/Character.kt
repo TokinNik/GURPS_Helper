@@ -16,7 +16,7 @@ data class Character(
     var hairs: String = "-",
     var skin: String = "-",
     var race: String = "human",
-    var sex: String = "male",
+    var gender: String = "male",
     var description: String = "-",
     //characteristics
     var height: String = "0",
@@ -24,6 +24,10 @@ data class Character(
     var mainHand: String = "right",
     var tl: String = "0",
     var sm: String = "0",
+    var totalPoints: Int = 0,
+    var earnPoints: Int = 0,
+    var disadvPoints: Int = 0,
+    var quirksPoints: Int = 0,
     //base stats
     var st: Int = 10,
     var dx: Int = 10,

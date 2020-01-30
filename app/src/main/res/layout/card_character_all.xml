@@ -34,7 +34,7 @@
                 tools:text="Name: name" />
 
             <TextView
-                android:id="@+id/character_card__age"
+                android:id="@+id/character_card_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
@@ -94,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                tools:text="Sex: M" />
+                tools:text="Gender: M" />
 
             <TextView
                 android:id="@+id/character_card_weight"

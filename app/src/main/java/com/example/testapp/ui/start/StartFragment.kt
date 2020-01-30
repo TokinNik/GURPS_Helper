@@ -16,6 +16,7 @@ import com.example.testapp.RxTest
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
 import com.example.testapp.ui.character.CharacterItem
+import com.example.testapp.util.GCSParser
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -65,6 +66,7 @@ class StartFragment : Fragment() {
         observeCharacters()
         observeErrors()
         observeDeleteComplete()
+        observeAddComplete()
 
         recyclerViewInit()
 
@@ -74,21 +76,30 @@ class StartFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        disposeBag.dispose()
+        disposeBag.clear()
     }
 
     private fun onClickAdd() {
-        val bundle = Bundle()
-        bundle.putString("mode", "add")
-        navController?.navigate(R.id.action_startFragment_to_characterEditFragment, bundle)
+        val parser = GCSParser(activity!!)
+       // parser.parseGCStoLog("test")
+        val character = parser.parseGCStoData("Valdemar Marshall")
+        viewModel.addCharacter(character)
+//        val bundle = Bundle()
+//        bundle.putString("mode", "add")
+//        navController?.navigate(R.id.action_startFragment_to_characterEditFragment, bundle)
     }
 
     private fun onClickDelete() {
-        //viewModel.deleteCharacter(currentCharacter)
-        //currentCharacter = Character()
-        //currentSelect = -1
-        disposeBag.clear()
+        viewModel.deleteCharacter(currentCharacter)
+        currentCharacter = Character()
+        currentSelect = -1
         //updateItems()
+    }
+
+    private fun observeAddComplete() {
+        viewModel.addComplete.observe(this, Observer {
+            Toast.makeText(activity, "added", Toast.LENGTH_SHORT).show()
+        })
     }
 
     private fun recyclerViewInit() {

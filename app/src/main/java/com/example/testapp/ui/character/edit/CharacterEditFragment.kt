@@ -217,7 +217,19 @@ class CharacterEditFragment : Fragment() {
 
     private fun setDataInFields(ch: Character) {
         character_edit_id.text = ch.id.toString()
-        character_edit_name.setText(ch.name)
+        character_edit_name.text = ch.name
+        character_edit_player_name.text = ch.playerName
+        character_edit_world.text = ch.world
+        character_edit_tl.text = ch.tl
+        character_edit_age.text = ch.age
+        character_edit_eye.text = ch.eyes
+        character_edit_hairs.text = ch.hairs
+        character_edit_skin.text = ch.skin
+        character_edit_height.text = ch.height
+        character_edit_weight.text = ch.weight
+        character_edit_sex.text = ch.gender
+        character_edit_race.text = ch.race
+        character_edit_sm.text = ch.sm
         character_edit_st_counter.edit_stat.setText(ch.st.toString())
         character_edit_dx_counter.edit_stat.setText(ch.dx.toString())
         character_edit_iq_counter.edit_stat.setText(ch.iq.toString())
@@ -237,6 +249,17 @@ class CharacterEditFragment : Fragment() {
     private fun getCharacterFromFields(): Character{
         return character.apply {
             name = character_edit_name.text.toString()
+            world = character_edit_world.text.toString()
+            tl = character_edit_tl.text.toString()
+            age = character_edit_age.text.toString()
+            eyes = character_edit_eye.text.toString()
+            hairs = character_edit_hairs.text.toString()
+            skin = character_edit_skin.text.toString()
+            height = character_edit_height.text.toString()
+            weight = character_edit_weight.text.toString()
+            gender = character_edit_sex.text.toString()
+            race = character_edit_race.text.toString()
+            sm = character_edit_sm.text.toString()
             st = character_edit_st_counter.edit_stat.text.toString().toInt()
             dx = character_edit_dx_counter.edit_stat.text.toString().toInt()
             iq = character_edit_iq_counter.edit_stat.text.toString().toInt()

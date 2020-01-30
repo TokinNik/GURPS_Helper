@@ -85,6 +85,18 @@ class CharacterFragment : Fragment() {
     private fun setDataInFields(ch: Character) {
         character_card_id.text = ch.id.toString()
         character_card_name.text = ch.name
+        character_card_player_name.text = ch.playerName
+        character_card_world.text = ch.world
+        character_card_tl.text = ch.tl
+        character_card_age.text = ch.age
+        character_card_eye.text = ch.eyes
+        character_card_hairs.text = ch.hairs
+        character_card_skin.text = ch.skin
+        character_card_height.text = ch.height
+        character_card_weight.text = ch.weight
+        character_card_sex.text = ch.gender
+        character_card_race.text = ch.race
+        character_card_sm.text = ch.sm
         character_card_st.text = ch.st.toString()
         character_card_dx.text = ch.dx.toString()
         character_card_iq.text = ch.iq.toString()

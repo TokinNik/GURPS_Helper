@@ -31,6 +31,11 @@ class StartFragmentViewModel: RxViewModel() {
     val deleteComplete: LiveData<Boolean>
         get() = deleteCompleteEvent
 
+    val addComplete: LiveData<Boolean>
+        get() = addCompleteEvent
+
+    private var addCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
+
     private var charactersEvent: MutableLiveData<List<Character>> = MutableLiveData()
 
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
@@ -63,6 +68,21 @@ class StartFragmentViewModel: RxViewModel() {
             }
             .doOnComplete {
                 deleteCompleteEvent.value = true
+            }
+            .subscribe()
+    }
+
+    fun addCharacter(character: Character){
+        Observable.create { emitter: ObservableEmitter<Int> ->
+            dbm.db.characterDao().insert(character)
+            emitter.onComplete()
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnError {
+                errorEvent.value = it
+            }
+            .doOnComplete {
+                addCompleteEvent.value = true
             }
             .subscribe()
     }
@@ -103,5 +123,6 @@ class StartFragmentViewModel: RxViewModel() {
         errorEvent =  MutableLiveData()
         deleteCompleteEvent =  MutableLiveData()
         charactersEvent =  MutableLiveData()
+        addCompleteEvent = MutableLiveData()
     }
 }
