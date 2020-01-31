@@ -75,8 +75,8 @@ class BattleFragment : Fragment() {
                 add(
                     CharacterHorizontalItem(
                         character = SelectableData(i),
-                        colorActive = ContextCompat.getColor(context!!, R.color.colorAccent),
-                        colorInactive = ContextCompat.getColor(context!!, R.color.colorWhite),//todo move to val?
+                        colorActive = ContextCompat.getColor(context!!, R.color.accent),
+                        colorInactive = ContextCompat.getColor(context!!, R.color.primary_light),//todo move to val?
                         onClick = {
 //                            val bundle = Bundle()
 //                            bundle.putInt("id", it.data.id)

@@ -75,16 +75,16 @@ class SkillObserveAllFragment : Fragment() {
             if(item is SkillItem) {
                 if (item.skill.select) {
                     item.skill.select = false
-                    view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
+                    view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
                 }
                 else {
                     item.skill.select = true
-                    view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
+                    view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.accent))
 
                     if (currentSelect >= 0 && currentSelect != select){
                         val prevItem = groupAdapter.getGroupAtAdapterPosition(0).getItem(currentSelect) as SkillItem
                         prevItem.skill.select = false
-                        prevItem.rootView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
+                        prevItem.rootView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
                     }
                 }
                 currentSkill = item.skill.data
@@ -126,8 +126,8 @@ class SkillObserveAllFragment : Fragment() {
                 section.add(
                     SkillItem(
                         skill = SelectableData(item),
-                        colorActive = ContextCompat.getColor(context!!, R.color.colorAccent),
-                        colorInactive = ContextCompat.getColor(context!!, R.color.colorPrimary)
+                        colorActive = ContextCompat.getColor(context!!, R.color.accent),
+                        colorInactive = ContextCompat.getColor(context!!, R.color.primary)
                     )
                 )
             }

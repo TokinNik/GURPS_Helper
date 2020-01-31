@@ -1,11 +1,14 @@
 package com.example.testapp.ui.character
 
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.View
 import com.example.testapp.R
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
+import kotlinx.android.synthetic.main.card_character_all.*
 import kotlinx.android.synthetic.main.item_character.view.*
 
 
@@ -21,10 +24,12 @@ class CharacterItem(
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
         viewHolder.apply {
-            root.textView_item_id.text = character.data.id.toString()
-            root.textView_item_select.text = character.select.toString()
-            root.textView_item_name.text = character.data.name
-            root.button_observe.setOnClickListener {
+            root.item_character_id.text = character.data.id.toString()
+            val bytes = Base64.decode(character.data.portrait, Base64.DEFAULT)
+            val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            root.item_character_image.setImageBitmap(image)
+            root.item_character_name.text = character.data.name
+            root.item_character_button_observe.setOnClickListener {
                 onClick.invoke(character)
             }
             if (!character.select) {

@@ -1,8 +1,11 @@
 package com.example.testapp.util
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Environment
 import android.text.TextUtils
+import android.util.Base64
 import android.util.Log
 import com.example.testapp.db.entity.Character
 import org.xmlpull.v1.XmlPullParser
@@ -178,7 +181,7 @@ class GCSParser {
 //                        "religion" -> TODO
                         "sm" -> { character.sm = parser.text ?: ""}
                         "notes" -> { character.description = parser.text ?: ""}
-//                        "portrait" -> TODO
+                        "portrait" -> { character.portrait = parser.text ?: "" }
                     }
                 }
                 XmlPullParser.END_TAG -> if (parser.name == "profile") return else currentTag = ""

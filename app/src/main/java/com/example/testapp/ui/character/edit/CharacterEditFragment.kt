@@ -1,7 +1,9 @@
 package com.example.testapp.ui.character.edit
 
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -112,26 +114,26 @@ class CharacterEditFragment : Fragment() {
             }
             selectSkillDialog.show(fragmentManager!!, null)
         }
-        character_edit_st_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_st_counter.edit_stat))//???????? wtf todo something with it
-        character_edit_st_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_st_counter.edit_stat))
-        character_edit_dx_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_dx_counter.edit_stat))
-        character_edit_dx_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_dx_counter.edit_stat))
-        character_edit_iq_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_iq_counter.edit_stat))
-        character_edit_iq_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_iq_counter.edit_stat))
-        character_edit_ht_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_ht_counter.edit_stat))
-        character_edit_ht_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_ht_counter.edit_stat))
-        character_edit_hp_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_hp_counter.edit_stat))
-        character_edit_hp_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_hp_counter.edit_stat))
-        character_edit_move_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_move_counter.edit_stat))
-        character_edit_move_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_move_counter.edit_stat))
-        character_edit_speed_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_speed_counter.edit_stat))
-        character_edit_speed_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_speed_counter.edit_stat))
-        character_edit_will_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_will_counter.edit_stat))
-        character_edit_will_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_will_counter.edit_stat))
-        character_edit_per_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_per_counter.edit_stat))
-        character_edit_per_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_per_counter.edit_stat))
-        character_edit_fp_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_fp_counter.edit_stat))
-        character_edit_fp_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_fp_counter.edit_stat))
+        character_edit_st_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_st_counter.edit_stat, 100))//???????? wtf todo something with it
+        character_edit_st_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_st_counter.edit_stat, 1))
+        character_edit_dx_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_dx_counter.edit_stat, 100))
+        character_edit_dx_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_dx_counter.edit_stat, 1))
+        character_edit_iq_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_iq_counter.edit_stat, 100))
+        character_edit_iq_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_iq_counter.edit_stat, 1))
+        character_edit_ht_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_ht_counter.edit_stat, 100))
+        character_edit_ht_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_ht_counter.edit_stat, 1))
+        character_edit_hp_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_hp_counter.edit_stat, 100))
+        character_edit_hp_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_hp_counter.edit_stat, 0))
+        character_edit_move_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_move_counter.edit_stat, 100))
+        character_edit_move_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_move_counter.edit_stat, 0))
+        character_edit_speed_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_speed_counter.edit_stat, 100))
+        character_edit_speed_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_speed_counter.edit_stat, 0))
+        character_edit_will_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_will_counter.edit_stat, 100))
+        character_edit_will_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_will_counter.edit_stat, 0))
+        character_edit_per_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_per_counter.edit_stat, 100))
+        character_edit_per_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_per_counter.edit_stat, 0))
+        character_edit_fp_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_fp_counter.edit_stat, 100))
+        character_edit_fp_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_fp_counter.edit_stat, 0))
 
     }
 
@@ -140,16 +142,16 @@ class CharacterEditFragment : Fragment() {
             val select = groupAdapter.getAdapterPosition(item)
             if ((item as SkillItem).skill.select) {
                 item.skill.select = false
-                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
+                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
             }
             else {
                 item.skill.select = true
-                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
+                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.accent))
 
                 if (currentSelect >= 0 && currentSelect != select){
                     val prevItem = groupAdapter.getGroupAtAdapterPosition(0).getItem(currentSelect) as SkillItem
                     prevItem.skill.select = false
-                    prevItem.rootView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
+                    prevItem.rootView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
                 }
             }
             currentSkill = item.skill.data
@@ -180,8 +182,8 @@ class CharacterEditFragment : Fragment() {
                 section.add(
                     SkillItem(
                         skill = SelectableData(item),
-                        colorActive = ContextCompat.getColor(context!!, R.color.colorAccent),
-                        colorInactive = ContextCompat.getColor(context!!, R.color.colorPrimary)
+                        colorActive = ContextCompat.getColor(context!!, R.color.accent),
+                        colorInactive = ContextCompat.getColor(context!!, R.color.primary)
                     )
                 )
             }
@@ -217,19 +219,19 @@ class CharacterEditFragment : Fragment() {
 
     private fun setDataInFields(ch: Character) {
         character_edit_id.text = ch.id.toString()//todo and this too
-        character_edit_name.text = ch.name
-        character_edit_player_name.text = ch.playerName
-        character_edit_world.text = ch.world
-        character_edit_tl.text = ch.tl
-        character_edit_age.text = ch.age
-        character_edit_eye.text = ch.eyes
-        character_edit_hairs.text = ch.hairs
-        character_edit_skin.text = ch.skin
-        character_edit_height.text = ch.height
-        character_edit_weight.text = ch.weight
-        character_edit_sex.text = ch.gender
-        character_edit_race.text = ch.race
-        character_edit_sm.text = ch.sm
+        character_edit_name.setText(ch.name)
+        character_edit_player_name.setText(ch.playerName)
+        character_edit_world.setText(ch.world)
+        character_edit_tl.setText(ch.tl)
+        character_edit_age.setText(ch.age)
+        character_edit_eye.setText(ch.eyes)
+        character_edit_hairs.setText(ch.hairs)
+        character_edit_skin.setText(ch.skin)
+        character_edit_height.setText(ch.height)
+        character_edit_weight.setText(ch.weight)
+        character_edit_gender.setText(ch.gender)
+        character_edit_race.setText(ch.race)
+        character_edit_sm.setText(ch.sm)
         character_edit_st_counter.edit_stat.setText(ch.st.toString())
         character_edit_dx_counter.edit_stat.setText(ch.dx.toString())
         character_edit_iq_counter.edit_stat.setText(ch.iq.toString())
@@ -240,7 +242,9 @@ class CharacterEditFragment : Fragment() {
         character_edit_will_counter.edit_stat.setText(ch.will.toString())
         character_edit_per_counter.edit_stat.setText(ch.per.toString())
         character_edit_fp_counter.edit_stat.setText(ch.fp.toString())
-
+        val bytes = Base64.decode(ch.portrait, Base64.DEFAULT)
+        val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        character_edit_image.setImageBitmap(image)
 
         viewModel.getSkillByIds(ch.skills)
 //        viewModel.getAllSkills()
@@ -257,7 +261,7 @@ class CharacterEditFragment : Fragment() {
             skin = character_edit_skin.text.toString()
             height = character_edit_height.text.toString()
             weight = character_edit_weight.text.toString()
-            gender = character_edit_sex.text.toString()
+            gender = character_edit_gender.text.toString()
             race = character_edit_race.text.toString()
             sm = character_edit_sm.text.toString()
             st = character_edit_st_counter.edit_stat.text.toString().toInt()

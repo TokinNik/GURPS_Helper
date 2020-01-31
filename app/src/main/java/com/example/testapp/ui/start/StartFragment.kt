@@ -108,16 +108,16 @@ class StartFragment : Fragment() {
             val select = groupAdapter.getAdapterPosition(item)
             if ((item as CharacterItem).character.select) {
                 item.character.select = false
-                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
+                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
             }
             else {
                 item.character.select = true
-                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
+                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.accent))
 
                 if (currentSelect >= 0 && currentSelect != select){
                     val prevItem = groupAdapter.getGroupAtAdapterPosition(currentSelect) as CharacterItem
                     prevItem.character.select = false
-                    prevItem.rootView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
+                    prevItem.rootView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
                 }
             }
             currentCharacter = item.character.data
@@ -141,8 +141,8 @@ class StartFragment : Fragment() {
                 add(
                     CharacterItem(
                         character = SelectableData(i),
-                        colorActive = ContextCompat.getColor(context!!, R.color.colorAccent),
-                        colorInactive = ContextCompat.getColor(context!!, R.color.colorWhite),//todo move to val?
+                        colorActive = ContextCompat.getColor(context!!, R.color.accent),
+                        colorInactive = ContextCompat.getColor(context!!, R.color.primary_light),//todo move to val?
                         onClick = {
                             val bundle = Bundle()
                             bundle.putInt("id", it.data.id)

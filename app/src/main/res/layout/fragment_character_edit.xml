@@ -1,144 +1,252 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.character.edit.CharacterEditFragment">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <ImageView
+            android:id="@+id/character_edit_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerInside"
+            android:layout_gravity="center"
+            android:layout_marginTop="4dp"
+            app:srcCompat="@mipmap/ic_launcher_round" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/character_edit_image"
+            <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
-                android:layout_height="173dp"
-                android:layout_weight="1"
-                app:srcCompat="@mipmap/ic_launcher_round" />
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:id="@+id/button_accept"
+                android:text="@string/accept" />
 
-            <com.google.android.flexbox.FlexboxLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                app:flexDirection="row"
-                app:flexWrap="wrap">
-
-                <TextView
-                    android:id="@+id/character_edit_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    tools:text="Name: name" />
-
-                <TextView
-                    android:id="@+id/character_edit_age"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    tools:text="Age: 22" />
-
-                <TextView
-                    android:id="@+id/character_edit_player_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    tools:text="Player name: Nik" />
-
-                <TextView
-                    android:id="@+id/character_edit_world"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    tools:text="World: world" />
-
-                <TextView
-                    android:id="@+id/character_edit_state"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    tools:text="State: state" />
-
-                <TextView
-                    android:id="@+id/character_edit_eye"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    tools:text="Eye: black" />
-
-                <TextView
-                    android:id="@+id/character_edit_hairs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    tools:text="Hairs: black" />
-
-                <TextView
-                    android:id="@+id/character_edit_skin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    tools:text="Skin: white" />
-
-                <TextView
-                    android:id="@+id/character_edit_race"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    tools:text="Race: human" />
-
-                <TextView
-                    android:id="@+id/character_edit_sex"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    tools:text="Sex: M" />
-
-                <TextView
-                    android:id="@+id/character_edit_weight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    tools:text="Weight: 60" />
-
-                <TextView
-                    android:id="@+id/character_edit_height"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    tools:text="Height: 1.8" />
-
-                <TextView
-                    android:id="@+id/character_edit_main_hand"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    tools:text="Main hand: right" />
-
-                <TextView
-                    android:id="@+id/character_edit_tl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    tools:text="TL: 0" />
-
-                <TextView
-                    android:id="@+id/character_edit_sm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    tools:text="SM: 0" />
-
-            </com.google.android.flexbox.FlexboxLayout>
-
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:id="@+id/button_cancel"
+                android:text="@string/cancel" />
         </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/MaterialTextInputView">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/character_edit_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:hint="@string/name"
+                        tools:text="Is a long name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/MaterialTextInputView">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/character_edit_player_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/player_name"
+                        tools:text="Is a long name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/MaterialTextInputView">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/character_edit_age"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberSigned"
+                        android:maxLength="10"
+                        android:hint="@string/age"
+                        tools:text="Is a long name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/MaterialTextInputView">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/character_edit_world"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/world"
+                        tools:text="Is a long name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/MaterialTextInputView">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/character_edit_state"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/state"
+                        tools:text="Is a long name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                style="@style/MaterialTextInputView">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/character_edit_eye"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/eyes"
+                        tools:text="Is a long name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                style="@style/MaterialTextInputView">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/character_edit_hairs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hairs"
+                        tools:text="Is a long name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/MaterialTextInputView">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/character_edit_skin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/skin"
+                        tools:text="Is a long name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/MaterialTextInputView">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/character_edit_race"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/race"
+                        tools:text="Is a long name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/MaterialTextInputView">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/character_edit_gender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLength="10"
+                        android:hint="@string/gender"
+                        tools:text="Is a long name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    app:suffixText="lbs"
+                    style="@style/MaterialTextInputView">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/character_edit_weight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLength="10"
+                        android:inputType="number"
+                        android:hint="@string/weight"
+                        tools:text="Is a long name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    app:suffixText="m"
+                    style="@style/MaterialTextInputView">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/character_edit_height"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:hint="@string/height"
+                        tools:text="Is a long name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/MaterialTextInputView">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/character_edit_main_hand"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/main_hand"
+                        tools:text="Is a long name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/MaterialTextInputView">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/character_edit_tl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberSigned"
+                        android:maxLength="2"
+                        android:hint="@string/tl"
+                        tools:text="Is a long name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/MaterialTextInputView">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/character_edit_sm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberSigned"
+                        android:hint="@string/sm"
+                        tools:text="Is a long name"/>
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
         <TableLayout
             android:layout_width="match_parent"
@@ -295,25 +403,6 @@
                 <include layout="@layout/stat_counter" android:id="@+id/character_edit_fp_counter"/>
             </TableRow>
         </TableLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:id="@+id/button_accept"
-                android:text="Accept" />
-
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:id="@+id/button_cancel"
-                android:text="Cancel" />
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout"

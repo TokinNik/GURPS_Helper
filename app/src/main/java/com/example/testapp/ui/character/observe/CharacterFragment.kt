@@ -1,7 +1,10 @@
 package com.example.testapp.ui.character.observe
 
 
+import android.annotation.SuppressLint
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -82,21 +85,22 @@ class CharacterFragment : Fragment() {
         })
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setDataInFields(ch: Character) {
         character_card_id.text = ch.id.toString()
-        character_card_name.text = ch.name
-        character_card_player_name.text = ch.playerName
-        character_card_world.text = ch.world
-        character_card_tl.text = ch.tl
-        character_card_age.text = ch.age
-        character_card_eye.text = ch.eyes
-        character_card_hairs.text = ch.hairs
-        character_card_skin.text = ch.skin
-        character_card_height.text = ch.height
-        character_card_weight.text = ch.weight
-        character_card_sex.text = ch.gender
-        character_card_race.text = ch.race
-        character_card_sm.text = ch.sm
+        character_card_name.text = "${resources.getString(R.string.name)}: ${ch.name}"
+        character_card_player_name.text = "${resources.getString(R.string.player_name)}: ${ch.playerName}"
+        character_card_world.text = "${resources.getString(R.string.world)}: ${ch.world}"
+        character_card_tl.text = "${resources.getString(R.string.tl)}: ${ch.tl}"
+        character_card_age.text = "${resources.getString(R.string.age)}: ${ch.age}"
+        character_card_eye.text = "${resources.getString(R.string.eyes)}: ${ch.eyes}"
+        character_card_hairs.text = "${resources.getString(R.string.hairs)}: ${ch.hairs}"
+        character_card_skin.text = "${resources.getString(R.string.skin)}: ${ch.skin}"
+        character_card_height.text = "${resources.getString(R.string.height)}: ${ch.height}"
+        character_card_weight.text = "${resources.getString(R.string.weight)}: ${ch.weight}"
+        character_card_gender.text = "${resources.getString(R.string.gender)}: ${ch.gender}"
+        character_card_race.text = "${resources.getString(R.string.race)}: ${ch.race}"
+        character_card_sm.text ="${resources.getString(R.string.sm)}: ${ch.sm}"
         character_card_st.text = ch.st.toString()
         character_card_dx.text = ch.dx.toString()
         character_card_iq.text = ch.iq.toString()
@@ -108,5 +112,8 @@ class CharacterFragment : Fragment() {
         character_card_per.text = ch.per.toString()
         character_card_fp.text = ch.fp.toString()
         textView_skills.text = ch.skills.toString()
+        val bytes = Base64.decode(ch.portrait, Base64.DEFAULT)
+        val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        character_card_image.setImageBitmap(image)//todo in other plases
     }
 }

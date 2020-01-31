@@ -18,6 +18,7 @@ data class Character(
     var race: String = "human",
     var gender: String = "male",
     var description: String = "-",
+    var portrait: String = "",
     //characteristics
     var height: String = "0",
     var weight: String = "0",

@@ -3,39 +3,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/colorWhite"
+    android:layout_height="50dp"
+    android:background="@color/primary_light"
     android:layout_margin="5dp"
     android:padding="5dp">
 
+
+    <ImageView
+        android:id="@+id/item_character_image"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher_round" />
+
     <TextView
-        android:id="@+id/textView_item_id"
+        android:id="@+id/item_character_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
         tools:text="123" />
 
     <TextView
-        android:id="@+id/textView_item_select"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_weight="1"
-        tools:text="true" />
-
-    <TextView
-        android:id="@+id/textView_item_name"
+        android:id="@+id/item_character_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginLeft="10dp"
+        android:layout_weight="5"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         tools:text="name"/>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/item_character_button_observe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:id="@+id/button_observe"
-        android:text="goto" />
+        android:text="@string/go" />
 </LinearLayout>
