@@ -80,7 +80,7 @@ class GCSParser {
                         when (parser.name) {
                             "profile" -> parseProfile(parser, character)
 //                            "advantage_list" -> TODO
-//                            "skill_list" -> TODO
+                            "skill_list" -> parseSkillList(parser, character)
 //                            "spell_list" -> TODO
 //                            "equipment_list" -> TODO
 //                            "notes" -> TODO
@@ -157,6 +157,83 @@ class GCSParser {
             Log.d(TAG, "Ошибка при загрузке XML-документа: $t")
         }
         return character
+    }
+
+    private fun parseSkillList(parser: XmlPullParser, character: Character) {
+        while (true) {
+            when (parser.eventType) {
+                XmlPullParser.START_TAG -> when (parser.name) {
+                    "skill" -> parseSkill(parser, character)
+//                  "skill_container" -> TODO
+                }
+                XmlPullParser.END_TAG -> if (parser.name == "skill_list") return
+                }
+            parser.next()
+        }
+    }
+
+    private fun parseSkill(parser: XmlPullParser, character: Character) {
+        var currentTag = ""
+        while (true) {
+            when (parser.eventType) {
+                XmlPullParser.START_TAG -> {
+                    currentTag = parser.name
+                    when(currentTag) {
+                        "categories" -> parseCategories(parser, character)
+                        "default" -> parseDefault(parser, character)
+                    }
+                }
+                XmlPullParser.TEXT -> {
+                    when (currentTag) {
+                        "name" -> {}//todo all
+                        "name-loc" -> {}
+                        "description-loc" -> {}
+                        "tech_level" -> {}
+                        "difficulty" -> {}
+                        "specialization" -> {}
+                        "points" -> {}
+                        "reference" -> {}
+                        "parry" -> {}
+                    }
+                }
+                XmlPullParser.END_TAG -> if (parser.name == "skill") return else currentTag = ""
+            }
+            parser.next()
+        }
+    }
+
+    private fun parseDefault(parser: XmlPullParser, character: Character) {
+        var currentTag = ""
+        while (true) {
+            when (parser.eventType) {
+                XmlPullParser.START_TAG -> currentTag = parser.name
+                XmlPullParser.TEXT -> {
+                    when (currentTag) {
+                        "type" -> {}//todo
+                        "name" -> {}//todo
+                        "modifier" -> {}//todo
+                    }
+                }
+                XmlPullParser.END_TAG -> if (parser.name == "default") return else currentTag = ""
+            }
+            parser.next()
+        }
+    }
+
+    private fun parseCategories(parser: XmlPullParser, character: Character) {
+        var currentTag = ""
+        while (true) {
+            when (parser.eventType) {
+                XmlPullParser.START_TAG -> currentTag = parser.name
+                XmlPullParser.TEXT -> {
+                    if (currentTag == "category") {
+                         //character.name = parser.text ?: "" todo
+                    }
+                }
+                XmlPullParser.END_TAG -> if (parser.name == "categories") return else currentTag = ""
+            }
+            parser.next()
+        }
     }
 
     private fun parseProfile(parser: XmlPullParser, character: Character) {
