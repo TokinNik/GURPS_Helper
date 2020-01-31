@@ -1,5 +1,8 @@
 package com.example.testapp.ui.start
 
+import android.app.Activity.RESULT_OK
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,7 +20,7 @@ import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
 import com.example.testapp.ui.character.CharacterItem
 import com.example.testapp.util.GCSParser
-import com.example.testapp.util.GurpsCalculations
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -36,6 +39,9 @@ class StartFragment : Fragment() {
     private var currentSelect = -1
 
     private var counter = 1
+
+    private val requestCodeAddFromFile = 200
+
     private val disposeBag = CompositeDisposable()
 
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
@@ -80,14 +86,34 @@ class StartFragment : Fragment() {
         disposeBag.clear()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == requestCodeAddFromFile && resultCode == RESULT_OK) {
+            val parser = GCSParser()
+            // parser.parseGCStoLog("test")
+            val character = parser.parseGCStoData(data?.data?.path ?: "")
+            viewModel.addCharacter(character)
+        }
+    }
+
     private fun onClickAdd() {
-        val parser = GCSParser()
-       // parser.parseGCStoLog("test")
-        val character = parser.parseGCStoData("Valdemar Marshall")
-        viewModel.addCharacter(character)
-//        val bundle = Bundle()
-//        bundle.putString("mode", "add")
-//        navController?.navigate(R.id.action_startFragment_to_characterEditFragment, bundle)
+        val builder = MaterialAlertDialogBuilder(activity)
+        builder
+            .setTitle(R.string.add_new_character)
+            .setMessage(R.string.add_new_character_message)
+            .setPositiveButton(R.string.add_from_file) { dialogInterface: DialogInterface, i: Int ->
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.type = "file/*"
+                startActivityForResult(intent, requestCodeAddFromFile)
+                dialogInterface.dismiss()
+            }
+            .setNegativeButton(R.string.create_new) { dialogInterface: DialogInterface, i: Int ->
+                dialogInterface.dismiss()
+                val bundle = Bundle()
+                bundle.putString("mode", "add")
+                navController?.navigate(R.id.action_startFragment_to_characterEditFragment, bundle)
+            }
+            .create().show()
     }
 
     private fun onClickDelete() {

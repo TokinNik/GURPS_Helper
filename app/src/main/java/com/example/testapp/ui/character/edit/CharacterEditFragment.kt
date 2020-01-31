@@ -68,7 +68,10 @@ class CharacterEditFragment : Fragment() {
         if (mode == "update"){
             val id = arguments?.getInt("id", 0) ?: 0
             viewModel.getCharacterById(id)
+        } else {
+            setDataInFields(character)
         }
+
 
         observeAddComplete()
         observeCharacterById()

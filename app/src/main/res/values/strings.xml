@@ -35,5 +35,9 @@
     <string name="cancel">Cancel</string>
     <string name="accept">Accept</string>
     <string name="go">goto</string>
+    <string name="add_from_file">Add from file</string>
+    <string name="create_new">Create new</string>
+    <string name="add_new_character">Add new character</string>
+    <string name="add_new_character_message">Choice how you want to add new character</string>
 
 </resources>

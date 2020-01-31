@@ -3,6 +3,7 @@ package com.example.testapp.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Environment
 import android.text.TextUtils
 import android.util.Base64
@@ -59,12 +60,14 @@ class GCSParser {
         }
     }
 
-    fun parseGCStoData(fileName: String): Character {
+    //fun parseGCStoData(fileName: String?): Character = parseGCStoData(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/$fileName.gcs")
+
+    fun parseGCStoData(filePath: String?): Character {
         val character = Character()
         try {
             val factory = XmlPullParserFactory.newInstance()
             val parser = factory.newPullParser()
-            val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/$fileName.gcs")
+            val file = File(filePath.toString())
             val fis = FileInputStream(file)
             parser.setInput(fis, "windows-1251")
 //            parser.setInput(InputStreamReader(fis, Charsets.UTF_8))
