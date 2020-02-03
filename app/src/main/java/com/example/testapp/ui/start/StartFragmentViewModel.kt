@@ -102,22 +102,6 @@ class StartFragmentViewModel: RxViewModel() {
             .subscribe()
     }
 
-    fun getSkillsAndCharOnST()//todo delete (test)
-    {
-        dbm.getDB().characterDao().getCharactersWithSkill("st")
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : DisposableSingleObserver<List<SkillsAndCharacterOnSt>>(){
-                override fun onSuccess(t: List<SkillsAndCharacterOnSt>) {
-                    println("!!!!!!!!!!! $t ")
-                }
-
-                override fun onError(e: Throwable) {
-                    errorEvent.value = e
-                }
-            })
-    }
-
     fun clearEvents()
     {
         errorEvent =  MutableLiveData()

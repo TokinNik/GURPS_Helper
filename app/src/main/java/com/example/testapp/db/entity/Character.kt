@@ -1,6 +1,7 @@
 package com.example.testapp.db.entity
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "character")
@@ -41,8 +42,8 @@ data class Character(
     var per: Int = 0,
     var fp: Int = 0,
     //dynamic stats
-    var wounds: Int = 0,
-    var fpLoss: Int = 0,
+    var wounds: String = "",
+    var fpLoss: String = "",
     var currentLoad: Int = 0,
 
     var drScull:Int = 2,//todo split in other classes
@@ -56,7 +57,8 @@ data class Character(
     var drLeg:Int = 0,
     var drFoot:Int = 0,
     //------------------
-    var skills: List<Int> = emptyList(),
+    @Ignore
+    var skills: List<Skill> = emptyList(),
     var advantages: List<Int> = emptyList(),
     var disadvantages: List<Int> = emptyList(),
     var quirks: List<Int> = emptyList(),

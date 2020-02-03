@@ -14,7 +14,7 @@ import com.example.testapp.db.entity.Skill
         Character::class,
         Skill::class
     ],
-    version = 8,
+    version = 11,
     exportSchema = false
 )
 @TypeConverters(SkillsConverter::class)

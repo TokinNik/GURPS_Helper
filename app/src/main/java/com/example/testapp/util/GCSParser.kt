@@ -1,14 +1,11 @@
 package com.example.testapp.util
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Environment
 import android.text.TextUtils
-import android.util.Base64
 import android.util.Log
 import com.example.testapp.db.entity.Character
+import com.example.testapp.db.entity.Default
+import com.example.testapp.db.entity.Skill
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.File
@@ -142,10 +139,10 @@ class GCSParser {
                                 character.move = parser.text.toInt()
                             }
                             "hp_lost" -> {
-                                //character.earnPoints = parser.getAttributeValue(0).toInt() todo
+                                character.wounds = parser.getAttributeValue(0)
                             }
                             "fp_lost" -> {
-                                //character.earnPoints = parser.getAttributeValue(0).toInt() todo
+                                character.fpLoss = parser.getAttributeValue(0)
                             }
                         }
                     }
@@ -160,77 +157,103 @@ class GCSParser {
     }
 
     private fun parseSkillList(parser: XmlPullParser, character: Character) {
+        var skillContainer = "empty"
+        val skillsList = mutableListOf<Skill>()
+        parser.next()
         while (true) {
             when (parser.eventType) {
                 XmlPullParser.START_TAG -> when (parser.name) {
-                    "skill" -> parseSkill(parser, character)
-//                  "skill_container" -> TODO
+                    "skill_container" -> {
+                        parser.next()
+                        parser.next()
+                        skillContainer = parser.text ?: "empty"
+                    }
+                    "skill" -> {
+
+                        skillsList.add(parseSkill(parser, skillContainer))
+                    }
                 }
-                XmlPullParser.END_TAG -> if (parser.name == "skill_list") return
+                XmlPullParser.END_TAG -> when(parser.name) {
+                    "skill_list" -> {
+                        character.skills = skillsList
+                        return
+                    }
+                    "skill_container" -> skillContainer = "empty"
                 }
+            }
             parser.next()
         }
     }
 
-    private fun parseSkill(parser: XmlPullParser, character: Character) {
+    private fun parseSkill(parser: XmlPullParser, container: String): Skill {
+        val parsedDefaults = mutableListOf<Default>()
+        val parsedSkill = Skill(container = container)
         var currentTag = ""
         while (true) {
             when (parser.eventType) {
                 XmlPullParser.START_TAG -> {
                     currentTag = parser.name
                     when(currentTag) {
-                        "categories" -> parseCategories(parser, character)
-                        "default" -> parseDefault(parser, character)
+                        "categories" -> parseSkillCategories(parser, parsedSkill)
+                        "default" -> parseSkillDefault(parser, parsedDefaults)
                     }
                 }
                 XmlPullParser.TEXT -> {
                     when (currentTag) {
-                        "name" -> {}//todo all
-                        "name-loc" -> {}
-                        "description-loc" -> {}
-                        "tech_level" -> {}
-                        "difficulty" -> {}
-                        "specialization" -> {}
-                        "points" -> {}
-                        "reference" -> {}
-                        "parry" -> {}
+                        "name" -> {parsedSkill.name = parser.text ?: ""}
+                        "name-loc" -> {parsedSkill.name_loc = parser.text ?: ""}
+                        "description-loc" -> {parsedSkill.description_loc = parser.text ?: ""}
+                        "tech_level" -> {parsedSkill.tl = parser.text ?: ""}
+                        "difficulty" -> {parsedSkill.difficulty = parser.text ?: ""}
+                        "specialization" -> {parsedSkill.specialization = parser.text ?: ""}
+                        "points" -> {parsedSkill.points = parser.text ?: ""}
+                        "reference" -> {parsedSkill.reference = parser.text ?: ""}
+                        "parry" -> {parsedSkill.parry = parser.text ?: ""}
                     }
                 }
-                XmlPullParser.END_TAG -> if (parser.name == "skill") return else currentTag = ""
+                XmlPullParser.END_TAG -> if (parser.name == "skill") return parsedSkill else currentTag = ""
             }
             parser.next()
         }
     }
 
-    private fun parseDefault(parser: XmlPullParser, character: Character) {
+    private fun parseSkillDefault(parser: XmlPullParser, defaultList: MutableList<Default>) {
+        val parsedDefault = Default()
         var currentTag = ""
         while (true) {
             when (parser.eventType) {
                 XmlPullParser.START_TAG -> currentTag = parser.name
                 XmlPullParser.TEXT -> {
                     when (currentTag) {
-                        "type" -> {}//todo
-                        "name" -> {}//todo
-                        "modifier" -> {}//todo
+                        "type" -> {parsedDefault.type = parser.text ?: ""}
+                        "name" -> {parsedDefault.name = parser.text ?: ""}
+                        "modifier" -> {parsedDefault.modifier = parser.text ?: ""}
                     }
                 }
-                XmlPullParser.END_TAG -> if (parser.name == "default") return else currentTag = ""
+                XmlPullParser.END_TAG -> if (parser.name == "default") {
+                    defaultList.add(parsedDefault)
+                    return
+                } else currentTag = ""
             }
             parser.next()
         }
     }
 
-    private fun parseCategories(parser: XmlPullParser, character: Character) {
+    private fun parseSkillCategories(parser: XmlPullParser, parsedSkill: Skill) {
+        val parsedCategories = mutableListOf<String>()
         var currentTag = ""
         while (true) {
             when (parser.eventType) {
                 XmlPullParser.START_TAG -> currentTag = parser.name
                 XmlPullParser.TEXT -> {
                     if (currentTag == "category") {
-                         //character.name = parser.text ?: "" todo
+                         parsedCategories.add(parser.text ?: "")
                     }
                 }
-                XmlPullParser.END_TAG -> if (parser.name == "categories") return else currentTag = ""
+                XmlPullParser.END_TAG -> if (parser.name == "categories") {
+                    parsedSkill.categories = parsedCategories
+                    return
+                } else currentTag = ""
             }
             parser.next()
         }

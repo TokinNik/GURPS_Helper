@@ -111,7 +111,7 @@ class CharacterFragment : Fragment() {
         character_card_will.text = ch.will.toString()
         character_card_per.text = ch.per.toString()
         character_card_fp.text = ch.fp.toString()
-        textView_skills.text = ch.skills.toString()
+        //textView_skills.text = ch.skills.toString()
         val bytes = Base64.decode(ch.portrait, Base64.DEFAULT)
         val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
         character_card_image.setImageBitmap(image)//todo in other plases
