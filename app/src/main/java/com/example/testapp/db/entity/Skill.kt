@@ -7,8 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "skill")
 data class Skill(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
-    @Ignore//todo ???
-    var container: String = "empty",
+    //var container: String = "empty", todo
     var name: String = "",
     var name_loc: String = "",
     var description_loc: String = "",
@@ -18,8 +17,6 @@ data class Skill(
     var points: String = "",
     var reference: String = "",
     var parry: String = "",
-    @Ignore //todo ???
     var categories: List<String> = emptyList(),
-    @Ignore//todo delete
     var default: List<Default> = emptyList()
 )

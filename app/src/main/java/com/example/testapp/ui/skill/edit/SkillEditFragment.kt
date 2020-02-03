@@ -106,7 +106,7 @@ class SkillEditFragment : Fragment() {
     }
 
     private fun setDataInFields(skill: Skill) {
-        textView_skill_id.text = skill.id.toString()
+        item_skill_id.text = skill.id.toString()
         editText_skill_name.setText(skill.name)
     }
 

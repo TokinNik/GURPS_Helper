@@ -107,15 +107,15 @@ class CharacterEditFragment : Fragment() {
         }
 
         button_add_skill.setOnClickListener {
-            /*val selectSkillDialog = ChoiceSkillFragment(character.skills)
+            val selectSkillDialog = ChoiceSkillFragment(emptyList())
             selectSkillDialog.setTargetFragment(this, 1)
             selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
             selectSkillDialog.onClickAccept = {
-                character.skills = it
-                viewModel.getSkillByIds(it)
+               // character.skills = it
+               // viewModel.getSkillByIds(it) todo
                 selectSkillDialog.dismiss()
             }
-            selectSkillDialog.show(fragmentManager!!, null)*/
+            selectSkillDialog.show(fragmentManager!!, null)
         }
         character_edit_st_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_st_counter.edit_stat, 100))//???????? wtf todo something with it
         character_edit_st_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_st_counter.edit_stat, 1))

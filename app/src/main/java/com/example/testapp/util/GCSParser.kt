@@ -187,7 +187,7 @@ class GCSParser {
 
     private fun parseSkill(parser: XmlPullParser, container: String): Skill {
         val parsedDefaults = mutableListOf<Default>()
-        val parsedSkill = Skill(container = container)
+        val parsedSkill = Skill()//(container = container) todo
         var currentTag = ""
         while (true) {
             when (parser.eventType) {

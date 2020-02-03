@@ -17,8 +17,8 @@ class ChoiceSkillItem(
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
         viewHolder.apply {
-            root.textView_skill_id.text = skill.data.id.toString()
-            root.textView_skill_name.text = skill.data.name
+//            root.item_skill_id.text = skill.data.id.toString()
+            root.item_skill_name.text = skill.data.name
             root.checkBox_select_skill.isChecked = skill.select
             root.checkBox_select_skill.setOnClickListener{
                 skill.select = skill.select.not()

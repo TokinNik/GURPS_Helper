@@ -16,21 +16,24 @@
         />
 
     <TextView
-        android:id="@+id/textView_skill_id"
+        android:id="@+id/item_skill_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        tools:text="1" />
+        tools:text="name" />
 
     <TextView
-        android:id="@+id/textView_skill_name"
-        android:layout_width="match_parent"
+        android:id="@+id/item_skill_name_loc"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="end"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        tools:text="название" />
+
+    <TextView
+        android:id="@+id/item_skill_default"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        tools:text="name" />
+        tools:text="IQ-2" />
 </LinearLayout>

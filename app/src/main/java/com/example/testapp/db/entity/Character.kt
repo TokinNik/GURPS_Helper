@@ -1,5 +1,6 @@
 package com.example.testapp.db.entity
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
