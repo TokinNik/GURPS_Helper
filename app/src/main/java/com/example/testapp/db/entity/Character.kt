@@ -1,13 +1,13 @@
 package com.example.testapp.db.entity
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "character")
 data class Character(
-    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0,
     //other
     var name: String = "",
     var playerName: String = "",
@@ -58,8 +58,6 @@ data class Character(
     var drLeg:Int = 0,
     var drFoot:Int = 0,
     //------------------
-    @Ignore
-    var skills: List<Skill> = emptyList(),
     var advantages: List<Int> = emptyList(),
     var disadvantages: List<Int> = emptyList(),
     var quirks: List<Int> = emptyList(),

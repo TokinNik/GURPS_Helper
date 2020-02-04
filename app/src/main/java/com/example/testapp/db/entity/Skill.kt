@@ -7,7 +7,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "skill")
 data class Skill(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
-    //var container: String = "empty", todo
+    @Ignore
+    var container: String = "empty",
     var name: String = "",
     var name_loc: String = "",
     var description_loc: String = "",

@@ -4,18 +4,47 @@ import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
 import com.example.testapp.db.entity.Character
+import com.example.testapp.db.entity.CharacterSkills
 import com.example.testapp.db.entity.Default
 import com.example.testapp.db.entity.Skill
+import com.example.testapp.di.DBModelImpl
+import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
+import toothpick.Toothpick
+import toothpick.ktp.delegate.inject
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader
+import javax.inject.Inject
 
 
-class GCSParser {
+class GCSParser @Inject constructor(){
 
     private val TAG = "GCS_PARSER"
+
+    private val dbm: DBModelImpl by inject()
+
+    var filePath: String = ""
+
+    var character: Character = Character()
+    private set
+
+    init {
+        val scope = Toothpick.openScope("APP")
+        scope.inject(this)
+    }
+
+    fun parse(characterId: Int){
+        if (filePath.isNotBlank()){
+            character = Character()
+            character.id = characterId
+            parseGCStoData()
+        }
+    }
 
     fun parseGCStoLog(fileName: String) {
         try {
@@ -59,12 +88,11 @@ class GCSParser {
 
     //fun parseGCStoData(fileName: String?): Character = parseGCStoData(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/$fileName.gcs")
 
-    fun parseGCStoData(filePath: String?): Character {
-        val character = Character()
+    private fun parseGCStoData(){
         try {
             val factory = XmlPullParserFactory.newInstance()
             val parser = factory.newPullParser()
-            val file = File(filePath.toString())
+            val file = File(filePath)
             val fis = FileInputStream(file)
             parser.setInput(fis, "windows-1251")
 //            parser.setInput(InputStreamReader(fis, Charsets.UTF_8))
@@ -75,7 +103,7 @@ class GCSParser {
                     XmlPullParser.START_DOCUMENT -> Log.d(TAG, "Начало документа")
                     XmlPullParser.START_TAG -> {
                         when (parser.name) {
-                            "profile" -> parseProfile(parser, character)
+                            "profile" -> parseProfile(parser)
 //                            "advantage_list" -> TODO
                             "skill_list" -> parseSkillList(parser, character)
 //                            "spell_list" -> TODO
@@ -150,10 +178,10 @@ class GCSParser {
                 }
                 parser.next()
             }
+            fis.channel.close()
         } catch (t: Throwable) {
             Log.d(TAG, "Ошибка при загрузке XML-документа: $t")
         }
-        return character
     }
 
     private fun parseSkillList(parser: XmlPullParser, character: Character) {
@@ -175,7 +203,7 @@ class GCSParser {
                 }
                 XmlPullParser.END_TAG -> when(parser.name) {
                     "skill_list" -> {
-                        character.skills = skillsList
+                        convertSkillListToDBFormat(skillsList)
                         return
                     }
                     "skill_container" -> skillContainer = "empty"
@@ -185,9 +213,45 @@ class GCSParser {
         }
     }
 
+    private fun convertSkillListToDBFormat(skillsList: MutableList<Skill>) {
+        skillsList.forEach {
+            Observable.create { emitter: ObservableEmitter<Int> ->
+                dbm.db.characterSkillsDao().insert(
+                    CharacterSkills(
+                        characterId = character.id,
+                        skillName = it.name,
+                        container = it.container,
+                        points = it.points
+                    )
+                )
+                emitter.onComplete()
+            }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError {
+                    println(it)
+                }
+                .doOnComplete {
+                }
+                .subscribe()
+
+            /*Observable.create { emitter: ObservableEmitter<Int> -> todo skill library add
+                dbm.db.skillDao().insert(it)
+                emitter.onComplete()
+            }.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError {
+                    println("1 - $it")
+                }
+                .doOnComplete {
+                }
+                .subscribe()*/
+        }
+    }
+
     private fun parseSkill(parser: XmlPullParser, container: String): Skill {
         val parsedDefaults = mutableListOf<Default>()
-        val parsedSkill = Skill()//(container = container) todo
+        val parsedSkill = Skill(container = container)
         var currentTag = ""
         while (true) {
             when (parser.eventType) {
@@ -259,7 +323,7 @@ class GCSParser {
         }
     }
 
-    private fun parseProfile(parser: XmlPullParser, character: Character) {
+    private fun parseProfile(parser: XmlPullParser) {
         var currentTag = ""
         while (true) {
             when (parser.eventType) {

@@ -140,7 +140,7 @@ class CharacterEditFragment : Fragment() {
 
     }
 
-    fun initRecyclerView(){
+    private fun initRecyclerView(){
         groupAdapter.setOnItemClickListener { item, view ->
             val select = groupAdapter.getAdapterPosition(item)
             if ((item as SkillItem).skill.select) {

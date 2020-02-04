@@ -2,20 +2,18 @@ package com.example.testapp.ui.character.observe
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.testapp.db.entity.Character
+import com.example.testapp.db.entity.CharacterSkills
 import com.example.testapp.di.DBModelImpl
+import com.example.testapp.ui.RxViewModel
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 
-
-class CharacterFragmentViewModel: ViewModel() {
+class CharacterFragmentViewModel: RxViewModel() {
 
     private val dbm: DBModelImpl by inject()
 
@@ -28,12 +26,16 @@ class CharacterFragmentViewModel: ViewModel() {
     val deleteComplete: LiveData<Boolean>
         get() = deleteCompleteEvent
 
+     val characterSkillsByIdComplete: LiveData<List<CharacterSkills>>
+        get() = characterSkillsByIdEvent
+
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
 
     private var deleteCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
 
     private var characterByIdEvent: MutableLiveData<Character> = MutableLiveData()
 
+    private var characterSkillsByIdEvent: MutableLiveData<List<CharacterSkills>> = MutableLiveData()
 
     init {
         val appScope = Toothpick.openScope("APP")
@@ -45,15 +47,28 @@ class CharacterFragmentViewModel: ViewModel() {
         dbm.getDB().characterDao().getById(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : DisposableSingleObserver<Character>(){
-                override fun onSuccess(t: Character) {
-                    characterByIdEvent.value = t
+            .subscribe(
+                {
+                    characterByIdEvent.value = it
+                },
+                {
+                    errorEvent.value = it
                 }
+            ).let(compositeDisposable::add)
+    }
 
-                override fun onError(e: Throwable) {
-                    errorEvent.value = e
+    fun getCharacterSkillsById(id: Int) {
+        dbm.getDB().characterSkillsDao().getCharacterSkills(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    characterSkillsByIdEvent.value = it
+                },
+                {
+                    errorEvent.value = it
                 }
-            })
+            ).let(compositeDisposable::add)
     }
 
     fun deleteCharacter(character: Character) {
@@ -69,6 +84,7 @@ class CharacterFragmentViewModel: ViewModel() {
                 deleteCompleteEvent.value = true
             }
             .subscribe()
+            .let(compositeDisposable::add)
     }
 
     fun clearEvents()
@@ -76,5 +92,6 @@ class CharacterFragmentViewModel: ViewModel() {
         errorEvent =  MutableLiveData()
         deleteCompleteEvent =  MutableLiveData()
         characterByIdEvent =  MutableLiveData()
+        characterSkillsByIdEvent = MutableLiveData()
     }
 }

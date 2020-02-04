@@ -35,16 +35,16 @@ class StartFragment : Fragment() {
 
     private val viewModel: StartFragmentViewModel by inject()
 
+    private var isfileAdd: Boolean = false
+    private val parser: GCSParser by inject()
+    private val requestCodeAddFromFile = 200
+    private val disposeBag = CompositeDisposable()
+    private val groupAdapter = GroupAdapter<GroupieViewHolder>()
+
+    private var newCharacter = Character()
     private var currentCharacter = Character()
     private var currentSelect = -1
-
     private var counter = 1
-
-    private val requestCodeAddFromFile = 200
-
-    private val disposeBag = CompositeDisposable()
-
-    private val groupAdapter = GroupAdapter<GroupieViewHolder>()
 
     private val navController: NavController?
         get() = activity?.let { Navigation.findNavController(it, R.id.nav_host_fragment) }
@@ -70,15 +70,15 @@ class StartFragment : Fragment() {
         button_add.setOnClickListener { onClickAdd() }
         button_delete.setOnClickListener { onClickDelete() }
 
-        observeCharacters()
+        observeGetAllCharacters()
         observeErrors()
         observeDeleteComplete()
         observeAddComplete()
+        observeGetLastCharacterIdComplete()
 
         recyclerViewInit()
 
-        viewModel.getItems()
-
+        viewModel.getAllCharacters()
     }
 
     override fun onStop() {
@@ -89,10 +89,10 @@ class StartFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == requestCodeAddFromFile && resultCode == RESULT_OK) {
-            val parser = GCSParser()
-            // parser.parseGCStoLog("test")
-            val character = parser.parseGCStoData(data?.data?.path ?: "")
-            viewModel.addCharacter(character)
+            newCharacter = Character()
+            viewModel.addCharacter(newCharacter)
+            isfileAdd = true
+            parser.filePath = data?.data?.path ?: ""
         }
     }
 
@@ -120,13 +120,34 @@ class StartFragment : Fragment() {
         viewModel.deleteCharacter(currentCharacter)
         currentCharacter = Character()
         currentSelect = -1
-        //updateItems()
     }
 
-    private fun observeAddComplete() {
-        viewModel.addComplete.observe(this, Observer {
-            Toast.makeText(activity, "added", Toast.LENGTH_SHORT).show()
-        })
+    private fun onClickRx() {
+        if (disposeBag.size() > 0)
+            return
+        progressBar.visibility = View.VISIBLE
+        val rxt = RxTest()
+        rxt.rxTimerRoll()//rxCreateRollWithTime(5)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            //.filter { it > 10 }
+            .subscribe(
+                {
+                    textView.text = "Next = ${it} (${counter++})"
+                    println(it)
+                },
+                {
+                    textView.text = "Error!!!"
+                },
+                {
+                    //textView.text = "Complete!!!"
+                    progressBar.visibility = View.INVISIBLE
+                },
+                {
+                    //dispose
+                    //it.dispose()
+                }
+            ).let(disposeBag::add)
     }
 
     private fun recyclerViewInit() {
@@ -180,38 +201,28 @@ class StartFragment : Fragment() {
         }
     }
 
-    private fun onClickRx() {
-        if (disposeBag.size() > 0)
-            return
-        progressBar.visibility = View.VISIBLE
-        val rxt = RxTest()
-        rxt.rxTimerRoll()//rxCreateRollWithTime(5)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            //.filter { it > 10 }
-            .subscribe(
-                {
-                textView.text = "Next = ${it} (${counter++})"
-                println(it)
-                },
-                {
-                    textView.text = "Error!!!"
-                },
-                {
-                    //textView.text = "Complete!!!"
-                    progressBar.visibility = View.INVISIBLE
-                },
-                {
-                    //dispose
-                    //it.dispose()
-                }
-            ).let(disposeBag::add)
+    private fun observeGetAllCharacters() {
+        viewModel.getAllCharactersComplete.observe(this, Observer {
+            addItems(it)
+        })
     }
 
-    private fun observeCharacters()
-    {
-        viewModel.characters.observe(this, Observer {
-            addItems(it)
+    private fun observeAddComplete() {
+        viewModel.addComplete.observe(this, Observer {
+            if (isfileAdd) {
+                viewModel.getLastCharacterId()
+                isfileAdd = false
+            } else {
+                Toast.makeText(activity, "added", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun observeGetLastCharacterIdComplete() {
+        viewModel.getLastCharacterIdComplete.observe(this, Observer {
+            parser.parse(it)
+            newCharacter = parser.character
+            viewModel.updateCharacter(newCharacter)
         })
     }
 

@@ -2,17 +2,12 @@ package com.example.testapp.ui.start
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.testapp.db.SkillsAndCharacterOnSt
 import com.example.testapp.db.entity.Character
-import com.example.testapp.db.entity.Skill
 import com.example.testapp.di.DBModelImpl
 import com.example.testapp.ui.RxViewModel
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
@@ -22,8 +17,8 @@ class StartFragmentViewModel: RxViewModel() {
 
     private val dbm: DBModelImpl by inject()
 
-    val characters: LiveData<List<Character>>
-        get() = charactersEvent
+    val getAllCharactersComplete: LiveData<List<Character>>
+        get() = getAllCharactersEvent
 
     val error: LiveData<Throwable>
         get() = errorEvent
@@ -34,25 +29,29 @@ class StartFragmentViewModel: RxViewModel() {
     val addComplete: LiveData<Boolean>
         get() = addCompleteEvent
 
+    val getLastCharacterIdComplete: LiveData<Int>
+        get() = getLastCharacterIdEvent
+
     private var addCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
 
-    private var charactersEvent: MutableLiveData<List<Character>> = MutableLiveData()
+    private var getAllCharactersEvent: MutableLiveData<List<Character>> = MutableLiveData()
 
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
 
     private var deleteCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
+
+    private var getLastCharacterIdEvent: MutableLiveData<Int> = MutableLiveData()
 
     init {
         val appScope = Toothpick.openScope("APP")
         Toothpick.inject(this, appScope)
     }
 
-    fun getItems()
-    {
+    fun getAllCharacters() {
         dbm.getDB().characterDao().getAll()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                charactersEvent.value = it
+                getAllCharactersEvent.value = it
             }.let(compositeDisposable::add)
     }
 
@@ -70,6 +69,7 @@ class StartFragmentViewModel: RxViewModel() {
                 deleteCompleteEvent.value = true
             }
             .subscribe()
+            .let(compositeDisposable::add)
     }
 
     fun addCharacter(character: Character){
@@ -85,28 +85,45 @@ class StartFragmentViewModel: RxViewModel() {
                 addCompleteEvent.value = true
             }
             .subscribe()
+            .let(compositeDisposable::add)
     }
 
-    fun addSkill(skill: Skill) {
+    fun updateCharacter(character: Character) {
         Observable.create { emitter: ObservableEmitter<Int> ->
-            dbm.db.skillDao().insert(skill)
+            dbm.db.characterDao().update(character)
             emitter.onComplete()
-        }
-            .subscribeOn(Schedulers.io())
+        }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError {
                 errorEvent.value = it
             }
             .doOnComplete {
+                addCompleteEvent.value = true
             }
             .subscribe()
+            .let(compositeDisposable::add)
+    }
+
+    fun getLastCharacterId() {
+        dbm.getDB().characterDao().getLastCharacterId()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    getLastCharacterIdEvent.value = it
+                },
+                {
+                    errorEvent.value = it
+                }
+            ).let(compositeDisposable::add)
     }
 
     fun clearEvents()
     {
         errorEvent =  MutableLiveData()
         deleteCompleteEvent =  MutableLiveData()
-        charactersEvent =  MutableLiveData()
+        getAllCharactersEvent =  MutableLiveData()
         addCompleteEvent = MutableLiveData()
+        getLastCharacterIdEvent = MutableLiveData()
     }
 }

@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.testapp.R
 import com.example.testapp.db.entity.Character
+import com.example.testapp.db.entity.CharacterSkills
 import kotlinx.android.synthetic.main.card_character_all.*
 import kotlinx.android.synthetic.main.fragment_character.*
 import toothpick.Toothpick
@@ -24,6 +25,7 @@ import toothpick.smoothie.viewmodel.installViewModelBinding
 class CharacterFragment : Fragment() {
 
     private lateinit var character: Character
+    private lateinit var characterSkills: List<CharacterSkills>
 
     private val viewModel: CharacterFragmentViewModel by inject()
 
@@ -49,14 +51,15 @@ class CharacterFragment : Fragment() {
         observeCharacterById()
         observeErrors()
         observeDeleteComplete()
+        observeCharacterSkillsById()
 
         initOnClick()
 
         val id = arguments?.getInt("id", 0) ?: 0
         viewModel.getCharacterById(id)
+        viewModel.getCharacterSkillsById(id)
     }
-    private fun initOnClick()
-    {
+    private fun initOnClick() {
         button_edit.setOnClickListener {
             val bundle = Bundle()
             bundle.putInt("id", character.id)
@@ -64,11 +67,17 @@ class CharacterFragment : Fragment() {
         }
     }
 
-    private fun observeCharacterById()
-    {
+    private fun observeCharacterById() {
         viewModel.characterById.observe(this, Observer {
             character = it
             setDataInFields(it)
+        })
+    }
+
+    private fun observeCharacterSkillsById() {
+        viewModel.characterSkillsByIdComplete.observe(this, Observer {
+            characterSkills = it
+            textView_skills.text = characterSkills.map { it.skillName }.toString()
         })
     }
 
@@ -111,7 +120,6 @@ class CharacterFragment : Fragment() {
         character_card_will.text = ch.will.toString()
         character_card_per.text = ch.per.toString()
         character_card_fp.text = ch.fp.toString()
-        //textView_skills.text = ch.skills.toString()
         val bytes = Base64.decode(ch.portrait, Base64.DEFAULT)
         val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
         character_card_image.setImageBitmap(image)//todo in other plases

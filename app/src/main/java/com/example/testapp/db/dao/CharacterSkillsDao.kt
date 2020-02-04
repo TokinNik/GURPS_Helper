@@ -7,8 +7,17 @@ import io.reactivex.Single
 @Dao
 interface CharacterSkillsDao {
 
-    @Query("SELECT * FROM skill, character_skills WHERE character_id = :characterId AND skill.name = character_skills.skill_name")
+    @Query("SELECT * FROM character_skills WHERE character_id = :characterId")
     fun getCharacterSkills(characterId: Int): Single<List<CharacterSkills>>
+
+    @Query("SELECT * FROM character_skills")
+    fun getAll(): Single<List<CharacterSkills>>
+
+    @Query("DELETE FROM character_skills WHERE character_id = :characterId")
+    fun deleteAllById(characterId: Int)
+
+    @Query("DELETE FROM character_skills")
+    fun deleteAll()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(skill: CharacterSkills)
@@ -18,5 +27,7 @@ interface CharacterSkillsDao {
 
     @Delete
     fun delete(skill: CharacterSkills)
+
+
 
 }
