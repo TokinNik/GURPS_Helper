@@ -10,12 +10,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.CharacterSkills
+import com.example.testapp.db.entity.Skill
+import com.example.testapp.ui.SelectableData
+import com.example.testapp.ui.skill.SkillItem
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.card_character_all.*
 import kotlinx.android.synthetic.main.fragment_character.*
 import toothpick.Toothpick
@@ -26,6 +33,9 @@ class CharacterFragment : Fragment() {
 
     private lateinit var character: Character
     private lateinit var characterSkills: List<CharacterSkills>
+    private val groupAdapter = GroupAdapter<GroupieViewHolder>()
+    private var currentSelect = -1
+    private var isInfoCollapsed = false
 
     private val viewModel: CharacterFragmentViewModel by inject()
 
@@ -48,6 +58,8 @@ class CharacterFragment : Fragment() {
 
         viewModel.clearEvents()
 
+        recyclerViewInit()
+
         observeCharacterById()
         observeErrors()
         observeDeleteComplete()
@@ -65,6 +77,79 @@ class CharacterFragment : Fragment() {
             bundle.putInt("id", character.id)
             navController?.navigate(R.id.action_characterFragment_to_characterEditFragment, bundle)
         }
+
+        haracter_card_collapse_info.setOnClickListener {
+            if (isInfoCollapsed) {
+                isInfoCollapsed = false
+                character_card_tl.visibility = View.VISIBLE//todo move in class CharacterCardView
+                character_card_age.visibility = View.VISIBLE
+                character_card_eye.visibility = View.VISIBLE
+                character_card_hairs.visibility = View.VISIBLE
+                character_card_skin.visibility = View.VISIBLE
+                character_card_height.visibility = View.VISIBLE
+                character_card_weight.visibility = View.VISIBLE
+                character_card_gender.visibility = View.VISIBLE
+                character_card_race.visibility = View.VISIBLE
+                character_card_sm.visibility = View.VISIBLE
+            } else {
+                isInfoCollapsed = true
+                character_card_tl.visibility = View.GONE
+                character_card_age.visibility = View.GONE
+                character_card_eye.visibility = View.GONE
+                character_card_hairs.visibility = View.GONE
+                character_card_skin.visibility = View.GONE
+                character_card_height.visibility = View.GONE
+                character_card_weight.visibility = View.GONE
+                character_card_gender.visibility = View.GONE
+                character_card_race.visibility = View.GONE
+                character_card_sm.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun recyclerViewInit() {
+        groupAdapter.setOnItemClickListener { item, view ->
+            val select = groupAdapter.getAdapterPosition(item)
+            if ((item as SkillItem).skill.select) {
+                item.skill.select = false
+                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
+            }
+            else {
+                item.skill.select = true
+                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.accent))
+
+                if (currentSelect >= 0 && currentSelect != select){
+                    val prevItem = groupAdapter.getGroupAtAdapterPosition(currentSelect) as SkillItem
+                    prevItem.skill.select = false
+                    prevItem.rootView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
+                }
+            }
+            groupAdapter.notifyItemChanged(currentSelect)
+            currentSelect = select
+            groupAdapter.notifyItemChanged(currentSelect)
+        }
+        character_card_skills_list.apply {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = groupAdapter
+        }
+    }
+
+    private fun addItems(items: List<Skill>)
+    {
+        groupAdapter.clear()
+
+        for(i in items)
+        {
+            groupAdapter.apply {
+                add(
+                    SkillItem(
+                        skill = SelectableData(i),
+                        colorActive = ContextCompat.getColor(context!!, R.color.accent),
+                        colorInactive = ContextCompat.getColor(context!!, R.color.primary_light)
+                    )
+                )
+            }
+        }
     }
 
     private fun observeCharacterById() {
@@ -77,7 +162,11 @@ class CharacterFragment : Fragment() {
     private fun observeCharacterSkillsById() {
         viewModel.characterSkillsByIdComplete.observe(this, Observer {
             characterSkills = it
-            textView_skills.text = characterSkills.map { it.skillName }.toString()
+            addItems(it.map { Skill(
+                name = it.skillName,
+                container = it.container,
+                points = it.points
+            ) })
         })
     }
 
@@ -98,7 +187,7 @@ class CharacterFragment : Fragment() {
     private fun setDataInFields(ch: Character) {
         character_card_id.text = ch.id.toString()
         character_card_name.text = "${resources.getString(R.string.name)}: ${ch.name}"
-        character_card_player_name.text = "${resources.getString(R.string.player_name)}: ${ch.playerName}"
+        character_card_player_name.text = "${resources.getString(R.string.player_name)}: ${ch.playerName}"//todo and this too
         character_card_world.text = "${resources.getString(R.string.world)}: ${ch.world}"
         character_card_tl.text = "${resources.getString(R.string.tl)}: ${ch.tl}"
         character_card_age.text = "${resources.getString(R.string.age)}: ${ch.age}"

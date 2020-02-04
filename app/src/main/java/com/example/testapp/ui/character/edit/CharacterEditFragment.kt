@@ -78,8 +78,8 @@ class CharacterEditFragment : Fragment() {
         observeUpdateComplete()
         observeErrors()
         observeSkillByIds()
-        initOnClick()
 
+        initOnClick()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -16,320 +16,330 @@
             android:id="@+id/character_card_image"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
             android:layout_weight="1"
             app:srcCompat="@mipmap/ic_launcher_round" />
 
-        <com.google.android.flexbox.FlexboxLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            app:flexDirection="row"
-            app:flexWrap="wrap">
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/character_card_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="Name: name" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/character_card_age"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="Age: 22" />
+                <TextView
+                    android:id="@+id/character_card_id_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/id"
+                    android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/character_card_player_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="Player name: Nik" />
+                <TextView
+                    android:id="@+id/character_card_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    tools:text="123" />
+            </TableRow>
 
-            <TextView
-                android:id="@+id/character_card_world"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="World: world" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/character_card_state"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="State: state" />
+                <TextView
+                    android:id="@+id/character_card_st_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/st"
+                    android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/character_card_eye"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="Eye: black" />
+                <TextView
+                    android:id="@+id/character_card_st"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    tools:text="10" />
 
-            <TextView
-                android:id="@+id/character_card_hairs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="Hairs: black" />
+                <TextView
+                    android:id="@+id/character_card_hp_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/hp"
+                    android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/character_card_skin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="Skin: white" />
+                <TextView
+                    android:id="@+id/character_card_hp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    tools:text="10" />
+            </TableRow>
 
-            <TextView
-                android:id="@+id/character_card_race"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="Race: human" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/character_card_gender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="Gender: M" />
+                <TextView
+                    android:id="@+id/character_card_dx_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/dx"
+                    android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/character_card_weight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="Weight: 60" />
+                <TextView
+                    android:id="@+id/character_card_dx"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    tools:text="10" />
 
-            <TextView
-                android:id="@+id/character_card_height"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="Height: 1.8" />
+                <TextView
+                    android:id="@+id/character_card_move_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/move"
+                    android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/character_card_main_hand"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="Main hand: right" />
+                <TextView
+                    android:id="@+id/character_card_move"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    tools:text="10" />
 
-            <TextView
-                android:id="@+id/character_card_tl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="TL: 0" />
+                <TextView
+                    android:id="@+id/character_card_speed_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/speed"
+                    android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/character_card_sm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="SM: 0" />
+                <TextView
+                    android:id="@+id/character_card_speed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    tools:text="10" />
+            </TableRow>
 
-        </com.google.android.flexbox.FlexboxLayout>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/character_card_iq_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/iq"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/character_card_iq"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    tools:text="10" />
+
+                <TextView
+                    android:id="@+id/character_card_will_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/will"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/character_card_will"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    tools:text="10" />
+
+                <TextView
+                    android:id="@+id/character_card_per_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/per"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/character_card_per"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    tools:text="10" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/character_card_ht_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/ht"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/character_card_ht"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    tools:text="10" />
+
+                <TextView
+                    android:id="@+id/character_card_fp_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/fp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/character_card_fp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    tools:text="10" />
+            </TableRow>
+        </TableLayout>
 
     </LinearLayout>
 
-    <TableLayout
+    <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        app:flexDirection="row"
+        app:flexWrap="wrap">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/character_card_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="Name: name" />
 
-            <TextView
-                android:id="@+id/character_card_id_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/id"
-                android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/character_card_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="Age: 22" />
 
-            <TextView
-                android:id="@+id/character_card_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="123" />
-        </TableRow>
+        <TextView
+            android:id="@+id/character_card_player_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="Player name: Nik" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/character_card_world"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="World: world" />
 
-            <TextView
-                android:id="@+id/character_card_st_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/st"
-                android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/character_card_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="State: state" />
 
-            <TextView
-                android:id="@+id/character_card_st"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="10" />
+        <TextView
+            android:id="@+id/character_card_eye"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="Eye: black" />
 
-            <TextView
-                android:id="@+id/character_card_hp_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/hp"
-                android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/character_card_hairs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="Hairs: black" />
 
-            <TextView
-                android:id="@+id/character_card_hp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="10" />
-        </TableRow>
+        <TextView
+            android:id="@+id/character_card_skin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="Skin: white" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/character_card_race"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="Race: human" />
 
-            <TextView
-                android:id="@+id/character_card_dx_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/dx"
-                android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/character_card_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="Gender: M" />
 
-            <TextView
-                android:id="@+id/character_card_dx"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="10" />
+        <TextView
+            android:id="@+id/character_card_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="Weight: 60" />
 
-            <TextView
-                android:id="@+id/character_card_move_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/move"
-                android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/character_card_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="Height: 1.8" />
 
-            <TextView
-                android:id="@+id/character_card_move"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="10" />
+        <TextView
+            android:id="@+id/character_card_main_hand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="Main hand: right" />
 
-            <TextView
-                android:id="@+id/character_card_speed_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/speed"
-                android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/character_card_tl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="TL: 0" />
 
-            <TextView
-                android:id="@+id/character_card_speed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="10" />
-        </TableRow>
+        <TextView
+            android:id="@+id/character_card_sm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            tools:text="SM: 0" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/haracter_card_collapse_info"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:padding="5dp"
+            app:layout_wrapBefore="true"
+            android:gravity="center"
+            app:layout_flexGrow="1"
+            android:text="^"  />
 
-            <TextView
-                android:id="@+id/character_card_iq_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/iq"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/character_card_iq"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="10" />
-
-            <TextView
-                android:id="@+id/character_card_will_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/will"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/character_card_will"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="10" />
-
-            <TextView
-                android:id="@+id/character_card_per_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/per"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/character_card_per"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="10" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/character_card_ht_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/ht"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/character_card_ht"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="10" />
-
-            <TextView
-                android:id="@+id/character_card_fp_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/fp"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/character_card_fp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                tools:text="10" />
-        </TableRow>
-    </TableLayout>
+    </com.google.android.flexbox.FlexboxLayout>
 
     <TextView
         android:id="@+id/character_card_skills_text"
@@ -339,11 +349,15 @@
         android:text="@string/skills"
         android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/textView_skills"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/character_card_skills_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        tools:text="blablabla, okokok" />
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        tools:itemCount="15"
+        tools:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/item_skill"
+        />
 
 </LinearLayout>
