@@ -1,5 +1,6 @@
 package com.example.testapp.ui.start
 
+import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
 import android.content.Intent
@@ -21,6 +22,7 @@ import com.example.testapp.db.entity.Character
 import com.example.testapp.ui.character.CharacterItem
 import com.example.testapp.util.GCSParser
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.tbruyelle.rxpermissions2.RxPermissions
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -102,10 +104,19 @@ class StartFragment : Fragment() {
             .setTitle(R.string.add_new_character)
             .setMessage(R.string.add_new_character_message)
             .setPositiveButton(R.string.add_from_file) { dialogInterface: DialogInterface, i: Int ->
-                val intent = Intent(Intent.ACTION_GET_CONTENT)
-                intent.type = "file/*"
-                startActivityForResult(intent, requestCodeAddFromFile)
-                dialogInterface.dismiss()
+
+                RxPermissions(activity!!)
+                    .request(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    .subscribe {
+                        if (it) {
+                            val intent = Intent(Intent.ACTION_GET_CONTENT)
+                            intent.type = "file/*"
+                            startActivityForResult(intent, requestCodeAddFromFile)
+                        } else {
+                            Toast.makeText(activity, "permission denied", Toast.LENGTH_SHORT).show()
+                        }
+                        dialogInterface.dismiss()
+                    }
             }
             .setNegativeButton(R.string.create_new) { dialogInterface: DialogInterface, i: Int ->
                 dialogInterface.dismiss()
