@@ -1,9 +1,9 @@
-package com.example.testapp.ui.skill.observeall
+package com.example.testapp.ui.skill.observe.observeall
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.testapp.db.entity.Skill
+import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.di.DBModelImpl
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter

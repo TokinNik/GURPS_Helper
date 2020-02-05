@@ -39,5 +39,12 @@
         android:layout_marginStart="10dp"
         tools:text="IQ-2" />
 
+    <TextView
+        android:id="@+id/item_skill_prereq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        tools:text="0" />
+
 
 </LinearLayout>

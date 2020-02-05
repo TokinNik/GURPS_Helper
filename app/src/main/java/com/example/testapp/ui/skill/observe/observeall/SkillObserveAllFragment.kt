@@ -1,4 +1,4 @@
-package com.example.testapp.ui.skill.observeall
+package com.example.testapp.ui.skill.observe.observeall
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,7 +13,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
 import com.example.testapp.ui.SelectableData
-import com.example.testapp.db.entity.Skill
+import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.SkillsHeaderItem
 import com.xwray.groupie.GroupAdapter
@@ -117,7 +117,8 @@ class SkillObserveAllFragment : Fragment() {
                 onClickDelete = {
                     if (currentSelect >= 0) {
                         viewModel.deleteSkill(currentSkill)
-                        currentSkill = Skill()
+                        currentSkill =
+                            Skill()
                         currentSelect = -1
                     }
                 }

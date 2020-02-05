@@ -3,7 +3,7 @@ package com.example.testapp.ui.character.choiseskill
 import android.view.View
 import com.example.testapp.R
 import com.example.testapp.ui.SelectableData
-import com.example.testapp.db.entity.Skill
+import com.example.testapp.db.entity.Skill.Skill
 
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item

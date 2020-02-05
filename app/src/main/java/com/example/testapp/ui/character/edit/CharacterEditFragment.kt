@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
-import com.example.testapp.db.entity.Skill
+import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.ui.character.choiseskill.ChoiceSkillFragment
 import com.example.testapp.ui.skill.SkillItem
 import com.xwray.groupie.GroupAdapter

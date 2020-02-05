@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -18,9 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.CharacterSkills
-import com.example.testapp.db.entity.Skill
+import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.ui.skill.SkillItem
+import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.card_character_all.*
@@ -34,7 +36,6 @@ class CharacterFragment : Fragment() {
     private lateinit var character: Character
     private lateinit var characterSkills: List<CharacterSkills>
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
-    private var currentSelect = -1
     private var isInfoCollapsed = false
 
     private val viewModel: CharacterFragmentViewModel by inject()
@@ -64,6 +65,7 @@ class CharacterFragment : Fragment() {
         observeErrors()
         observeDeleteComplete()
         observeCharacterSkillsById()
+        observeSkillByName()
 
         initOnClick()
 
@@ -71,6 +73,7 @@ class CharacterFragment : Fragment() {
         viewModel.getCharacterById(id)
         viewModel.getCharacterSkillsById(id)
     }
+
     private fun initOnClick() {
         button_edit.setOnClickListener {
             val bundle = Bundle()
@@ -109,24 +112,10 @@ class CharacterFragment : Fragment() {
 
     private fun recyclerViewInit() {
         groupAdapter.setOnItemClickListener { item, view ->
-            val select = groupAdapter.getAdapterPosition(item)
-            if ((item as SkillItem).skill.select) {
-                item.skill.select = false
-                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
-            }
-            else {
-                item.skill.select = true
-                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.accent))
-
-                if (currentSelect >= 0 && currentSelect != select){
-                    val prevItem = groupAdapter.getGroupAtAdapterPosition(currentSelect) as SkillItem
-                    prevItem.skill.select = false
-                    prevItem.rootView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
-                }
-            }
-            groupAdapter.notifyItemChanged(currentSelect)
-            currentSelect = select
-            groupAdapter.notifyItemChanged(currentSelect)
+            val selectSkillDialog = SkillObserveSingleFragment((item as SkillItem).skill.data.name)
+            selectSkillDialog.setTargetFragment(this, 1)
+            selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
+            selectSkillDialog.show(fragmentManager!!, null)
         }
         character_card_skills_list.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -159,14 +148,22 @@ class CharacterFragment : Fragment() {
         })
     }
 
+    private fun observeSkillByName() {
+        viewModel.getSkillByNameComplete.observe(this, Observer {
+            println(it)
+        })
+    }
+
     private fun observeCharacterSkillsById() {
         viewModel.characterSkillsByIdComplete.observe(this, Observer {
             characterSkills = it
-            addItems(it.map { Skill(
-                name = it.skillName,
-                container = it.container,
-                points = it.points
-            ) })
+            addItems(it.map {
+                Skill(
+                    name = it.skillName,
+                    container = it.container,
+                    points = it.points
+                )
+            })
         })
     }
 
@@ -179,7 +176,7 @@ class CharacterFragment : Fragment() {
     private fun observeErrors() {
         viewModel.error.observe(this, Observer {
             Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
-            println("ERROR!!! $it")
+            println("ERROR!!! ${it.printStackTrace()}")
         })
     }
 

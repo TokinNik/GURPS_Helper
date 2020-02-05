@@ -1,4 +1,4 @@
-package com.example.testapp.db.entity
+package com.example.testapp.db.entity.Skill
 
 import androidx.room.Entity
 import androidx.room.Ignore
@@ -10,8 +10,8 @@ data class Skill(
     @Ignore
     var container: String = "empty",
     var name: String = "",
-    var name_loc: String = "",
-    var description_loc: String = "",
+    var nameLoc: String = "",
+    var descriptionLoc: String = "",
     var tl: String = "",
     var difficulty: String = "",
     var specialization: String = "",
@@ -19,5 +19,7 @@ data class Skill(
     var reference: String = "",
     var parry: String = "",
     var categories: List<String> = emptyList(),
-    var default: List<Default> = emptyList()
+    var defaults: List<Default> = emptyList(),
+    var prereqList: List<PrereqList> = emptyList()
+
 )

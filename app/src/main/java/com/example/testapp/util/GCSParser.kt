@@ -3,10 +3,11 @@ package com.example.testapp.util
 import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
-import com.example.testapp.db.entity.Character
-import com.example.testapp.db.entity.CharacterSkills
-import com.example.testapp.db.entity.Default
-import com.example.testapp.db.entity.Skill
+import com.example.testapp.db.entity.*
+import com.example.testapp.db.entity.Skill.Default
+import com.example.testapp.db.entity.Skill.PrereqList
+import com.example.testapp.db.entity.Skill.Skill
+import com.example.testapp.db.entity.Skill.SkillPrereq
 import com.example.testapp.di.DBModelImpl
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -235,7 +236,7 @@ class GCSParser @Inject constructor(){
                 }
                 .subscribe()
 
-            /*Observable.create { emitter: ObservableEmitter<Int> -> todo skill library add
+            Observable.create { emitter: ObservableEmitter<Int> ->
                 dbm.db.skillDao().insert(it)
                 emitter.onComplete()
             }.subscribeOn(Schedulers.io())
@@ -245,13 +246,16 @@ class GCSParser @Inject constructor(){
                 }
                 .doOnComplete {
                 }
-                .subscribe()*/
+                .subscribe()
         }
     }
 
     private fun parseSkill(parser: XmlPullParser, container: String): Skill {
         val parsedDefaults = mutableListOf<Default>()
-        val parsedSkill = Skill(container = container)
+        val parsedPrereqList = mutableListOf<PrereqList>()
+        var prereqParentCounter = 0
+        val parsedSkill =
+            Skill(container = container)
         var currentTag = ""
         while (true) {
             when (parser.eventType) {
@@ -260,13 +264,17 @@ class GCSParser @Inject constructor(){
                     when(currentTag) {
                         "categories" -> parseSkillCategories(parser, parsedSkill)
                         "default" -> parseSkillDefault(parser, parsedDefaults)
+                        "prereq_list" -> {
+                            parsePrereqList(parser, parsedPrereqList, 0, prereqParentCounter)
+                            prereqParentCounter++
+                        }
                     }
                 }
                 XmlPullParser.TEXT -> {
                     when (currentTag) {
                         "name" -> {parsedSkill.name = parser.text ?: ""}
-                        "name-loc" -> {parsedSkill.name_loc = parser.text ?: ""}
-                        "description-loc" -> {parsedSkill.description_loc = parser.text ?: ""}
+                        "name-loc" -> {parsedSkill.nameLoc = parser.text ?: ""}
+                        "description-loc" -> {parsedSkill.descriptionLoc = parser.text ?: ""}
                         "tech_level" -> {parsedSkill.tl = parser.text ?: ""}
                         "difficulty" -> {parsedSkill.difficulty = parser.text ?: ""}
                         "specialization" -> {parsedSkill.specialization = parser.text ?: ""}
@@ -275,7 +283,71 @@ class GCSParser @Inject constructor(){
                         "parry" -> {parsedSkill.parry = parser.text ?: ""}
                     }
                 }
-                XmlPullParser.END_TAG -> if (parser.name == "skill") return parsedSkill else currentTag = ""
+                XmlPullParser.END_TAG -> if (parser.name == "skill") {
+                    parsedSkill.defaults = parsedDefaults
+                    parsedSkill.prereqList = parsedPrereqList
+                    return parsedSkill
+                } else {
+                    currentTag = ""
+                }
+            }
+            parser.next()
+        }
+    }
+
+    private fun parsePrereqList(parser: XmlPullParser, parsedPrereqListList: MutableList<PrereqList>, depth: Int, parent: Int) {
+        var parsedPrereqList = PrereqList(
+            all = parser.getAttributeValue(0) == "yes",
+            depth = depth,
+            parent = parent
+        )
+        val parsedSkillPrereq = mutableListOf<SkillPrereq>()
+        //val parsedAdvPrereq = mutableListOf<AdvantsgePrereq>()
+        //val parsedAttrPrereq = mutableListOf<AttributePrereq>()
+        parser.next()
+        while (true) {
+            when (parser.eventType) {
+                XmlPullParser.START_TAG -> {
+                    when(parser.name) {
+                        "skill_prereq" -> parsedSkillPrereq.add(parseSkillPrereq(parser))
+                        //"advantage_prereq" -> parsedAdvPrereq.add(parseAdvPrereq(parser))
+                        //"attribute_prereq" -> parsedAttrPrereq.add(parseAttrPrereq(parser))
+                        "prereq_list" -> parsePrereqList(parser, parsedPrereqListList, parsedPrereqList.depth++, parsedPrereqList.parent++)
+                    }
+                }
+                XmlPullParser.END_TAG -> if (parser.name == "prereq_list") {
+                    parsedPrereqList.skillPrereqList = parsedSkillPrereq
+                    parsedPrereqListList.add(parsedPrereqList)
+                    return
+                }
+            }
+            parser.next()
+        }
+    }
+
+    private fun parseSkillPrereq(parser: XmlPullParser): SkillPrereq {
+        val parsedSkillPrereq = SkillPrereq()
+        var currentTag = ""
+        //parser.next()
+        while (true) {
+            when (parser.eventType) {
+                XmlPullParser.START_TAG -> {
+                    currentTag = parser.name
+                    when(currentTag) {
+                        "skill_prereq" -> parsedSkillPrereq.has = parser.getAttributeValue(0) == "yes"
+                        "name" -> parsedSkillPrereq.nameCompare = parser.getAttributeValue(0)
+                        "specialization" -> parsedSkillPrereq.specializationCompare = parser.getAttributeValue(0)
+                        "level" -> parsedSkillPrereq.levelCompare = parser.getAttributeValue(0)
+                    }
+                }
+                XmlPullParser.TEXT -> {
+                    when (currentTag) {
+                        "name" -> {parsedSkillPrereq.name = parser.text ?: ""}
+                        "level" -> {parsedSkillPrereq.level = parser.text ?: ""}
+                        "specialization" -> {parsedSkillPrereq.specialization = parser.text ?: ""}
+                    }
+                }
+                XmlPullParser.END_TAG -> if (parser.name == "skill_prereq") return parsedSkillPrereq else currentTag = ""
             }
             parser.next()
         }
@@ -292,6 +364,7 @@ class GCSParser @Inject constructor(){
                         "type" -> {parsedDefault.type = parser.text ?: ""}
                         "name" -> {parsedDefault.name = parser.text ?: ""}
                         "modifier" -> {parsedDefault.modifier = parser.text ?: ""}
+                        "specialization" -> {parsedDefault.specialization = parser.text ?: ""}
                     }
                 }
                 XmlPullParser.END_TAG -> if (parser.name == "default") {

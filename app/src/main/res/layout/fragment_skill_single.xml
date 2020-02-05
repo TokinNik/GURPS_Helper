@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/skill_observe_single_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            tools:text="Skill Name" />
+
+        <TextView
+            android:id="@+id/skill_observe_single_name_loc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            tools:text="Skill Name-loc" />
+
+        <TextView
+            android:id="@+id/skill_observe_single_specialization"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            tools:text="Skill Specialization" />
+
+        <TextView
+            android:id="@+id/skill_observe_single_tl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            tools:text="Skill TL" />
+
+        <TextView
+            android:id="@+id/skill_observe_single_difficulty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            tools:text="Skill Difficulty" />
+
+        <TextView
+            android:id="@+id/skill_observe_single_points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            tools:text="Skill Points" />
+
+        <TextView
+            android:id="@+id/skill_observe_single_reference"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            tools:text="Skill Reference" />
+
+        <TextView
+            android:id="@+id/skill_observe_single_parry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            tools:text="Skill Perry" />
+
+        <TextView
+            android:id="@+id/skill_observe_single_categories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            tools:text="Skill Categories" />
+
+        <TextView
+            android:id="@+id/skill_observe_single_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            tools:text="Skill Default" />
+
+        <TextView
+            android:id="@+id/skill_observe_single_prereq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            tools:text="Skill Prereq List" />
+
+        <TextView
+            android:id="@+id/skill_observe_single_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            tools:text="Skill Description" />
+
+
+    </LinearLayout>
+
+</ScrollView>

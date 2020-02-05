@@ -3,16 +3,10 @@ package com.example.testapp.ui.battle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.testapp.db.SkillsAndCharacterOnSt
 import com.example.testapp.db.entity.Character
-import com.example.testapp.db.entity.Skill
 import com.example.testapp.di.DBModelImpl
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
-import io.reactivex.schedulers.Schedulers
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 

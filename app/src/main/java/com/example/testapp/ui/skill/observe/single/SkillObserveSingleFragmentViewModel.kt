@@ -1,19 +1,19 @@
-package com.example.testapp.ui.character.choiseskill
+package com.example.testapp.ui.skill.observe.single
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.di.DBModelImpl
+import com.example.testapp.ui.RxViewModel
+import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 
 
-class ChoiceSkillFragmentViewModel: ViewModel() {
+class SkillObserveSingleFragmentViewModel: RxViewModel() {
 
     private val dbm: DBModelImpl by inject()
 
@@ -26,6 +26,12 @@ class ChoiceSkillFragmentViewModel: ViewModel() {
     val skillById: LiveData<Skill>
         get() = skillByIdEvent
 
+    val deleteComplete: LiveData<Boolean>
+        get() = deleteCompleteEvent
+
+    val getSkillByNameComplete: LiveData<Skill>
+        get() = getSkillByNameEvent
+
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
 
     private var skillsEvent: MutableLiveData<List<Skill>> = MutableLiveData()
@@ -34,7 +40,7 @@ class ChoiceSkillFragmentViewModel: ViewModel() {
 
     private var deleteCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
 
-    private val compositeDisposable = CompositeDisposable()
+    private var getSkillByNameEvent: MutableLiveData<Skill> = MutableLiveData()
 
     init {
         val appScope = Toothpick.openScope("APP")
@@ -45,15 +51,14 @@ class ChoiceSkillFragmentViewModel: ViewModel() {
         dbm.getDB().skillDao().getById(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : DisposableSingleObserver<Skill>() {
-                override fun onSuccess(t: Skill) {
-                    skillByIdEvent.value = t
+            .subscribe(
+                {
+                    skillByIdEvent.value = it
+                },
+                {
+                    errorEvent.value = it
                 }
-
-                override fun onError(e: Throwable) {
-                    errorEvent.value = e
-                }
-            })
+            ).let(compositeDisposable::add)
     }
 
     fun getAllSkills()
@@ -63,6 +68,37 @@ class ChoiceSkillFragmentViewModel: ViewModel() {
             .subscribe {
                 skillsEvent.value = it
             }.let(compositeDisposable::add)
+    }
+
+    fun deleteSkill(currentSkill: Skill) {
+        Observable.create { emitter: ObservableEmitter<Int> ->
+            dbm.db.skillDao().delete(currentSkill)
+            emitter.onComplete()
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnError {
+                errorEvent.value = it
+            }
+            .doOnComplete {
+                deleteCompleteEvent.value = true
+            }
+            .subscribe()
+            .let(compositeDisposable::add)
+    }
+
+    fun getSkillByName(name: String) {
+        dbm.getDB().skillDao().getByName(name)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    getSkillByNameEvent.value = it
+                },
+                {
+                    errorEvent.value = it
+                }
+            ).let(compositeDisposable::add)
     }
 
     fun clearEvents()

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.testapp.db.entity.Character
-import com.example.testapp.db.entity.Skill
+import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.di.DBModelImpl
 import com.example.testapp.util.RollUtil
 import io.reactivex.Observable

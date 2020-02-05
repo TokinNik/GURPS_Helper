@@ -47,16 +47,16 @@ data class Character(
     var fpLoss: String = "",
     var currentLoad: Int = 0,
 
-    var drScull:Int = 2,//todo split in other classes
-    var drFace:Int = 0,
-    var drEye:Int = 0,
-    var drNeck:Int = 0,
-    var drBody:Int = 0,
-    var drGroin:Int = 0,
-    var drHand:Int = 0,
-    var drWrist:Int = 0,
-    var drLeg:Int = 0,
-    var drFoot:Int = 0,
+    var drScull: Int = 2,//todo split in other classes
+    var drFace: Int = 0,
+    var drEye: Int = 0,
+    var drNeck: Int = 0,
+    var drBody: Int = 0,
+    var drGroin: Int = 0,
+    var drHand: Int = 0,
+    var drWrist: Int = 0,
+    var drLeg: Int = 0,
+    var drFoot: Int = 0,
     //------------------
     var advantages: List<Int> = emptyList(),
     var disadvantages: List<Int> = emptyList(),

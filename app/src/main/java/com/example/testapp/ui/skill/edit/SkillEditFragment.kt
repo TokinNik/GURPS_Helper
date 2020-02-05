@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.testapp.R
-import com.example.testapp.db.entity.Skill
+import com.example.testapp.db.entity.Skill.Skill
 import kotlinx.android.synthetic.main.fragment_skill_edit.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject

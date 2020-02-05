@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.CharacterSkills
+import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.di.DBModelImpl
 import com.example.testapp.ui.RxViewModel
 import io.reactivex.Observable
@@ -29,6 +30,9 @@ class CharacterFragmentViewModel: RxViewModel() {
      val characterSkillsByIdComplete: LiveData<List<CharacterSkills>>
         get() = characterSkillsByIdEvent
 
+    val getSkillByNameComplete: LiveData<Skill>
+        get() = getSkillByNameEvent
+
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
 
     private var deleteCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
@@ -36,6 +40,8 @@ class CharacterFragmentViewModel: RxViewModel() {
     private var characterByIdEvent: MutableLiveData<Character> = MutableLiveData()
 
     private var characterSkillsByIdEvent: MutableLiveData<List<CharacterSkills>> = MutableLiveData()
+
+    private var getSkillByNameEvent: MutableLiveData<Skill> = MutableLiveData()
 
     init {
         val appScope = Toothpick.openScope("APP")
@@ -93,5 +99,19 @@ class CharacterFragmentViewModel: RxViewModel() {
         deleteCompleteEvent =  MutableLiveData()
         characterByIdEvent =  MutableLiveData()
         characterSkillsByIdEvent = MutableLiveData()
+    }
+
+    fun getSkillByName(name: String) {
+        dbm.getDB().skillDao().getByName(name)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    getSkillByNameEvent.value = it
+                },
+                {
+                    errorEvent.value = it
+                }
+            ).let(compositeDisposable::add)
     }
 }
