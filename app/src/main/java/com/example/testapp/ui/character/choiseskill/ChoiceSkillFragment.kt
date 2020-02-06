@@ -63,7 +63,11 @@ class ChoiceSkillFragment(oldSkills: List<Skill>) : DialogFragment() {
         button_accept.setOnClickListener {
             for (i in 0 until groupAdapter.itemCount){
                 val item = (groupAdapter.getItem(i) as ChoiceSkillItem)
-                if (item.skill.select) selectedSkills.add(item.skill.data) else selectedSkills.remove(item.skill.data)
+                if (item.skill.select) {
+                    if (!selectedSkills.contains(item.skill.data)) selectedSkills.add(item.skill.data)
+                } else {
+                    selectedSkills.remove(item.skill.data)
+                }
             }
             onClickAccept.invoke(selectedSkills)
         }

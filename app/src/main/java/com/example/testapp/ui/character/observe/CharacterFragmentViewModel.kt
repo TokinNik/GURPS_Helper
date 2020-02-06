@@ -90,9 +90,9 @@ class CharacterFragmentViewModel: RxViewModel() {
             .subscribe(
                 { list ->
                     getSkillByNamesEvent.value = list.filter { skill ->
-                        characterSkills.first {
-                            it.skillName == skill.name
-                        }.specialization == skill.specialization
+                        characterSkills.any {
+                            it.skillName == skill.name && it.specialization == skill.specialization
+                        }
                     }
                 },
                 {

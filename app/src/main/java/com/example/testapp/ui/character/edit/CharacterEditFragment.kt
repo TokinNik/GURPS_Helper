@@ -111,9 +111,9 @@ class CharacterEditFragment : Fragment() {
             selectSkillDialog.setTargetFragment(this, 1)
             selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
             selectSkillDialog.onClickAccept = {
+                selectSkillDialog.dismiss()
                 characterSkillList = it
                 setItems(it)
-                selectSkillDialog.dismiss()
             }
             selectSkillDialog.show(fragmentManager!!, null)
         }
