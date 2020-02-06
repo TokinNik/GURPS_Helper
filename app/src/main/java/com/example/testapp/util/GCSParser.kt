@@ -106,7 +106,7 @@ class GCSParser @Inject constructor(){
                         when (parser.name) {
                             "profile" -> parseProfile(parser)
 //                            "advantage_list" -> TODO
-                            "skill_list" -> convertSkillListToDBFormat(parseSkillList(parser))
+                            "skill_list" -> dbm.saveCharacterSkills(parseSkillList(parser), character.id)
 //                            "spell_list" -> TODO
 //                            "equipment_list" -> TODO
 //                            "notes" -> TODO
@@ -211,30 +211,6 @@ class GCSParser @Inject constructor(){
                 }
             }
             parser.next()
-        }
-    }
-
-    private fun convertSkillListToDBFormat(skillsList: MutableList<Skill>) {
-        skillsList.forEach {
-            Observable.create { emitter: ObservableEmitter<Int> ->
-                dbm.db.characterSkillsDao().insert(
-                    CharacterSkills(
-                        characterId = character.id,
-                        skillName = it.name,
-                        container = it.container,
-                        points = it.points
-                    )
-                )
-                emitter.onComplete()
-            }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError {
-                    println(it)
-                }
-                .doOnComplete {
-                }
-                .subscribe()
         }
     }
 

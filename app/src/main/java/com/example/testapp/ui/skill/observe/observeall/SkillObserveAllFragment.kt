@@ -73,7 +73,7 @@ class SkillObserveAllFragment : Fragment() {
 
     private fun initRecyclerView(){
         groupAdapter.setOnItemClickListener { item, view ->
-            val selectSkillDialog = SkillObserveSingleFragment((item as SkillItem).skill.data.name)
+            val selectSkillDialog = SkillObserveSingleFragment((item as SkillItem).skill.data)
             selectSkillDialog.setTargetFragment(this, 1)
             selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
             selectSkillDialog.show(fragmentManager!!, null)

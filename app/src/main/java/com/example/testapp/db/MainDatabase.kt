@@ -17,7 +17,7 @@ import com.example.testapp.db.entity.Skill.Skill
         Skill::class,
         CharacterSkills::class
     ],
-    version = 28,
+    version = 29,
     exportSchema = false
 )
 @TypeConverters(IntListConverter::class, StringListConverter::class, SkillDefaultConverter::class, PrereqListConverter::class)
@@ -28,4 +28,6 @@ abstract class MainDatabase: RoomDatabase()
     abstract fun skillDao(): SkillDao
 
     abstract fun characterSkillsDao(): CharacterSkillsDao
+
+
 }

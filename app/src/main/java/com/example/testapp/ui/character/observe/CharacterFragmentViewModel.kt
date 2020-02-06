@@ -33,6 +33,9 @@ class CharacterFragmentViewModel: RxViewModel() {
     val getSkillByNameComplete: LiveData<Skill>
         get() = getSkillByNameEvent
 
+    val getSkillByNamesComplete: LiveData<List<Skill>>
+        get() = getSkillByNamesEvent
+
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
 
     private var deleteCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
@@ -42,6 +45,8 @@ class CharacterFragmentViewModel: RxViewModel() {
     private var characterSkillsByIdEvent: MutableLiveData<List<CharacterSkills>> = MutableLiveData()
 
     private var getSkillByNameEvent: MutableLiveData<Skill> = MutableLiveData()
+
+    private var getSkillByNamesEvent: MutableLiveData<List<Skill>> = MutableLiveData()
 
     init {
         val appScope = Toothpick.openScope("APP")
@@ -77,20 +82,23 @@ class CharacterFragmentViewModel: RxViewModel() {
             ).let(compositeDisposable::add)
     }
 
-    fun deleteCharacter(character: Character) {
-        Observable.create { emitter: ObservableEmitter<Int> ->
-            dbm.db.characterDao().delete(character)
-            emitter.onComplete()
-        }.subscribeOn(Schedulers.io())
+    fun getSkillByNames(characterSkills: List<CharacterSkills>)
+    {
+        dbm.getDB().skillDao().getByNames(characterSkills.map { it.skillName })
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnError {
-                errorEvent.value = it
-            }
-            .doOnComplete {
-                deleteCompleteEvent.value = true
-            }
-            .subscribe()
-            .let(compositeDisposable::add)
+            .subscribe(
+                { list ->
+                    getSkillByNamesEvent.value = list.filter { skill ->
+                        characterSkills.first {
+                            it.skillName == skill.name
+                        }.specialization == skill.specialization
+                    }
+                },
+                {
+                    errorEvent.value = it
+                }
+            ).let(compositeDisposable::add)
     }
 
     fun clearEvents()
@@ -99,19 +107,7 @@ class CharacterFragmentViewModel: RxViewModel() {
         deleteCompleteEvent =  MutableLiveData()
         characterByIdEvent =  MutableLiveData()
         characterSkillsByIdEvent = MutableLiveData()
-    }
-
-    fun getSkillByName(name: String) {
-        dbm.getDB().skillDao().getByName(name)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    getSkillByNameEvent.value = it
-                },
-                {
-                    errorEvent.value = it
-                }
-            ).let(compositeDisposable::add)
+        getSkillByNameEvent = MutableLiveData()
+        getSkillByNamesEvent = MutableLiveData()
     }
 }

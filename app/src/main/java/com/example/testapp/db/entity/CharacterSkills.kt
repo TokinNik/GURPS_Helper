@@ -14,6 +14,7 @@ data class CharacterSkills(
     var characterId: Int = 0,
     @ColumnInfo(name = "skill_name")
     var skillName: String = "",
+    var specialization: String = "",
     var container: String = "empty",
     var points: String = ""
 )

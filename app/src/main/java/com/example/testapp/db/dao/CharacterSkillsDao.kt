@@ -27,7 +27,4 @@ interface CharacterSkillsDao {
 
     @Delete
     fun delete(skill: CharacterSkills)
-
-
-
 }

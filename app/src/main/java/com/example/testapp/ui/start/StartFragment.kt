@@ -20,11 +20,14 @@ import com.example.testapp.RxTest
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
 import com.example.testapp.ui.character.CharacterItem
+import com.example.testapp.util.DataManager
 import com.example.testapp.util.GCSParser
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -37,13 +40,15 @@ class StartFragment : Fragment() {
 
     private val viewModel: StartFragmentViewModel by inject()
 
+    private val dataManager: DataManager by inject()
+
     private var isfileAdd: Boolean = false
-    private val parser: GCSParser by inject()
     private val requestCodeAddFromFile = 200
     private val disposeBag = CompositeDisposable()
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
 
     private var newCharacter = Character()
+    private var newCharacterFilePath: String = ""
     private var currentCharacter = Character()
     private var currentSelect = -1
     private var counter = 1
@@ -79,6 +84,7 @@ class StartFragment : Fragment() {
         observeDeleteComplete()
         observeAddComplete()
         observeGetLastCharacterIdComplete()
+        observePArseCharacterComplete()
 
         recyclerViewInit()
 
@@ -87,7 +93,7 @@ class StartFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.clearEvents()
+        //viewModel.clearEvents()
     }
 
     override fun onStop() {
@@ -101,7 +107,7 @@ class StartFragment : Fragment() {
             newCharacter = Character()
             viewModel.addCharacter(newCharacter)
             isfileAdd = true
-            parser.filePath = data?.data?.path ?: ""
+            newCharacterFilePath = data?.data?.path ?: ""
         }
     }
 
@@ -141,31 +147,30 @@ class StartFragment : Fragment() {
     }
 
     private fun onClickRx() {
-        if (disposeBag.size() > 0)
-            return
-        progressBar.visibility = View.VISIBLE
-        val rxt = RxTest()
-        rxt.rxTimerRoll()//rxCreateRollWithTime(5)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            //.filter { it > 10 }
-            .subscribe(
-                {
-                    textView.text = "Next = ${it} (${counter++})"
-                    println(it)
-                },
-                {
-                    textView.text = "Error!!!"
-                },
-                {
-                    //textView.text = "Complete!!!"
-                    progressBar.visibility = View.INVISIBLE
-                },
-                {
-                    //dispose
-                    //it.dispose()
-                }
-            ).let(disposeBag::add)
+        dataManager.appSettingsVault.clearSettings()//todo delete
+//        progressBar.visibility = View.VISIBLE
+//        val rxt = RxTest()
+//        rxt.rxTimerRoll()//rxCreateRollWithTime(5)
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            //.filter { it > 10 }
+//            .subscribe(
+//                {
+//                    textView.text = "Next = ${it} (${counter++})"
+//                    println(it)
+//                },
+//                {
+//                    textView.text = "Error!!!"
+//                },
+//                {
+//                    //textView.text = "Complete!!!"
+//                    progressBar.visibility = View.INVISIBLE
+//                },
+//                {
+//                    //dispose
+//                    //it.dispose()
+//                }
+//            ).let(disposeBag::add)
     }
 
     private fun recyclerViewInit() {
@@ -228,7 +233,7 @@ class StartFragment : Fragment() {
     private fun observeStandartLibraryLoadComplete() {
         viewModel.standartLibraryLoadComplete.observe(this, Observer {
             if (it) {
-                progressBar.visibility = View.INVISIBLE
+                Toast.makeText(activity, "all libs loaded", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -246,9 +251,13 @@ class StartFragment : Fragment() {
 
     private fun observeGetLastCharacterIdComplete() {
         viewModel.getLastCharacterIdComplete.observe(this, Observer {
-            parser.parse(it)
-            newCharacter = parser.character
-            viewModel.updateCharacter(newCharacter)
+            viewModel.parseCharacter(it, newCharacterFilePath)
+        })
+    }
+
+    private fun observePArseCharacterComplete() {
+        viewModel.parseCharacterComplete.observe(this, Observer {
+            viewModel.updateCharacter(it)
         })
     }
 

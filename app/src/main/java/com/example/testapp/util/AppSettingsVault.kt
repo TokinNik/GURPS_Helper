@@ -5,4 +5,8 @@ import com.example.mts_pass_refactor.utils.preference_delegate.SharedPreferences
 
 class AppSettingsVault(override val sharedPreferences: SharedPreferences) : SharedPreferencesHolder {
     var isSkilLibLoaded: Boolean by booleanDelegate(false, "is_skill_lib_loaded")
+
+    fun clearSettings(){
+        isSkilLibLoaded = false
+    }
 }

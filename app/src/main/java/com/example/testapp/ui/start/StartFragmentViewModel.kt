@@ -6,6 +6,7 @@ import com.example.testapp.db.entity.Character
 import com.example.testapp.di.DBModelImpl
 import com.example.testapp.ui.RxViewModel
 import com.example.testapp.util.DataManager
+import com.example.testapp.util.GCSParser
 import com.example.testapp.util.SkillsLibLoader
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -19,6 +20,7 @@ import java.io.InputStream
 class StartFragmentViewModel: RxViewModel() {
 
     private val dbm: DBModelImpl by inject()
+    private val parser: GCSParser by inject()
     private val skillsLibLoader: SkillsLibLoader by inject()
     private val dataManager: DataManager by inject()
 
@@ -40,6 +42,9 @@ class StartFragmentViewModel: RxViewModel() {
     val standartLibraryLoadComplete: LiveData<Boolean>
         get() = standartLibraryLoadEvent
 
+    val parseCharacterComplete: LiveData<Character>
+        get() = parseCharacterEvent
+
     private var addCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
 
     private var getAllCharactersEvent: MutableLiveData<List<Character>> = MutableLiveData()
@@ -51,6 +56,8 @@ class StartFragmentViewModel: RxViewModel() {
     private var getLastCharacterIdEvent: MutableLiveData<Int> = MutableLiveData()
 
     private var standartLibraryLoadEvent: MutableLiveData<Boolean> = MutableLiveData()
+
+    private var parseCharacterEvent: MutableLiveData<Character> = MutableLiveData()
 
     init {
         val appScope = Toothpick.openScope("APP")
@@ -70,11 +77,12 @@ class StartFragmentViewModel: RxViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                {
-                    standartLibraryLoadEvent.value = true
-                },
+                {},
                 {
                     println(it)
+                },
+                {
+                    standartLibraryLoadEvent.value = true
                 }
             ).let(compositeDisposable::add)
     }
@@ -94,14 +102,15 @@ class StartFragmentViewModel: RxViewModel() {
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnError {
-                errorEvent.value = it
-            }
-            .doOnComplete {
-                deleteCompleteEvent.value = true
-            }
-            .subscribe()
-            .let(compositeDisposable::add)
+            .subscribe(
+                {},
+                {
+                    errorEvent.value = it
+                },
+                {
+                    deleteCompleteEvent.value = true
+                }
+            ).let(compositeDisposable::add)
     }
 
     fun addCharacter(character: Character){
@@ -110,13 +119,15 @@ class StartFragmentViewModel: RxViewModel() {
             emitter.onComplete()
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnError {
-                errorEvent.value = it
-            }
-            .doOnComplete {
-                addCompleteEvent.value = true
-            }
-            .subscribe()
+            .subscribe(
+                {},
+                {
+                    errorEvent.value = it
+                },
+                {
+                    addCompleteEvent.value = true
+                }
+            )
             .let(compositeDisposable::add)
     }
 
@@ -126,14 +137,15 @@ class StartFragmentViewModel: RxViewModel() {
             emitter.onComplete()
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnError {
-                errorEvent.value = it
-            }
-            .doOnComplete {
-                addCompleteEvent.value = true
-            }
-            .subscribe()
-            .let(compositeDisposable::add)
+            .subscribe(
+                {},
+                {
+                    errorEvent.value = it
+                },
+                {
+                    addCompleteEvent.value = true
+                }
+            ).let(compositeDisposable::add)
     }
 
     fun getLastCharacterId() {
@@ -157,5 +169,26 @@ class StartFragmentViewModel: RxViewModel() {
         getAllCharactersEvent =  MutableLiveData()
         addCompleteEvent = MutableLiveData()
         getLastCharacterIdEvent = MutableLiveData()
+        standartLibraryLoadEvent = MutableLiveData()
+        parseCharacterEvent = MutableLiveData()
+    }
+
+    fun parseCharacter(it: Int, filePath: String) {
+        Observable.create { emitter: ObservableEmitter<Int> ->
+            parser.filePath = filePath
+            parser.parse(it)
+            emitter.onComplete()
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {},
+                {
+                    errorEvent.value = it
+                },
+                {
+                    parseCharacterEvent.value = parser.character
+                }
+            ).let(compositeDisposable::add)
     }
 }

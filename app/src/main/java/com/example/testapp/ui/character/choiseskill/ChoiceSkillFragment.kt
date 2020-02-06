@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
+import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.ui.skill.SkillItem
 import com.xwray.groupie.GroupAdapter
@@ -21,15 +22,13 @@ import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
 
 
-class ChoiceSkillFragment(
-    oldSkills: List<Int>
-) : DialogFragment() {
+class ChoiceSkillFragment(oldSkills: List<Skill>) : DialogFragment() {
 
-    var onClickAccept: (skills: List<Int>) -> Unit = {}
+    var onClickAccept: (skills: List<Skill>) -> Unit = {}
 
     private val viewModel: ChoiceSkillFragmentViewModel by inject()
 
-    private var selectedSkills = ArrayList<Int>(oldSkills)
+    private var selectedSkills = ArrayList<Skill>(oldSkills)
 
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
 
@@ -64,7 +63,7 @@ class ChoiceSkillFragment(
         button_accept.setOnClickListener {
             for (i in 0 until groupAdapter.itemCount){
                 val item = (groupAdapter.getItem(i) as ChoiceSkillItem)
-                if (item.skill.select) selectedSkills.add(item.skill.data.id) else selectedSkills.remove(item.skill.data.id)
+                if (item.skill.select) selectedSkills.add(item.skill.data) else selectedSkills.remove(item.skill.data)
             }
             onClickAccept.invoke(selectedSkills)
         }
@@ -72,11 +71,7 @@ class ChoiceSkillFragment(
 
     private fun initRecyclerView(){
         groupAdapter.setOnItemClickListener { item, _ ->
-            if ((item as ChoiceSkillItem).skill.select) {
-                item.skill.select = false
-            } else {
-                item.skill.select = true
-            }
+            (item as ChoiceSkillItem).skill.select = !item.skill.select
         }
         recyclerView_choice_skill.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -92,7 +87,7 @@ class ChoiceSkillFragment(
             for (item in it) {
                 groupAdapter.add(
                     ChoiceSkillItem(
-                        skill = SelectableData(item, selectedSkills.contains(item.id))
+                        skill = SelectableData(item, selectedSkills.contains(item))
                     )
                 )
             }

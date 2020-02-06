@@ -22,6 +22,7 @@ import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.ui.character.choiseskill.ChoiceSkillFragment
 import com.example.testapp.ui.skill.SkillItem
+import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
@@ -33,13 +34,10 @@ import toothpick.smoothie.viewmodel.installViewModelBinding
 
 class CharacterEditFragment : Fragment() {
 
+    private var characterSkillList: List<Skill> = emptyList()
     private var character: Character = Character()
 
     private var mode: String = "update"//need enum?
-
-    private var currentSkill = Skill()
-
-    private var currentSelect = -1
 
     private val viewModel: CharacterEditFragmentViewModel by inject()
 
@@ -68,6 +66,7 @@ class CharacterEditFragment : Fragment() {
         if (mode == "update"){
             val id = arguments?.getInt("id", 0) ?: 0
             viewModel.getCharacterById(id)
+            viewModel.getCharacterSkillsById(id)
         } else {
             setDataInFields(character)
         }
@@ -77,7 +76,8 @@ class CharacterEditFragment : Fragment() {
         observeCharacterById()
         observeUpdateComplete()
         observeErrors()
-        observeSkillByIds()
+        observeCharacterSkillsById()
+        observeSkillByNames()
 
         initOnClick()
     }
@@ -107,12 +107,12 @@ class CharacterEditFragment : Fragment() {
         }
 
         button_add_skill.setOnClickListener {
-            val selectSkillDialog = ChoiceSkillFragment(emptyList())
+            val selectSkillDialog = ChoiceSkillFragment(characterSkillList)
             selectSkillDialog.setTargetFragment(this, 1)
             selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
             selectSkillDialog.onClickAccept = {
-               // character.skills = it
-               // viewModel.getSkillByIds(it) todo
+                characterSkillList = it
+                setItems(it)
                 selectSkillDialog.dismiss()
             }
             selectSkillDialog.show(fragmentManager!!, null)
@@ -142,25 +142,10 @@ class CharacterEditFragment : Fragment() {
 
     private fun initRecyclerView(){
         groupAdapter.setOnItemClickListener { item, view ->
-            val select = groupAdapter.getAdapterPosition(item)
-            if ((item as SkillItem).skill.select) {
-                item.skill.select = false
-                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
-            }
-            else {
-                item.skill.select = true
-                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.accent))
-
-                if (currentSelect >= 0 && currentSelect != select){
-                    val prevItem = groupAdapter.getGroupAtAdapterPosition(0).getItem(currentSelect) as SkillItem
-                    prevItem.skill.select = false
-                    prevItem.rootView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
-                }
-            }
-            currentSkill = item.skill.data
-            groupAdapter.notifyItemChanged(currentSelect)
-            currentSelect = select
-            groupAdapter.notifyItemChanged(currentSelect)
+            val selectSkillDialog = SkillObserveSingleFragment((item as SkillItem).skill.data)
+            selectSkillDialog.setTargetFragment(this, 1)
+            selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
+            selectSkillDialog.show(fragmentManager!!, null)
         }
         recyclerView_skills.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -168,39 +153,50 @@ class CharacterEditFragment : Fragment() {
         }
     }
 
+    private fun setItems(skillsList: List<Skill>) {
+        groupAdapter.clear()
+        val section = Section()
+        for (item in skillsList) {
+            section.add(
+                SkillItem(
+                    skill = SelectableData(item),
+                    colorActive = ContextCompat.getColor(context!!, R.color.accent),
+                    colorInactive = ContextCompat.getColor(context!!, R.color.primary_light)
+                )
+            )
+        }
+        groupAdapter.add(section)
+    }
+
     private fun observeCharacterById()
     {
-        viewModel.characterById.observe(this, Observer {
+        viewModel.getCharacterByIdComplete.observe(this, Observer {
             character = it
             setDataInFields(it)
         })
     }
 
-    private fun observeSkillByIds()
+    private fun observeCharacterSkillsById() {
+        viewModel.characterSkillsByIdComplete.observe(this, Observer {
+            viewModel.getSkillByNames(it)
+        })
+    }
+
+    private fun observeSkillByNames()
     {
-        viewModel.skillByIds.observe(this, Observer {
-            groupAdapter.clear()
-            val section = Section()
-            for (item in it) {
-                section.add(
-                    SkillItem(
-                        skill = SelectableData(item),
-                        colorActive = ContextCompat.getColor(context!!, R.color.accent),
-                        colorInactive = ContextCompat.getColor(context!!, R.color.primary)
-                    )
-                )
-            }
-            groupAdapter.add(section)
+        viewModel.getSkillByNamesComplete.observe(this, Observer {
+            characterSkillList = it
+            setItems(it)
         })
     }
 
     private fun observeUpdateComplete() {
-        viewModel.updateComplete.observe(this, Observer {
+        viewModel.updateCharacterComplete.observe(this, Observer {
             Toast.makeText(activity, "updated", Toast.LENGTH_SHORT).show()
         })
     }
     private fun observeAddComplete() {
-        viewModel.addComplete.observe(this, Observer {
+        viewModel.addCharacterComplete.observe(this, Observer {
             Toast.makeText(activity, "added", Toast.LENGTH_SHORT).show()
         })
     }
@@ -214,10 +210,12 @@ class CharacterEditFragment : Fragment() {
 
     private fun onClickAdd() {
         viewModel.addCharacter(getCharacterFromFields())
+        viewModel.addCharacterSkills(characterSkillList, character.id)
     }
 
     private fun onClickUpdate() {
         viewModel.updateCharacter(getCharacterFromFields())
+        viewModel.addCharacterSkills(characterSkillList, character.id)
     }
 
     private fun setDataInFields(ch: Character) {
@@ -248,9 +246,6 @@ class CharacterEditFragment : Fragment() {
         val bytes = Base64.decode(ch.portrait, Base64.DEFAULT)
         val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
         character_edit_image.setImageBitmap(image)
-
-        //viewModel.getSkillByIds(ch.skills)
-//        viewModel.getAllSkills()
     }
 
     private fun getCharacterFromFields(): Character{

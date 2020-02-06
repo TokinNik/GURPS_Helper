@@ -2,53 +2,59 @@ package com.example.testapp.ui.character.edit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.testapp.db.entity.Character
+import com.example.testapp.db.entity.CharacterSkills
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.di.DBModelImpl
+import com.example.testapp.ui.RxViewModel
 import com.example.testapp.util.RollUtil
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 
 
-class CharacterEditFragmentViewModel(): ViewModel() {
+class CharacterEditFragmentViewModel(): RxViewModel() {
 
     private val dbm: DBModelImpl by inject()
-
     private val rollUtil: RollUtil by inject()
 
-    val characterById: LiveData<Character>
-        get() = characterByIdEvent
+    val getCharacterByIdComplete: LiveData<Character>
+        get() = getCharacterByIdEvent
 
     val error: LiveData<Throwable>
         get() = errorEvent
 
-    val addComplete: LiveData<Boolean>
-        get() = addCompleteEvent
+    val addCharacterComplete: LiveData<Boolean>
+        get() = addCharacterCompleteEvent
 
-    val updateComplete: LiveData<Boolean>
-        get() = updateCompleteEvent
+    val addCharacterSkillsComplete: LiveData<Boolean>
+        get() = addCharacterSkillsEvent
 
-    val skillByIds: LiveData<List<Skill>>
-        get() = skillByIdsEvent
+    val updateCharacterComplete: LiveData<Boolean>
+        get() = updateCharacterCompleteEvent
+
+    val getSkillByNamesComplete: LiveData<List<Skill>>
+        get() = getSkillByNamesEvent
+
+    val characterSkillsByIdComplete: LiveData<List<CharacterSkills>>
+        get() = characterSkillsByIdEvent
 
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
 
-    private var addCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
+    private var addCharacterCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
 
-    private var updateCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
+    private var updateCharacterCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
 
-    private var characterByIdEvent: MutableLiveData<Character> = MutableLiveData()
+    private var getCharacterByIdEvent: MutableLiveData<Character> = MutableLiveData()
 
-    private var skillByIdsEvent: MutableLiveData<List<Skill>> = MutableLiveData()
+    private var getSkillByNamesEvent: MutableLiveData<List<Skill>> = MutableLiveData()
 
-    private val compositeDisposable = CompositeDisposable()
+    private var addCharacterSkillsEvent: MutableLiveData<Boolean> = MutableLiveData()
+
+    private var characterSkillsByIdEvent: MutableLiveData<List<CharacterSkills>> = MutableLiveData()
 
     init {
         val appScope = Toothpick.openScope("APP")
@@ -61,15 +67,14 @@ class CharacterEditFragmentViewModel(): ViewModel() {
         dbm.getDB().characterDao().getById(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : DisposableSingleObserver<Character>(){
-                override fun onSuccess(t: Character) {
-                    characterByIdEvent.value = t
+            .subscribe(
+                {
+                    getCharacterByIdEvent.value = it
+                },
+                {
+                    errorEvent.value = it
                 }
-
-                override fun onError(e: Throwable) {
-                    errorEvent.value = e
-                }
-            })
+            ).let(compositeDisposable::add)
     }
 
     fun addCharacter(character: Character){
@@ -78,13 +83,15 @@ class CharacterEditFragmentViewModel(): ViewModel() {
             emitter.onComplete()
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnError {
-                errorEvent.value = it
-            }
-            .doOnComplete {
-                addCompleteEvent.value = true
-            }
-            .subscribe()
+            .subscribe(
+                {},
+                {
+                    errorEvent.value = it
+                },
+                {
+                    addCharacterCompleteEvent.value = true
+                }
+            ).let(compositeDisposable::add)
     }
 
     fun updateCharacter(character: Character) {
@@ -93,46 +100,75 @@ class CharacterEditFragmentViewModel(): ViewModel() {
             emitter.onComplete()
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnError {
-                errorEvent.value = it
-            }
-            .doOnComplete {
-                updateCompleteEvent.value = true
-            }
-            .subscribe()
+            .subscribe(
+                {},
+                {
+                    errorEvent.value = it
+                },
+                {
+                    updateCharacterCompleteEvent.value = true
+                }
+            ).let(compositeDisposable::add)
     }
 
-    fun getSkillByIds(id: List<Int>)
+    fun getSkillByNames(characterSkills: List<CharacterSkills>)
     {
-        dbm.getDB().skillDao().getByIds(id)
+        dbm.getDB().skillDao().getByNames(characterSkills.map { it.skillName })
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : DisposableSingleObserver<List<Skill>>(){
-                override fun onSuccess(t: List<Skill>) {
-                    skillByIdsEvent.value = t
+            .subscribe(
+                { list ->
+                    getSkillByNamesEvent.value = list.filter { skill ->
+                        characterSkills.first {
+                            it.skillName == skill.name
+                        }.specialization == skill.specialization
+                    }
+                },
+                {
+                    errorEvent.value = it
                 }
-
-                override fun onError(e: Throwable) {
-                    errorEvent.value = e
-                }
-            })
+            ).let(compositeDisposable::add)
     }
 
-    fun getAllSkills()
-    {
-        dbm.getDB().skillDao().getAll()
+    fun getCharacterSkillsById(id: Int) {
+        dbm.getDB().characterSkillsDao().getCharacterSkills(id)
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                skillByIdsEvent.value = it
-            }.let(compositeDisposable::add)
+            .subscribe(
+                {
+                    characterSkillsByIdEvent.value = it
+                },
+                {
+                    errorEvent.value = it
+                }
+            ).let(compositeDisposable::add)
+    }
+
+    fun addCharacterSkills(characterSkillList: List<Skill>, characterId: Int) {
+        Observable.create { emitter: ObservableEmitter<Int> ->
+            dbm.saveCharacterSkills(characterSkillList, characterId)
+            emitter.onComplete()
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {},
+                {
+                    errorEvent.value = it
+                },
+                {
+                    addCharacterSkillsEvent.value = true
+                }
+            ).let(compositeDisposable::add)
     }
 
     fun clearEvents()
     {
         errorEvent =  MutableLiveData()
-        addCompleteEvent =  MutableLiveData()
-        skillByIdsEvent =  MutableLiveData()
-        characterByIdEvent =  MutableLiveData()
-        updateCompleteEvent =  MutableLiveData()
+        addCharacterCompleteEvent =  MutableLiveData()
+        getSkillByNamesEvent =  MutableLiveData()
+        getCharacterByIdEvent =  MutableLiveData()
+        updateCharacterCompleteEvent =  MutableLiveData()
+        addCharacterSkillsEvent =  MutableLiveData()
+        characterSkillsByIdEvent = MutableLiveData()
     }
 }

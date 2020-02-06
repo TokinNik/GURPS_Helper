@@ -18,9 +18,11 @@ import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
 
-class SkillObserveSingleFragment(
-    val skillName: String
-) : DialogFragment() {
+class SkillObserveSingleFragment constructor(private val skillName: String) : DialogFragment() {
+
+    constructor(skill: Skill) : this(skill.name) {
+        currentSkill = skill
+    }
 
     private val viewModel: SkillObserveSingleFragmentViewModel by inject()
 
@@ -51,7 +53,11 @@ class SkillObserveSingleFragment(
         observeErrors()
         observeSkillByName()
 
-        viewModel.getSkillByName(skillName)
+        if (currentSkill.id == 0){
+            viewModel.getSkillByName(skillName)
+        } else {
+            setDataInFields()
+        }
     }
 
     private fun initOnClick() {

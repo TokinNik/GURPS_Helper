@@ -17,8 +17,14 @@ interface SkillDao {
     @Query("SELECT * FROM skill WHERE name = :name")
     fun getByName(name: String): Single<Skill>
 
+    @Query("SELECT * FROM skill WHERE name = :name AND specialization = :specialization")
+    fun getByParams(name: String, specialization: String): Single<Skill>
+
     @Query("SELECT * FROM skill WHERE id IN (:id)")
     fun getByIds(id: List<Int>): Single<List<Skill>>
+
+    @Query("SELECT * FROM skill WHERE name IN (:names)")
+    fun getByNames(names: List<String>): Single<List<Skill>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(skill: Skill)

@@ -66,6 +66,7 @@ class CharacterFragment : Fragment() {
         observeDeleteComplete()
         observeCharacterSkillsById()
         observeSkillByName()
+        observeSkillByNames()
 
         initOnClick()
 
@@ -112,7 +113,7 @@ class CharacterFragment : Fragment() {
 
     private fun recyclerViewInit() {
         groupAdapter.setOnItemClickListener { item, view ->
-            val selectSkillDialog = SkillObserveSingleFragment((item as SkillItem).skill.data.name)
+            val selectSkillDialog = SkillObserveSingleFragment((item as SkillItem).skill.data)
             selectSkillDialog.setTargetFragment(this, 1)
             selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
             selectSkillDialog.show(fragmentManager!!, null)
@@ -123,7 +124,7 @@ class CharacterFragment : Fragment() {
         }
     }
 
-    private fun addItems(items: List<Skill>)
+    private fun setItems(items: List<Skill>)
     {
         groupAdapter.clear()
 
@@ -156,14 +157,14 @@ class CharacterFragment : Fragment() {
 
     private fun observeCharacterSkillsById() {
         viewModel.characterSkillsByIdComplete.observe(this, Observer {
-            characterSkills = it
-            addItems(it.map {
-                Skill(
-                    name = it.skillName,
-                    container = it.container,
-                    points = it.points
-                )
-            })
+            viewModel.getSkillByNames(it)
+        })
+    }
+
+    private fun observeSkillByNames()
+    {
+        viewModel.getSkillByNamesComplete.observe(this, Observer {
+            setItems(it)
         })
     }
 
