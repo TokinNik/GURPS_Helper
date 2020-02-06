@@ -106,7 +106,7 @@ class GCSParser @Inject constructor(){
                         when (parser.name) {
                             "profile" -> parseProfile(parser)
 //                            "advantage_list" -> TODO
-                            "skill_list" -> parseSkillList(parser, character)
+                            "skill_list" -> convertSkillListToDBFormat(parseSkillList(parser))
 //                            "spell_list" -> TODO
 //                            "equipment_list" -> TODO
 //                            "notes" -> TODO
@@ -185,7 +185,7 @@ class GCSParser @Inject constructor(){
         }
     }
 
-    private fun parseSkillList(parser: XmlPullParser, character: Character) {
+    fun parseSkillList(parser: XmlPullParser): MutableList<Skill> {
         var skillContainer = "empty"
         val skillsList = mutableListOf<Skill>()
         parser.next()
@@ -204,8 +204,8 @@ class GCSParser @Inject constructor(){
                 }
                 XmlPullParser.END_TAG -> when(parser.name) {
                     "skill_list" -> {
-                        convertSkillListToDBFormat(skillsList)
-                        return
+
+                        return skillsList
                     }
                     "skill_container" -> skillContainer = "empty"
                 }
@@ -231,18 +231,6 @@ class GCSParser @Inject constructor(){
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError {
                     println(it)
-                }
-                .doOnComplete {
-                }
-                .subscribe()
-
-            Observable.create { emitter: ObservableEmitter<Int> ->
-                dbm.db.skillDao().insert(it)
-                emitter.onComplete()
-            }.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError {
-                    println("1 - $it")
                 }
                 .doOnComplete {
                 }

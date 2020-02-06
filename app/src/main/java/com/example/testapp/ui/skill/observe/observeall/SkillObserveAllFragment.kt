@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -16,6 +17,7 @@ import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.SkillsHeaderItem
+import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
@@ -71,27 +73,10 @@ class SkillObserveAllFragment : Fragment() {
 
     private fun initRecyclerView(){
         groupAdapter.setOnItemClickListener { item, view ->
-            val select = groupAdapter.getAdapterPosition(item)
-            if(item is SkillItem) {
-                if (item.skill.select) {
-                    item.skill.select = false
-                    view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
-                }
-                else {
-                    item.skill.select = true
-                    view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.accent))
-
-                    if (currentSelect >= 0 && currentSelect != select){
-                        val prevItem = groupAdapter.getGroupAtAdapterPosition(0).getItem(currentSelect) as SkillItem
-                        prevItem.skill.select = false
-                        prevItem.rootView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
-                    }
-                }
-                currentSkill = item.skill.data
-                groupAdapter.notifyItemChanged(currentSelect)
-                currentSelect = select
-                groupAdapter.notifyItemChanged(currentSelect)
-            }
+            val selectSkillDialog = SkillObserveSingleFragment((item as SkillItem).skill.data.name)
+            selectSkillDialog.setTargetFragment(this, 1)
+            selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
+            selectSkillDialog.show(fragmentManager!!, null)
         }
         recyclerView_skills.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -128,7 +113,7 @@ class SkillObserveAllFragment : Fragment() {
                     SkillItem(
                         skill = SelectableData(item),
                         colorActive = ContextCompat.getColor(context!!, R.color.accent),
-                        colorInactive = ContextCompat.getColor(context!!, R.color.primary)
+                        colorInactive = ContextCompat.getColor(context!!, R.color.primary_light)
                     )
                 )
             }

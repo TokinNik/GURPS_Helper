@@ -23,11 +23,7 @@ class SkillItem(
             root.item_skill_id.text = skill.data.id.toString()
             root.item_skill_name.text = skill.data.name
             root.item_skill_default.text = skill.data.difficulty
-            root.item_skill_prereq.text =
-                if(skill.data.prereqList.isNotEmpty())
-                    skill.data.prereqList[0].skillPrereqList[0].name
-                else
-                    "none"
+            root.item_skill_prereq.text = skill.data.nameLoc
 
             if (!skill.select) {
                 root.setBackgroundColor(colorInactive)

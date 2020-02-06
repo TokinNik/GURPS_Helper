@@ -67,11 +67,13 @@ class StartFragment : Fragment() {
         scope.inject(this)
 
         viewModel.clearEvents()
+        viewModel.initStandartLibrary(resources.assets.open("Mentor_Skills.gcs"))
 
         button_rx.setOnClickListener { onClickRx() }
         button_add.setOnClickListener { onClickAdd() }
         button_delete.setOnClickListener { onClickDelete() }
 
+        observeStandartLibraryLoadComplete()
         observeGetAllCharacters()
         observeErrors()
         observeDeleteComplete()
@@ -81,6 +83,11 @@ class StartFragment : Fragment() {
         recyclerViewInit()
 
         viewModel.getAllCharacters()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.clearEvents()
     }
 
     override fun onStop() {
@@ -218,6 +225,14 @@ class StartFragment : Fragment() {
         })
     }
 
+    private fun observeStandartLibraryLoadComplete() {
+        viewModel.standartLibraryLoadComplete.observe(this, Observer {
+            if (it) {
+                progressBar.visibility = View.INVISIBLE
+            }
+        })
+    }
+
     private fun observeAddComplete() {
         viewModel.addComplete.observe(this, Observer {
             if (isfileAdd) {
@@ -245,7 +260,7 @@ class StartFragment : Fragment() {
 
     private fun observeErrors() {
         viewModel.error.observe(this, Observer {
-            Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
+             Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
             println("ERROR!!! $it")
         })
     }

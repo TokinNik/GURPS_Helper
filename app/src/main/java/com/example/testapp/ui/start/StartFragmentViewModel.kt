@@ -5,17 +5,22 @@ import androidx.lifecycle.MutableLiveData
 import com.example.testapp.db.entity.Character
 import com.example.testapp.di.DBModelImpl
 import com.example.testapp.ui.RxViewModel
+import com.example.testapp.util.DataManager
+import com.example.testapp.util.SkillsLibLoader
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
+import java.io.InputStream
 
 
 class StartFragmentViewModel: RxViewModel() {
 
     private val dbm: DBModelImpl by inject()
+    private val skillsLibLoader: SkillsLibLoader by inject()
+    private val dataManager: DataManager by inject()
 
     val getAllCharactersComplete: LiveData<List<Character>>
         get() = getAllCharactersEvent
@@ -32,6 +37,9 @@ class StartFragmentViewModel: RxViewModel() {
     val getLastCharacterIdComplete: LiveData<Int>
         get() = getLastCharacterIdEvent
 
+    val standartLibraryLoadComplete: LiveData<Boolean>
+        get() = standartLibraryLoadEvent
+
     private var addCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
 
     private var getAllCharactersEvent: MutableLiveData<List<Character>> = MutableLiveData()
@@ -42,9 +50,33 @@ class StartFragmentViewModel: RxViewModel() {
 
     private var getLastCharacterIdEvent: MutableLiveData<Int> = MutableLiveData()
 
+    private var standartLibraryLoadEvent: MutableLiveData<Boolean> = MutableLiveData()
+
     init {
         val appScope = Toothpick.openScope("APP")
         Toothpick.inject(this, appScope)
+    }
+
+    fun initStandartLibrary(open: InputStream) {
+        Observable.create { emitter: ObservableEmitter<Int> ->
+            if (!dataManager.appSettingsVault.isSkilLibLoaded) {
+                skillsLibLoader.loadSkillLibrary(open)
+                dataManager.appSettingsVault.isSkilLibLoaded = true
+                emitter.onComplete()
+            } else {
+                emitter.onError(Throwable("Skills Library already loaded"))
+            }
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    standartLibraryLoadEvent.value = true
+                },
+                {
+                    println(it)
+                }
+            ).let(compositeDisposable::add)
     }
 
     fun getAllCharacters() {
