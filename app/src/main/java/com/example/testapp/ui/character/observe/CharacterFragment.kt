@@ -3,21 +3,18 @@ package com.example.testapp.ui.character.observe
 
 import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
-import android.graphics.Outline
 import android.os.Bundle
 import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewOutlineProvider
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
 import com.example.testapp.custom_view.outline_corner.OutlineProviders
 import com.example.testapp.db.entity.Character
@@ -30,7 +27,6 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.card_character_all.*
 import kotlinx.android.synthetic.main.fragment_character.*
-import kotlinx.android.synthetic.main.item_page_test.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
@@ -82,6 +78,7 @@ class CharacterFragment : Fragment() {
         initOnClick()
 
         val id = arguments?.getInt("id", 0) ?: 0
+        showProgressBar()
         viewModel.getCharacterById(id)
         viewModel.getCharacterSkillsById(id)
     }
@@ -174,6 +171,7 @@ class CharacterFragment : Fragment() {
     {
         viewModel.getSkillByNamesComplete.observe(this, Observer {
             setItems(it)
+            hideProgressBar()
         })
     }
 
@@ -219,5 +217,13 @@ class CharacterFragment : Fragment() {
         val bytes = Base64.decode(ch.portrait, Base64.DEFAULT)
         val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
         character_card_image.setImageBitmap(image)
+    }
+
+    private fun hideProgressBar() {
+        character_fagment_progress_bar.visibility = View.GONE
+    }
+
+    private fun showProgressBar() {
+        character_fagment_progress_bar.visibility = View.VISIBLE
     }
 }

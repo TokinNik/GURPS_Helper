@@ -16,21 +16,15 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
-import com.example.testapp.RxTest
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
 import com.example.testapp.ui.character.CharacterItem
 import com.example.testapp.util.DataManager
-import com.example.testapp.util.GCSParser
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_start.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
@@ -87,7 +81,11 @@ class StartFragment : Fragment() {
         observePArseCharacterComplete()
 
         recyclerViewInit()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        showProgressBar()
         viewModel.getAllCharacters()
     }
 
@@ -195,7 +193,7 @@ class StartFragment : Fragment() {
             currentSelect = select
             groupAdapter.notifyItemChanged(currentSelect)
         }
-        recyclerView_characters.apply {
+        start_fragment_characters.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = groupAdapter
         }
@@ -227,6 +225,7 @@ class StartFragment : Fragment() {
     private fun observeGetAllCharacters() {
         viewModel.getAllCharactersComplete.observe(this, Observer {
             addItems(it)
+            hideProgressBar()
         })
     }
 
@@ -272,5 +271,13 @@ class StartFragment : Fragment() {
              Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
             println("ERROR!!! $it")
         })
+    }
+
+    private fun hideProgressBar() {
+        start_fragment_progress_bar.visibility = View.GONE
+    }
+
+    private fun showProgressBar() {
+        start_fragment_progress_bar.visibility = View.VISIBLE
     }
 }

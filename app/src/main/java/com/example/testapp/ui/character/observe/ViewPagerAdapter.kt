@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.testapp.R
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import kotlinx.android.synthetic.main.item_page_test.view.*
+import kotlinx.android.synthetic.main.item_page_sadq.view.*
 
 class ViewPagerAdapter : RecyclerView.Adapter<PagerVH>() {
 
@@ -24,7 +24,7 @@ class ViewPagerAdapter : RecyclerView.Adapter<PagerVH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerVH {
         layoutManager = LinearLayoutManager(parent.context)
-        return PagerVH(LayoutInflater.from(parent.context).inflate(R.layout.item_page_test, parent, false))
+        return PagerVH(LayoutInflater.from(parent.context).inflate(R.layout.item_page_sadq, parent, false))
     }
 
     override fun getItemCount(): Int = CharacterPages.values().size

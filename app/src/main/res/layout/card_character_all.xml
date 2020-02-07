@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -219,7 +219,7 @@
 
     <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:flexDirection="row"
         app:flexWrap="wrap">
 
@@ -333,11 +333,11 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:padding="5dp"
-            app:layout_wrapBefore="true"
             android:gravity="center"
+            android:padding="5dp"
+            android:text="^"
             app:layout_flexGrow="1"
-            android:text="^"  />
+            app:layout_wrapBefore="true" />
 
     </com.google.android.flexbox.FlexboxLayout>
 

@@ -63,6 +63,7 @@ class SkillObserveAllFragment : Fragment() {
         initOnClick()
         initRecyclerView()
 
+        showProgressBar()
         viewModel.getAllSkills()
     }
 
@@ -85,39 +86,44 @@ class SkillObserveAllFragment : Fragment() {
 
     }
 
+    private fun setItems(skillList: List<Skill>) {
+        groupAdapter.clear()
+        val section = Section()
+        section.setHeader(SkillsHeaderItem(
+            onClickAdd = {
+                val bundle = Bundle()
+                bundle.putString("mode", "add")
+                navController?.navigate(
+                    R.id.action_skillObserveAllFragment_to_editSkillFragment,
+                    bundle
+                )
+            },
+            onClickDelete = {
+                if (currentSelect >= 0) {
+                    viewModel.deleteSkill(currentSkill)
+                    currentSkill =
+                        Skill()
+                    currentSelect = -1
+                }
+            }
+        ))
+        for (item in skillList) {
+            section.add(
+                SkillItem(
+                    skill = SelectableData(item),
+                    colorActive = ContextCompat.getColor(context!!, R.color.accent),
+                    colorInactive = ContextCompat.getColor(context!!, R.color.primary_light)
+                )
+            )
+        }
+        groupAdapter.add(section)
+    }
+
     private fun observeSkills()
     {
         viewModel.skills.observe(this, Observer {
-            groupAdapter.clear()
-            val section = Section()
-            section.setHeader(SkillsHeaderItem(
-                onClickAdd = {
-                    val bundle = Bundle()
-                    bundle.putString("mode", "add")
-                    navController?.navigate(
-                        R.id.action_skillObserveAllFragment_to_editSkillFragment,
-                        bundle
-                    )
-                },
-                onClickDelete = {
-                    if (currentSelect >= 0) {
-                        viewModel.deleteSkill(currentSkill)
-                        currentSkill =
-                            Skill()
-                        currentSelect = -1
-                    }
-                }
-            ))
-            for (item in it) {
-                section.add(
-                    SkillItem(
-                        skill = SelectableData(item),
-                        colorActive = ContextCompat.getColor(context!!, R.color.accent),
-                        colorInactive = ContextCompat.getColor(context!!, R.color.primary_light)
-                    )
-                )
-            }
-            groupAdapter.add(section)
+            setItems(it)
+            hideProgressBar()
         })
     }
 
@@ -139,5 +145,13 @@ class SkillObserveAllFragment : Fragment() {
             Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
             println("ERROR!!! $it")
         })
+    }
+
+    private fun hideProgressBar() {
+        skill_all_fragment_progress_bar.visibility = View.GONE
+    }
+
+    private fun showProgressBar() {
+        skill_all_fragment_progress_bar.visibility = View.VISIBLE
     }
 }
