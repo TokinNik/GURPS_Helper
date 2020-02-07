@@ -44,7 +44,6 @@ class SkillEditFragmentViewModel(): ViewModel() {
     init {
         val appScope = Toothpick.openScope("APP")
         Toothpick.inject(this, appScope)
-        println(rollUtil.roll3D6())
     }
 
     fun getSkillById(id: Int) {

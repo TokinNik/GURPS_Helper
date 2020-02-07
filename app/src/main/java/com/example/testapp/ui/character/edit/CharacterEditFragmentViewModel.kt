@@ -59,7 +59,6 @@ class CharacterEditFragmentViewModel(): RxViewModel() {
     init {
         val appScope = Toothpick.openScope("APP")
         Toothpick.inject(this, appScope)
-        println(rollUtil.roll3D6())
     }
 
     fun getCharacterById(id: Int)

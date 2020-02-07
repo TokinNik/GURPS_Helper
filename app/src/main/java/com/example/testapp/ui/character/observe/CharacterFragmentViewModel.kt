@@ -94,6 +94,7 @@ class CharacterFragmentViewModel: RxViewModel() {
                             it.skillName == skill.name && it.specialization == skill.specialization
                         }
                     }
+                    getSkillByNamesEvent.value
                 },
                 {
                     errorEvent.value = it

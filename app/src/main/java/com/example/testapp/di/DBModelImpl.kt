@@ -38,10 +38,9 @@ class DBModelImpl @Inject constructor(private val application: Application) : DB
                 {},
                 { println(it) },
                 {
-
+                    compositeDisposable.clear()
                 }
             ).let(compositeDisposable::add)
-        compositeDisposable.clear()
     }
 
     override fun saveCharacterAdvantage(adv: List<CharacterSkills>, characterId: Int) {
