@@ -4,6 +4,7 @@ import android.graphics.BitmapFactory
 import android.util.Base64
 import android.view.View
 import com.example.testapp.R
+import com.example.testapp.custom_view.outline_corner.OutlineProviders
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
@@ -24,6 +25,8 @@ class CharacterItem(
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
         viewHolder.apply {
+            root.outlineProvider = OutlineProviders(8f, OutlineProviders.OutlineType.ROUND_RECT)
+            root.clipToOutline = true
             root.item_character_id.text = character.data.id.toString()
             val bytes = Base64.decode(character.data.portrait, Base64.DEFAULT)
             val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)

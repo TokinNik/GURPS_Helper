@@ -116,4 +116,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+
 }

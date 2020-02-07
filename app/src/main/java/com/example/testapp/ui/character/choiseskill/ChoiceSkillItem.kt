@@ -2,6 +2,7 @@ package com.example.testapp.ui.character.choiseskill
 
 import android.view.View
 import com.example.testapp.R
+import com.example.testapp.custom_view.outline_corner.OutlineProviders
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Skill.Skill
 
@@ -17,6 +18,8 @@ class ChoiceSkillItem(
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
         viewHolder.apply {
+            root.outlineProvider = OutlineProviders(16f, OutlineProviders.OutlineType.ROUND_RECT)
+            root.clipToOutline = true
 //            root.item_skill_id.text = skill.data.id.toString()
             root.item_skill_name.text = skill.data.name
             root.checkBox_select_skill.isChecked = skill.select

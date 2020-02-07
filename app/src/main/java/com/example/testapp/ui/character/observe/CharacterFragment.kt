@@ -3,12 +3,14 @@ package com.example.testapp.ui.character.observe
 
 import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
+import android.graphics.Outline
 import android.os.Bundle
 import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewOutlineProvider
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -17,6 +19,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
+import com.example.testapp.custom_view.outline_corner.OutlineProviders
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.CharacterSkills
 import com.example.testapp.db.entity.Skill.Skill
@@ -27,6 +30,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.card_character_all.*
 import kotlinx.android.synthetic.main.fragment_character.*
+import kotlinx.android.synthetic.main.item_page_test.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
@@ -58,6 +62,13 @@ class CharacterFragment : Fragment() {
         scope.inject(this)
 
         viewModel.clearEvents()
+
+        character_card_pager.adapter = ViewPagerAdapter()
+        character_card_pager.offscreenPageLimit = 4
+
+        val radius = 32f
+        character_card_pager.outlineProvider = OutlineProviders(radius, OutlineProviders.OutlineType.ROUND_RECT_TOP)
+        character_card_pager.clipToOutline = true
 
         recyclerViewInit()
 
@@ -118,10 +129,8 @@ class CharacterFragment : Fragment() {
             selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
             selectSkillDialog.show(fragmentManager!!, null)
         }
-        character_card_skills_list.apply {
-            layoutManager = LinearLayoutManager(activity)
-            adapter = groupAdapter
-        }
+
+        (character_card_pager.adapter as ViewPagerAdapter).groupAdapter = groupAdapter
     }
 
     private fun setItems(items: List<Skill>)

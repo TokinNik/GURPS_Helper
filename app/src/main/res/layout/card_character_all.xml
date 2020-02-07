@@ -341,23 +341,11 @@
 
     </com.google.android.flexbox.FlexboxLayout>
 
-    <TextView
-        android:id="@+id/character_card_skills_text"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/character_card_pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="@string/skills"
-        android:textStyle="bold"/>
+        android:layout_height="match_parent">
+    </androidx.viewpager2.widget.ViewPager2>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/character_card_skills_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        tools:itemCount="15"
-        tools:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/item_skill"
-        />
 
 </LinearLayout>
