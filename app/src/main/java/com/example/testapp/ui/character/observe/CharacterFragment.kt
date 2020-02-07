@@ -21,6 +21,7 @@ import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.CharacterSkills
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.ui.SelectableData
+import com.example.testapp.ui.settings.ColorScheme
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
 import com.xwray.groupie.GroupAdapter
@@ -58,6 +59,7 @@ class CharacterFragment : Fragment() {
         scope.inject(this)
 
         viewModel.clearEvents()
+        viewModel.getColorScheme()
 
         character_card_pager.adapter = ViewPagerAdapter()
         character_card_pager.offscreenPageLimit = 4
@@ -68,6 +70,7 @@ class CharacterFragment : Fragment() {
 
         recyclerViewInit()
 
+        observeColorScheme()
         observeCharacterById()
         observeErrors()
         observeDeleteComplete()
@@ -146,6 +149,12 @@ class CharacterFragment : Fragment() {
                 )
             }
         }
+    }
+
+    private fun observeColorScheme() {
+        viewModel.colorScheme.observe(this, Observer {
+            (character_card_pager.adapter as ViewPagerAdapter).schemeType = it
+        })
     }
 
     private fun observeCharacterById() {

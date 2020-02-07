@@ -7,6 +7,8 @@ import com.example.testapp.db.entity.CharacterSkills
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.di.DBModelImpl
 import com.example.testapp.ui.RxViewModel
+import com.example.testapp.ui.settings.ColorScheme
+import com.example.testapp.util.DataManager
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,6 +19,7 @@ import toothpick.ktp.delegate.inject
 class CharacterFragmentViewModel: RxViewModel() {
 
     private val dbm: DBModelImpl by inject()
+    private val dataManager: DataManager by inject()
 
     val characterById: LiveData<Character>
         get() = characterByIdEvent
@@ -36,6 +39,9 @@ class CharacterFragmentViewModel: RxViewModel() {
     val getSkillByNamesComplete: LiveData<List<Skill>>
         get() = getSkillByNamesEvent
 
+    val colorScheme: LiveData<ColorScheme>
+        get() = colorSchemeEvent
+
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
 
     private var deleteCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
@@ -47,6 +53,8 @@ class CharacterFragmentViewModel: RxViewModel() {
     private var getSkillByNameEvent: MutableLiveData<Skill> = MutableLiveData()
 
     private var getSkillByNamesEvent: MutableLiveData<List<Skill>> = MutableLiveData()
+
+    private var colorSchemeEvent: MutableLiveData<ColorScheme> = MutableLiveData()
 
     init {
         val appScope = Toothpick.openScope("APP")
@@ -110,5 +118,9 @@ class CharacterFragmentViewModel: RxViewModel() {
         characterSkillsByIdEvent = MutableLiveData()
         getSkillByNameEvent = MutableLiveData()
         getSkillByNamesEvent = MutableLiveData()
+    }
+
+    fun getColorScheme() {
+        colorSchemeEvent.value = ColorScheme.valueOf(dataManager.appSettingsVault.colorScheme)
     }
 }

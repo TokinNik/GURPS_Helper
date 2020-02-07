@@ -5,12 +5,15 @@
 
     <group android:checkableBehavior="single">
         <item android:id="@+id/startFragment"
-            android:title="Home"/>
+            android:title="@string/home"/>
         <item android:id="@+id/skillObserveAllFragment"
-            android:title="All Skills"
+            android:title="@string/all_skills"
             />
         <item android:id="@+id/battleFragment"
-            android:title="Battle Manager"
+            android:title="@string/battle_manager"
+            />
+        <item android:id="@+id/settingsFragment"
+            android:title="@string/settings"
             />
     </group>
 </menu>

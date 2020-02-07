@@ -2,6 +2,7 @@ package com.example.testapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
@@ -21,9 +22,11 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.testapp.ui.character.CharacterItem
+import com.example.testapp.ui.settings.ColorScheme
 import com.google.android.material.navigation.NavigationView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.fragment_start.*
 import toothpick.Toothpick
 
@@ -53,7 +56,8 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.startFragment,
                 R.id.skillObserveAllFragment,
-                R.id.battleFragment
+                R.id.battleFragment,
+                R.id.settingsFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

@@ -5,8 +5,21 @@
     <color name="primary_light">#DCEDC8</color>
     <color name="accent">#FFEB3B</color>
     <color name="primary_text">#212121</color>
-    <color name="contrast_text">#DEDEDE</color>
     <color name="secondary_text">#757575</color>
     <color name="icons">#212121</color>
     <color name="divider">#BDBDBD</color>
+
+    <color name="contrast_primary">#743CB5</color>
+    <color name="contrast_primary_dark">#9760C7</color>
+    <color name="contrast_primary_light">#231237</color>
+    <color name="contrast_accent">#0014C4</color>
+    <color name="contrast_text">#DEDEDE</color>
+    <color name="contrast_secondary_text">#8A8A8A</color>
+    <color name="contrast_icons">#DEDEDE</color>
+    <color name="contrast_divider">#424242</color>
+
+    <color name="skills_container">#453D96</color>
+    <color name="advantage_container">#007DB8</color>
+    <color name="disadvantage_container">#874a33</color>
+    <color name="quirks_container">#8A5E4F</color>
 </resources>

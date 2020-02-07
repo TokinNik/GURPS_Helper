@@ -23,20 +23,20 @@ jacocoAndroidUnitTestReport {
 }
 
 jacocoAndroidUnitTestReport {
-    excludes += [ '**/R.class',
-                           '**/R$*.class',
-                           '**/BuildConfig.*',
-                           '**/Manifest*.*',
-                           '**/AndroidManifest.xml',
-                           '**/*Test*.*',
-                           'android/**/*.*',
-                           'androidx/**/*.*',
-                           '**/*Fragment.*',
-                           '**/*Activity.*',
-                           '**/*Api.*',
-                           '**/di/**/*.class',
-                           '**/db/**/*.class',
-                           '**/ui/**/*.class' ]
+    excludes += ['**/R.class',
+                 '**/R$*.class',
+                 '**/BuildConfig.*',
+                 '**/Manifest*.*',
+                 '**/AndroidManifest.xml',
+                 '**/*Test*.*',
+                 'android/**/*.*',
+                 'androidx/**/*.*',
+                 '**/*Fragment.*',
+                 '**/*Activity.*',
+                 '**/*Api.*',
+                 '**/di/**/*.class',
+                 '**/db/**/*.class',
+                 '**/ui/**/*.class']
 }
 
 android {
