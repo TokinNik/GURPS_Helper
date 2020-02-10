@@ -1,52 +1,34 @@
 package com.example.testapp.ui.character.edit
 
-import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.TextView
-import com.example.testapp.R
-import com.google.android.material.button.MaterialButton
-import kotlinx.android.synthetic.main.stat_counter.view.*
+import androidx.databinding.DataBindingUtil
+import com.example.testapp.databinding.StatCounterBinding
 
-class StatCounterPlusButtonListener(
-    private val textView: TextView,
-    private val maxValue: Int
-): View.OnClickListener {
-    override fun onClick(v: View?) {
-        var value = textView.text.toString().toInt()
-        if (value < maxValue) value++
-        textView.text = value.toString()
+class StatCounterPlusButtonListener(private val maxValue: Int) {
+    fun onClick(textView: View) {
+        val bind: StatCounterBinding? = DataBindingUtil.findBinding(textView)
+        if (bind != null) {
+            var stat = bind.stat
+            stat = if (stat < maxValue) stat + 1 else stat
+            bind.let {
+                it.stat = stat
+                it.invalidateAll()
+            }
+        }
     }
 }
 
-class StatCounterMinusButtonListener(
-    private val textView: TextView,
-    private val minValue: Int
-): View.OnClickListener {
-    override fun onClick(v: View?) {
-        var value = textView.text.toString().toInt()
-        if (value > minValue) value-- else value = minValue
-        textView.text = value.toString()
+class StatCounterMinusButtonListener(private val minValue: Int) {
+    fun onClick( textView: View) {
+        val bind: StatCounterBinding? = DataBindingUtil.findBinding(textView)
+        if (bind != null) {
+            var stat = bind.stat
+            stat = if (stat > minValue) stat - 1 else minValue
+            bind.let {
+                it.stat = stat
+                it.invalidateAll()
+            }
+        }
     }
 }
 
-class PlusButton(private val textView: TextView, context: Context) : MaterialButton(context) {
-
-    init {
-        setOnClickListener(StatCounterPlusButtonListener(textView, 100))//???
-    }
-
-}
-
-class StatCounter(context: Context): LinearLayout(context) {
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        //val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        //inflater.inflate(R.layout.stat_counter, this)
-        edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(edit_stat, 100))
-        edit_stat_button_minus.setOnClickListener(StatCounterPlusButtonListener(edit_stat, 1))
-    }
-
-}

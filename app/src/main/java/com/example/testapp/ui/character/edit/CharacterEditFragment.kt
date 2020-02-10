@@ -17,6 +17,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
+import com.example.testapp.databinding.FragmentCharacterEditBinding
+import com.example.testapp.databinding.StatCounterBinding
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill.Skill
@@ -36,12 +38,12 @@ class CharacterEditFragment : Fragment() {
 
     private var characterSkillList: List<Skill> = emptyList()
     private var character: Character = Character()
-
-    private var mode: String = "update"//need enum?
-
+    private var mode: String = "update"//todo need enum?
     private val viewModel: CharacterEditFragmentViewModel by inject()
 
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
+
+    private lateinit var characterEditBinding: FragmentCharacterEditBinding
 
     private val navController: NavController?
         get() = activity?.let { Navigation.findNavController(it, R.id.nav_host_fragment) }
@@ -50,7 +52,10 @@ class CharacterEditFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_character_edit, container, false)
+        characterEditBinding = FragmentCharacterEditBinding.inflate(inflater, container, false)
+        characterEditBinding.onClickPlus = StatCounterPlusButtonListener(100)
+        characterEditBinding.onClickMinus = StatCounterMinusButtonListener(0)
+        return characterEditBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,9 +73,9 @@ class CharacterEditFragment : Fragment() {
             viewModel.getCharacterById(id)
             viewModel.getCharacterSkillsById(id)
         } else {
+            characterEditBinding.character = character
             setDataInFields(character)
         }
-
 
         observeAddComplete()
         observeCharacterById()
@@ -119,27 +124,6 @@ class CharacterEditFragment : Fragment() {
             }
             selectSkillDialog.show(fragmentManager!!, null)
         }
-        character_edit_st_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_st_counter.edit_stat, 100))//???????? wtf todo something with it
-        character_edit_st_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_st_counter.edit_stat, 1))
-        character_edit_dx_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_dx_counter.edit_stat, 100))
-        character_edit_dx_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_dx_counter.edit_stat, 1))
-        character_edit_iq_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_iq_counter.edit_stat, 100))
-        character_edit_iq_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_iq_counter.edit_stat, 1))
-        character_edit_ht_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_ht_counter.edit_stat, 100))
-        character_edit_ht_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_ht_counter.edit_stat, 1))
-        character_edit_hp_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_hp_counter.edit_stat, 100))
-        character_edit_hp_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_hp_counter.edit_stat, 0))
-        character_edit_move_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_move_counter.edit_stat, 100))
-        character_edit_move_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_move_counter.edit_stat, 0))
-        character_edit_speed_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_speed_counter.edit_stat, 100))
-        character_edit_speed_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_speed_counter.edit_stat, 0))
-        character_edit_will_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_will_counter.edit_stat, 100))
-        character_edit_will_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_will_counter.edit_stat, 0))
-        character_edit_per_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_per_counter.edit_stat, 100))
-        character_edit_per_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_per_counter.edit_stat, 0))
-        character_edit_fp_counter.edit_stat_button_plus.setOnClickListener(StatCounterPlusButtonListener(character_edit_fp_counter.edit_stat, 100))
-        character_edit_fp_counter.edit_stat_button_minus.setOnClickListener(StatCounterMinusButtonListener(character_edit_fp_counter.edit_stat, 0))
-
     }
 
     private fun initRecyclerView(){
@@ -174,6 +158,7 @@ class CharacterEditFragment : Fragment() {
     {
         viewModel.getCharacterByIdComplete.observe(this, Observer {
             character = it
+            characterEditBinding.character = character
             setDataInFields(it)
         })
     }
@@ -194,7 +179,7 @@ class CharacterEditFragment : Fragment() {
 
     private fun observeUpdateComplete() {
         viewModel.updateCharacterComplete.observe(this, Observer {
-            Toast.makeText(activity, "updated", Toast.LENGTH_SHORT).show()
+            viewModel.addCharacterSkills(characterSkillList, character.id)
         })
     }
     private fun observeAddComplete() {
@@ -211,10 +196,13 @@ class CharacterEditFragment : Fragment() {
 
     private fun observeAddCharacterSkillsComplete() {
         viewModel.addCharacterSkillsComplete.observe(this, Observer {
-            Toast.makeText(activity, "added", Toast.LENGTH_SHORT).show()
+            if (mode == "add") {
+                Toast.makeText(activity, "added", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(activity, "updated", Toast.LENGTH_SHORT).show()
+            }
         })
     }
-
 
     private fun observeErrors() {
         viewModel.error.observe(this, Observer {
@@ -224,68 +212,16 @@ class CharacterEditFragment : Fragment() {
     }
 
     private fun onClickAdd() {
-        viewModel.addCharacter(getCharacterFromFields())
+        viewModel.addCharacter(character)
     }
 
     private fun onClickUpdate() {
-        viewModel.updateCharacter(getCharacterFromFields())
-        viewModel.addCharacterSkills(characterSkillList, character.id)
+        viewModel.updateCharacter(character)
     }
 
     private fun setDataInFields(ch: Character) {
-        character_edit_id.text = ch.id.toString()//todo and this too
-        character_edit_name.setText(ch.name)
-        character_edit_player_name.setText(ch.playerName)
-        character_edit_world.setText(ch.world)
-        character_edit_tl.setText(ch.tl)
-        character_edit_age.setText(ch.age)
-        character_edit_eye.setText(ch.eyes)
-        character_edit_hairs.setText(ch.hairs)
-        character_edit_skin.setText(ch.skin)
-        character_edit_height.setText(ch.height)
-        character_edit_weight.setText(ch.weight)
-        character_edit_gender.setText(ch.gender)
-        character_edit_race.setText(ch.race)
-        character_edit_sm.setText(ch.sm)
-        character_edit_st_counter.edit_stat.setText(ch.st.toString())
-        character_edit_dx_counter.edit_stat.setText(ch.dx.toString())
-        character_edit_iq_counter.edit_stat.setText(ch.iq.toString())
-        character_edit_ht_counter.edit_stat.setText(ch.ht.toString())
-        character_edit_hp_counter.edit_stat.setText(ch.hp.toString())
-        character_edit_move_counter.edit_stat.setText(ch.move.toString())
-        character_edit_speed_counter.edit_stat.setText(ch.speed.toString())
-        character_edit_will_counter.edit_stat.setText(ch.will.toString())
-        character_edit_per_counter.edit_stat.setText(ch.per.toString())
-        character_edit_fp_counter.edit_stat.setText(ch.fp.toString())
         val bytes = Base64.decode(ch.portrait, Base64.DEFAULT)
         val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
         character_edit_image.setImageBitmap(image)
-    }
-
-    private fun getCharacterFromFields(): Character{
-        return character.apply {
-            name = character_edit_name.text.toString()//todo and this too
-            world = character_edit_world.text.toString()
-            tl = character_edit_tl.text.toString()
-            age = character_edit_age.text.toString()
-            eyes = character_edit_eye.text.toString()
-            hairs = character_edit_hairs.text.toString()
-            skin = character_edit_skin.text.toString()
-            height = character_edit_height.text.toString()
-            weight = character_edit_weight.text.toString()
-            gender = character_edit_gender.text.toString()
-            race = character_edit_race.text.toString()
-            sm = character_edit_sm.text.toString()
-            st = character_edit_st_counter.edit_stat.text.toString().toInt()
-            dx = character_edit_dx_counter.edit_stat.text.toString().toInt()
-            iq = character_edit_iq_counter.edit_stat.text.toString().toInt()
-            ht = character_edit_ht_counter.edit_stat.text.toString().toInt()
-            hp = character_edit_hp_counter.edit_stat.text.toString().toInt()
-            move = character_edit_move_counter.edit_stat.text.toString().toInt()
-            speed = character_edit_speed_counter.edit_stat.text.toString().toInt()
-            will = character_edit_will_counter.edit_stat.text.toString().toInt()
-            per = character_edit_per_counter.edit_stat.text.toString().toInt()
-            fp = character_edit_fp_counter.edit_stat.text.toString().toInt()
-        }
     }
 }
