@@ -17,6 +17,8 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.testapp.R
 import com.example.testapp.custom_view.outline_corner.OutlineProviders
+import com.example.testapp.databinding.CardCharacterAllBinding
+import com.example.testapp.databinding.FragmentCharacterBinding
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.CharacterSkills
 import com.example.testapp.db.entity.Skill.Skill
@@ -36,6 +38,7 @@ class CharacterFragment : Fragment() {
 
     private lateinit var character: Character
     private lateinit var characterSkills: List<CharacterSkills>
+    private lateinit var characterBinding: FragmentCharacterBinding
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
     private var isInfoCollapsed = false
 
@@ -48,7 +51,8 @@ class CharacterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_character, container, false)
+        characterBinding = FragmentCharacterBinding.inflate(inflater, container, false)
+        return characterBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -96,28 +100,10 @@ class CharacterFragment : Fragment() {
         haracter_card_collapse_info.setOnClickListener {
             if (isInfoCollapsed) {
                 isInfoCollapsed = false
-                character_card_tl.visibility = View.VISIBLE//todo move in class CharacterCardView
-                character_card_age.visibility = View.VISIBLE
-                character_card_eye.visibility = View.VISIBLE
-                character_card_hairs.visibility = View.VISIBLE
-                character_card_skin.visibility = View.VISIBLE
-                character_card_height.visibility = View.VISIBLE
-                character_card_weight.visibility = View.VISIBLE
-                character_card_gender.visibility = View.VISIBLE
-                character_card_race.visibility = View.VISIBLE
-                character_card_sm.visibility = View.VISIBLE
+                character_card_other_info.visibility = View.VISIBLE
             } else {
                 isInfoCollapsed = true
-                character_card_tl.visibility = View.GONE
-                character_card_age.visibility = View.GONE
-                character_card_eye.visibility = View.GONE
-                character_card_hairs.visibility = View.GONE
-                character_card_skin.visibility = View.GONE
-                character_card_height.visibility = View.GONE
-                character_card_weight.visibility = View.GONE
-                character_card_gender.visibility = View.GONE
-                character_card_race.visibility = View.GONE
-                character_card_sm.visibility = View.GONE
+                character_card_other_info.visibility = View.GONE
             }
         }
     }
@@ -160,6 +146,7 @@ class CharacterFragment : Fragment() {
     private fun observeCharacterById() {
         viewModel.characterById.observe(this, Observer {
             character = it
+            characterBinding.character = character
             setDataInFields(it)
         })
     }
@@ -199,30 +186,6 @@ class CharacterFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun setDataInFields(ch: Character) {
-        character_card_id.text = ch.id.toString()
-        character_card_name.text = "${resources.getString(R.string.name)}: ${ch.name}"
-        character_card_player_name.text = "${resources.getString(R.string.player_name)}: ${ch.playerName}"//todo and this too
-        character_card_world.text = "${resources.getString(R.string.world)}: ${ch.world}"
-        character_card_tl.text = "${resources.getString(R.string.tl)}: ${ch.tl}"
-        character_card_age.text = "${resources.getString(R.string.age)}: ${ch.age}"
-        character_card_eye.text = "${resources.getString(R.string.eyes)}: ${ch.eyes}"
-        character_card_hairs.text = "${resources.getString(R.string.hairs)}: ${ch.hairs}"
-        character_card_skin.text = "${resources.getString(R.string.skin)}: ${ch.skin}"
-        character_card_height.text = "${resources.getString(R.string.height)}: ${ch.height}"
-        character_card_weight.text = "${resources.getString(R.string.weight)}: ${ch.weight}"
-        character_card_gender.text = "${resources.getString(R.string.gender)}: ${ch.gender}"
-        character_card_race.text = "${resources.getString(R.string.race)}: ${ch.race}"
-        character_card_sm.text ="${resources.getString(R.string.sm)}: ${ch.sm}"
-        character_card_st.text = ch.st.toString()
-        character_card_dx.text = ch.dx.toString()
-        character_card_iq.text = ch.iq.toString()
-        character_card_ht.text = ch.ht.toString()
-        character_card_hp.text = ch.hp.toString()
-        character_card_move.text = ch.move.toString()
-        character_card_speed.text = ch.speed.toString()
-        character_card_will.text = ch.will.toString()
-        character_card_per.text = ch.per.toString()
-        character_card_fp.text = ch.fp.toString()
         val bytes = Base64.decode(ch.portrait, Base64.DEFAULT)
         val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
         character_card_image.setImageBitmap(image)
