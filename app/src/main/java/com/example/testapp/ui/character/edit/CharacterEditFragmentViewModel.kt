@@ -42,6 +42,9 @@ class CharacterEditFragmentViewModel(): RxViewModel() {
     val characterSkillsByIdComplete: LiveData<List<CharacterSkills>>
         get() = characterSkillsByIdEvent
 
+    val getLastCharacterIdComplete: LiveData<Int>
+        get() = getLastCharacterIdEvent
+
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
 
     private var addCharacterCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
@@ -55,6 +58,8 @@ class CharacterEditFragmentViewModel(): RxViewModel() {
     private var addCharacterSkillsEvent: MutableLiveData<Boolean> = MutableLiveData()
 
     private var characterSkillsByIdEvent: MutableLiveData<List<CharacterSkills>> = MutableLiveData()
+
+    private var getLastCharacterIdEvent: MutableLiveData<Int> = MutableLiveData()
 
     init {
         val appScope = Toothpick.openScope("APP")
@@ -160,6 +165,21 @@ class CharacterEditFragmentViewModel(): RxViewModel() {
             ).let(compositeDisposable::add)
     }
 
+    fun getLastCharacterId() {
+        dbm.getDB().characterDao().getLastCharacterId()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    getLastCharacterIdEvent.value = it
+                },
+                {
+                    errorEvent.value = it
+                }
+            ).let(compositeDisposable::add)
+    }
+
+
     fun clearEvents()
     {
         errorEvent =  MutableLiveData()
@@ -169,5 +189,6 @@ class CharacterEditFragmentViewModel(): RxViewModel() {
         updateCharacterCompleteEvent =  MutableLiveData()
         addCharacterSkillsEvent =  MutableLiveData()
         characterSkillsByIdEvent = MutableLiveData()
+        getLastCharacterIdEvent = MutableLiveData()
     }
 }

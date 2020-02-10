@@ -78,6 +78,8 @@ class CharacterEditFragment : Fragment() {
         observeErrors()
         observeCharacterSkillsById()
         observeSkillByNames()
+        observeGetLastCharacterIdComplete()
+        observeAddCharacterSkillsComplete()
 
         initOnClick()
     }
@@ -197,9 +199,22 @@ class CharacterEditFragment : Fragment() {
     }
     private fun observeAddComplete() {
         viewModel.addCharacterComplete.observe(this, Observer {
+            viewModel.getLastCharacterId()
+        })
+    }
+
+    private fun observeGetLastCharacterIdComplete() {
+        viewModel.getLastCharacterIdComplete.observe(this, Observer {
+            viewModel.addCharacterSkills(characterSkillList, it)
+        })
+    }
+
+    private fun observeAddCharacterSkillsComplete() {
+        viewModel.addCharacterSkillsComplete.observe(this, Observer {
             Toast.makeText(activity, "added", Toast.LENGTH_SHORT).show()
         })
     }
+
 
     private fun observeErrors() {
         viewModel.error.observe(this, Observer {
@@ -210,7 +225,6 @@ class CharacterEditFragment : Fragment() {
 
     private fun onClickAdd() {
         viewModel.addCharacter(getCharacterFromFields())
-        viewModel.addCharacterSkills(characterSkillList, character.id)
     }
 
     private fun onClickUpdate() {
