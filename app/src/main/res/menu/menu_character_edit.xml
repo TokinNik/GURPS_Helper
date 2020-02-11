@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_item_character_edit_accept"
+        android:title="@string/accept"
+        android:visible="true"
+        app:actionLayout="@layout/item_menu_accept_button"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_item_character_edit_cancel"
+        android:title="@string/cancel"
+        android:visible="true"
+        app:actionLayout="@layout/item_menu_cancel_button"
+        app:showAsAction="always" />
+
+</menu>

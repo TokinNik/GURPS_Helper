@@ -4,10 +4,8 @@ package com.example.testapp.ui.character.edit
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -18,18 +16,17 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
 import com.example.testapp.databinding.FragmentCharacterEditBinding
-import com.example.testapp.databinding.StatCounterBinding
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.ui.character.choiseskill.ChoiceSkillFragment
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
+import com.google.android.material.button.MaterialButton
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
 import kotlinx.android.synthetic.main.fragment_character_edit.*
-import kotlinx.android.synthetic.main.stat_counter.view.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
@@ -48,6 +45,11 @@ class CharacterEditFragment : Fragment() {
     private val navController: NavController?
         get() = activity?.let { Navigation.findNavController(it, R.id.nav_host_fragment) }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,6 +58,30 @@ class CharacterEditFragment : Fragment() {
         characterEditBinding.onClickPlus = StatCounterPlusButtonListener(100)
         characterEditBinding.onClickMinus = StatCounterMinusButtonListener(0)
         return characterEditBinding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_character_edit, menu)
+        menu.findItem(R.id.menu_item_character_edit_accept)
+            .actionView.findViewById<MaterialButton>(R.id.button_accept)
+            .setOnClickListener {
+                if (mode == "update"){
+                    onClickUpdate()
+                } else {
+                    onClickAdd()
+                    //navController?.navigateUp()
+                }
+            }
+        menu.findItem(R.id.menu_item_character_edit_cancel)
+            .actionView.findViewById<MaterialButton>(R.id.button_cancel)
+            .setOnClickListener {
+                val bundle = Bundle()
+                bundle.putInt("id", character.id)
+                val optionsBuilder = NavOptions.Builder()
+                val options = optionsBuilder.setPopUpTo(R.id.startFragment, false).build()
+                navController?.navigate(R.id.characterFragment, bundle, options)
+            }
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -96,23 +122,6 @@ class CharacterEditFragment : Fragment() {
 
     private fun initOnClick()
     {
-        button_cancel.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putInt("id", character.id)
-            val optionsBuilder = NavOptions.Builder()
-            val options = optionsBuilder.setPopUpTo(R.id.startFragment, false).build()
-            navController?.navigate(R.id.characterFragment, bundle, options)
-        }
-
-        button_accept.setOnClickListener {
-            if (mode == "update"){
-                onClickUpdate()
-            } else {
-                onClickAdd()
-                //navController?.navigateUp()
-            }
-        }
-
         button_add_skill.setOnClickListener {
             val selectSkillDialog = ChoiceSkillFragment(characterSkillList)
             selectSkillDialog.setTargetFragment(this, 1)

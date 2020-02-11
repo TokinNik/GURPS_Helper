@@ -5,27 +5,23 @@ import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.testapp.R
 import com.example.testapp.custom_view.outline_corner.OutlineProviders
-import com.example.testapp.databinding.CardCharacterAllBinding
 import com.example.testapp.databinding.FragmentCharacterBinding
 import com.example.testapp.db.entity.Character
-import com.example.testapp.db.entity.CharacterSkills
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.ui.SelectableData
-import com.example.testapp.ui.settings.ColorScheme
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
+import com.google.android.material.button.MaterialButton
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.card_character_all.*
@@ -37,7 +33,6 @@ import toothpick.smoothie.viewmodel.installViewModelBinding
 class CharacterFragment : Fragment() {
 
     private lateinit var character: Character
-    private lateinit var characterSkills: List<CharacterSkills>
     private lateinit var characterBinding: FragmentCharacterBinding
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
     private var isInfoCollapsed = false
@@ -45,7 +40,14 @@ class CharacterFragment : Fragment() {
     private val viewModel: CharacterFragmentViewModel by inject()
 
     private val navController: NavController?
-        get() = activity?.let { Navigation.findNavController(it, R.id.nav_host_fragment) }
+        get() = activity?.let {
+            Navigation.findNavController(it, R.id.nav_host_fragment)
+        }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +55,18 @@ class CharacterFragment : Fragment() {
     ): View? {
         characterBinding = FragmentCharacterBinding.inflate(inflater, container, false)
         return characterBinding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_character, menu)
+        menu.findItem(R.id.menu_item_character_edit)
+            .actionView.findViewById<MaterialButton>(R.id.button_edit)
+            .setOnClickListener {
+            val bundle = Bundle()
+            bundle.putInt("id", character.id)
+            navController?.navigate(R.id.action_characterFragment_to_characterEditFragment, bundle)
+        }
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -91,12 +105,6 @@ class CharacterFragment : Fragment() {
     }
 
     private fun initOnClick() {
-        button_edit.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putInt("id", character.id)
-            navController?.navigate(R.id.action_characterFragment_to_characterEditFragment, bundle)
-        }
-
         haracter_card_collapse_info.setOnClickListener {
             if (isInfoCollapsed) {
                 isInfoCollapsed = false
