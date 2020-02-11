@@ -8,6 +8,8 @@ class AppSettingsVault(override val sharedPreferences: SharedPreferences) : Shar
 
     var isSkilLibLoaded: Boolean by booleanDelegate(false, "is_skill_lib_loaded")
     var colorScheme: String by stringDelegate(ColorScheme.CLASSIC.name , "color_scheme")
+    var fileIntentAdd: String by stringDelegate("" , "file_intent_add")
+
 
     fun clearSettings(){
         isSkilLibLoaded = false

@@ -33,10 +33,10 @@ import toothpick.smoothie.viewmodel.installViewModelBinding
 class StartFragment : Fragment() {
 
     private val viewModel: StartFragmentViewModel by inject()
-
     private val dataManager: DataManager by inject()
 
-    private var isfileAdd: Boolean = false
+    private var isFileAdd: Boolean = false
+    private var isIntentAdd: Boolean = false
     private val requestCodeAddFromFile = 200
     private val disposeBag = CompositeDisposable()
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
@@ -65,8 +65,9 @@ class StartFragment : Fragment() {
         scope.installViewModelBinding<StartFragmentViewModel>(this)
         scope.inject(this)
 
+
         viewModel.clearEvents()
-        viewModel.initStandartLibrary(resources.assets.open("Mentor_Skills.gcs"))
+        viewModel.initStandartLibrary(resources.assets.open("Mentor_Skills.gcs"))//todo move in appConstants
 
         button_rx.setOnClickListener { onClickRx() }
         button_add.setOnClickListener { onClickAdd() }
@@ -78,15 +79,23 @@ class StartFragment : Fragment() {
         observeDeleteComplete()
         observeAddComplete()
         observeGetLastCharacterIdComplete()
-        observePArseCharacterComplete()
+        observeParseCharacterComplete()
 
         recyclerViewInit()
+
+
     }
 
     override fun onResume() {
         super.onResume()
         showProgressBar()
         viewModel.getAllCharacters()
+        if (viewModel.getFileIntentAdd().isNotBlank())
+        {
+            isIntentAdd = true
+            addFromFile(viewModel.getFileIntentAdd())
+            viewModel.clearFileIntentAdd()
+        }
     }
 
     override fun onPause() {
@@ -102,11 +111,15 @@ class StartFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == requestCodeAddFromFile && resultCode == RESULT_OK) {
-            newCharacter = Character()
-            viewModel.addCharacter(newCharacter)
-            isfileAdd = true
-            newCharacterFilePath = data?.data?.path ?: ""
+            addFromFile(data?.data?.path ?: "")
         }
+    }
+
+    private fun addFromFile(path: String) {
+        newCharacter = Character()
+        viewModel.addCharacter(newCharacter)
+        isFileAdd = true
+        newCharacterFilePath = path
     }
 
     private fun onClickAdd() {
@@ -212,14 +225,18 @@ class StartFragment : Fragment() {
                         colorActive = ContextCompat.getColor(context!!, R.color.accent),
                         colorInactive = ContextCompat.getColor(context!!, R.color.primary_light),//todo move to val?
                         onClick = {
-                            val bundle = Bundle()
-                            bundle.putInt("id", it.data.id)
-                            navController?.navigate(R.id.action_startFragment_to_characterFragment, bundle)
+                            openCharacter(it.data.id)
                         }
                     )
                 )
             }
         }
+    }
+
+    private fun openCharacter(id: Int) {
+        val bundle = Bundle()
+        bundle.putInt("id", id)
+        navController?.navigate(R.id.action_startFragment_to_characterFragment, bundle)
     }
 
     private fun observeGetAllCharacters() {
@@ -239,9 +256,12 @@ class StartFragment : Fragment() {
 
     private fun observeAddComplete() {
         viewModel.addComplete.observe(this, Observer {
-            if (isfileAdd) {
+            if (isFileAdd) {
                 viewModel.getLastCharacterId()
-                isfileAdd = false
+                isFileAdd = false
+            } else if(isIntentAdd) {
+                isIntentAdd = false
+                openCharacter(newCharacter.id)
             } else {
                 Toast.makeText(activity, "added", Toast.LENGTH_SHORT).show()
             }
@@ -254,8 +274,9 @@ class StartFragment : Fragment() {
         })
     }
 
-    private fun observePArseCharacterComplete() {
+    private fun observeParseCharacterComplete() {
         viewModel.parseCharacterComplete.observe(this, Observer {
+            newCharacter = it
             viewModel.updateCharacter(it)
         })
     }

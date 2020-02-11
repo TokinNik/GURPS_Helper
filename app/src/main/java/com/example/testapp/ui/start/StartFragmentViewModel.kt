@@ -191,4 +191,11 @@ class StartFragmentViewModel: RxViewModel() {
                 }
             ).let(compositeDisposable::add)
     }
+
+    fun getFileIntentAdd() = dataManager.appSettingsVault.fileIntentAdd
+
+    fun clearFileIntentAdd() {
+        dataManager.appSettingsVault.fileIntentAdd = ""
+    }
+
 }
