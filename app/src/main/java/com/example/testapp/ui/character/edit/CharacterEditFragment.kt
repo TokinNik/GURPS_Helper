@@ -1,31 +1,24 @@
 package com.example.testapp.ui.character.edit
 
 
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Base64
+import android.text.BoringLayout
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
-import com.example.testapp.databinding.FragmentCharacterEditBinding
-import com.example.testapp.ui.SelectableData
+import com.example.testapp.custom_view.outline_corner.OutlineProviders
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill.Skill
-import com.example.testapp.ui.character.choiseskill.ChoiceSkillFragment
-import com.example.testapp.ui.skill.SkillItem
-import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
 import com.google.android.material.button.MaterialButton
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.GroupieViewHolder
-import com.xwray.groupie.Section
+import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
 import kotlinx.android.synthetic.main.fragment_character_edit.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
@@ -33,14 +26,15 @@ import toothpick.smoothie.viewmodel.installViewModelBinding
 
 class CharacterEditFragment : Fragment() {
 
+    private val viewModel: CharacterEditFragmentViewModel by inject()
+
     private var characterSkillList: List<Skill> = emptyList()
     private var character: Character = Character()
     private var mode: String = "update"//todo need enum?
-    private val viewModel: CharacterEditFragmentViewModel by inject()
 
-    private val groupAdapter = GroupAdapter<GroupieViewHolder>()
-
-    private lateinit var characterEditBinding: FragmentCharacterEditBinding
+    private val onSave: LiveData<Boolean>
+        get() = onSaveEvent
+    private var onSaveEvent: MutableLiveData<Boolean> = MutableLiveData()
 
     private val navController: NavController?
         get() = activity?.let { Navigation.findNavController(it, R.id.nav_host_fragment) }
@@ -54,10 +48,7 @@ class CharacterEditFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        characterEditBinding = FragmentCharacterEditBinding.inflate(inflater, container, false)
-        characterEditBinding.onClickPlus = StatCounterPlusButtonListener(100)
-        characterEditBinding.onClickMinus = StatCounterMinusButtonListener(0)
-        return characterEditBinding.root
+        return inflater.inflate(R.layout.fragment_character_edit, container, false)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -94,103 +85,31 @@ class CharacterEditFragment : Fragment() {
         viewModel.clearEvents()
 
         mode = arguments?.getString("mode", "update") ?: "update"
-        if (mode == "update"){
+        if (mode == "update") {
             val id = arguments?.getInt("id", 0) ?: 0
-            viewModel.getCharacterById(id)
-            viewModel.getCharacterSkillsById(id)
-        } else {
-            characterEditBinding.character = character
-            setDataInFields(character)
+            viewModel.setEditCharacterId(id)
         }
+
+        character_edit_pager.adapter = ViewPagerCharacterEditAdapter(activity!!,
+            Observable.create { emitter: ObservableEmitter<Boolean> ->
+                onSave.observe(this, Observer {
+                    emitter.onNext(it)
+                    if (it)
+                    {
+                        emitter.onComplete()
+                    }
+                })
+            })
+        character_edit_pager.offscreenPageLimit = 4
 
         observeAddComplete()
-        observeCharacterById()
-        observeUpdateComplete()
         observeErrors()
-        observeCharacterSkillsById()
-        observeSkillByNames()
         observeGetLastCharacterIdComplete()
         observeAddCharacterSkillsComplete()
-
-        initOnClick()
+        observeEditCharacter()
+        observeEditCharacterSkills()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        initRecyclerView()
-    }
-
-    private fun initOnClick()
-    {
-        button_add_skill.setOnClickListener {
-            val selectSkillDialog = ChoiceSkillFragment(characterSkillList)
-            selectSkillDialog.setTargetFragment(this, 1)
-            selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
-            selectSkillDialog.onClickAccept = {
-                selectSkillDialog.dismiss()
-                characterSkillList = it
-                setItems(it)
-            }
-            selectSkillDialog.show(fragmentManager!!, null)
-        }
-    }
-
-    private fun initRecyclerView(){
-        groupAdapter.setOnItemClickListener { item, view ->
-            val selectSkillDialog = SkillObserveSingleFragment((item as SkillItem).skill.data)
-            selectSkillDialog.setTargetFragment(this, 1)
-            selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
-            selectSkillDialog.show(fragmentManager!!, null)
-        }
-        recyclerView_skills.apply {
-            layoutManager = LinearLayoutManager(activity)
-            adapter = groupAdapter
-        }
-    }
-
-    private fun setItems(skillsList: List<Skill>) {
-        groupAdapter.clear()
-        val section = Section()
-        for (item in skillsList) {
-            section.add(
-                SkillItem(
-                    skill = SelectableData(item),
-                    colorActive = ContextCompat.getColor(context!!, R.color.accent),
-                    colorInactive = ContextCompat.getColor(context!!, R.color.primary_light)
-                )
-            )
-        }
-        groupAdapter.add(section)
-    }
-
-    private fun observeCharacterById()
-    {
-        viewModel.getCharacterByIdComplete.observe(this, Observer {
-            character = it
-            characterEditBinding.character = character
-            setDataInFields(it)
-        })
-    }
-
-    private fun observeCharacterSkillsById() {
-        viewModel.characterSkillsByIdComplete.observe(this, Observer {
-            viewModel.getSkillByNames(it)
-        })
-    }
-
-    private fun observeSkillByNames()
-    {
-        viewModel.getSkillByNamesComplete.observe(this, Observer {
-            characterSkillList = it
-            setItems(it)
-        })
-    }
-
-    private fun observeUpdateComplete() {
-        viewModel.updateCharacterComplete.observe(this, Observer {
-            viewModel.addCharacterSkills(characterSkillList, character.id)
-        })
-    }
     private fun observeAddComplete() {
         viewModel.addCharacterComplete.observe(this, Observer {
             viewModel.getLastCharacterId()
@@ -210,6 +129,8 @@ class CharacterEditFragment : Fragment() {
             } else {
                 Toast.makeText(activity, "updated", Toast.LENGTH_SHORT).show()
             }
+            onSaveEvent.value = false
+            viewModel.clearEditCharacter()
         })
     }
 
@@ -221,16 +142,31 @@ class CharacterEditFragment : Fragment() {
     }
 
     private fun onClickAdd() {
-        viewModel.addCharacter(character)
+        onSaveEvent.value = true
     }
 
     private fun onClickUpdate() {
-        viewModel.updateCharacter(character)
+        onSaveEvent.value = true
     }
 
-    private fun setDataInFields(ch: Character) {
-        val bytes = Base64.decode(ch.portrait, Base64.DEFAULT)
-        val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-        character_edit_image.setImageBitmap(image)
+    private fun observeEditCharacter() {
+        viewModel.getEditCharacter().observe(this, Observer {
+            character = it
+            if (onSave.value == true)
+                if(mode == "add") {
+                    viewModel.addCharacter(character)
+                } else {
+                    viewModel.updateCharacter(character)
+                }
+        })
+    }
+
+    private fun observeEditCharacterSkills() {
+        viewModel.getEditCharacterSkills().observe(this, Observer {
+            characterSkillList = it
+            if (onSave.value == true && mode == "update") {
+                    viewModel.addCharacterSkills(characterSkillList, character.id)
+            }
+        })
     }
 }

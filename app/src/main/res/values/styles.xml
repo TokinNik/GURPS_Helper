@@ -19,7 +19,7 @@
         <item name="android:windowMinWidthMinor">75%</item>
     </style>
 
-    <style name="MaterialTextInputView" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+    <style name="MaterialTextInputView" parent="Widget.Design.TextInputLayout">
         <item name="android:paddingStart">5dp</item>
         <item name="android:paddingEnd">5dp</item>
         <item name="android:layout_width">match_parent</item>

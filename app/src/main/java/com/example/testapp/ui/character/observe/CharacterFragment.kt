@@ -79,7 +79,7 @@ class CharacterFragment : Fragment() {
         viewModel.clearEvents()
         viewModel.getColorScheme()
 
-        character_card_pager.adapter = ViewPagerAdapter()
+        character_card_pager.adapter = ViewPagerCharacterAdapter()
         character_card_pager.offscreenPageLimit = 4
 
         val radius = 32f
@@ -124,7 +124,7 @@ class CharacterFragment : Fragment() {
             selectSkillDialog.show(fragmentManager!!, null)
         }
 
-        (character_card_pager.adapter as ViewPagerAdapter).groupAdapter = groupAdapter
+        (character_card_pager.adapter as ViewPagerCharacterAdapter).groupAdapter = groupAdapter
     }
 
     private fun setItems(items: List<Skill>)
@@ -147,7 +147,7 @@ class CharacterFragment : Fragment() {
 
     private fun observeColorScheme() {
         viewModel.colorScheme.observe(this, Observer {
-            (character_card_pager.adapter as ViewPagerAdapter).schemeType = it
+            (character_card_pager.adapter as ViewPagerCharacterAdapter).schemeType = it
         })
     }
 
