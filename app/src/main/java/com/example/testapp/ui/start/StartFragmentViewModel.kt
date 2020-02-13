@@ -90,9 +90,9 @@ class StartFragmentViewModel: RxViewModel() {
     fun getAllCharacters() {
         dbm.getDB().characterDao().getAll()
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                getAllCharactersEvent.value = it
-            }.let(compositeDisposable::add)
+            .subscribe{
+                    getAllCharactersEvent.value = it
+                }.let(compositeDisposable::add) //todo onClear() is call after onActivityCreated() and onResume(), and clear this query! (wtf)
     }
 
     fun deleteCharacter(character: Character) {

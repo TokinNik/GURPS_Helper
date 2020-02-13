@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.di.DBModelImpl
+import com.example.testapp.ui.RxViewModel
 import com.example.testapp.util.RollUtil
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -15,11 +16,9 @@ import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 
 
-class SkillEditFragmentViewModel(): ViewModel() {
+class SkillEditFragmentViewModel : RxViewModel() {
 
     private val dbm: DBModelImpl by inject()
-
-    private val rollUtil: RollUtil by inject()
 
     val skillById: LiveData<Skill>
         get() = skillByIdEvent
@@ -50,15 +49,14 @@ class SkillEditFragmentViewModel(): ViewModel() {
         dbm.getDB().skillDao().getById(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : DisposableSingleObserver<Skill>() {
-                override fun onSuccess(t: Skill) {
-                    skillByIdEvent.value = t
+            .subscribe(
+                 {
+                    skillByIdEvent.value = it
+                 },
+                {
+                    errorEvent.value = it
                 }
-
-                override fun onError(e: Throwable) {
-                    errorEvent.value = e
-                }
-            })
+            ).let(compositeDisposable::add)
     }
 
     fun addSkill(skill: Skill) {
@@ -67,13 +65,15 @@ class SkillEditFragmentViewModel(): ViewModel() {
             emitter.onComplete()
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnError {
-                errorEvent.value = it
-            }
-            .doOnComplete {
-                addCompleteEvent.value = true
-            }
-            .subscribe()
+            .subscribe(
+                {},
+                {
+                    errorEvent.value = it
+                },
+                {
+                    addCompleteEvent.value = true
+                }
+            ).let(compositeDisposable::add)
     }
 
     fun updateSkill(skill: Skill) {
@@ -82,13 +82,15 @@ class SkillEditFragmentViewModel(): ViewModel() {
             emitter.onComplete()
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnError {
-                errorEvent.value = it
-            }
-            .doOnComplete {
-                updateCompleteEvent.value = true
-            }
-            .subscribe()
+            .subscribe(
+                {},
+                {
+                    errorEvent.value = it
+                },
+                {
+                    updateCompleteEvent.value = true
+                }
+            ).let(compositeDisposable::add)
     }
 
     fun clearEvents()

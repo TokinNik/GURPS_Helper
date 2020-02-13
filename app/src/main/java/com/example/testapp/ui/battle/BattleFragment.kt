@@ -58,6 +58,11 @@ class BattleFragment : Fragment() {
         viewModel.getItems()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.forceClear()
+    }
+
     private fun recyclerViewInit() {
         recyclerView_characters_queue.apply {
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)

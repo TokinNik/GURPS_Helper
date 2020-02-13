@@ -45,8 +45,6 @@ class SettingsFragment : Fragment() {
         observeErrors()
 
         initOnClick()
-
-        initRecyclerView()
     }
 
     private fun initOnClick() {
@@ -62,26 +60,10 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    private fun initRecyclerView(){
-
-    }
-
-    private fun setItems(skillList: List<Skill>) {
-
-    }
-
     private fun observeErrors() {
         viewModel.error.observe(this, Observer {
             Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
             println("ERROR!!! $it")
         })
-    }
-
-    private fun hideProgressBar() {
-        skill_all_fragment_progress_bar.visibility = View.GONE
-    }
-
-    private fun showProgressBar() {
-        skill_all_fragment_progress_bar.visibility = View.VISIBLE
     }
 }

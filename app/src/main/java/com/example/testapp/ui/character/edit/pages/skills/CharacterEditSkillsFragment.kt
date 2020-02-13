@@ -76,6 +76,11 @@ class CharacterEditSkillsFragment(private val onSave: Observable<Boolean>) : Fra
         compositeDisposable.clear()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.forceClear()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initRecyclerView()

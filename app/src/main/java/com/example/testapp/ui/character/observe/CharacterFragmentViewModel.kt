@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 
-class CharacterFragmentViewModel: RxViewModel() {
+class CharacterFragmentViewModel : RxViewModel() {
 
     private val dbm: DBModelImpl by inject()
     private val dataManager: DataManager by inject()

@@ -9,6 +9,10 @@ open class RxViewModel : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
+        //forceClear()
+    }
+
+    fun forceClear() {
         compositeDisposable.clear()
     }
 }

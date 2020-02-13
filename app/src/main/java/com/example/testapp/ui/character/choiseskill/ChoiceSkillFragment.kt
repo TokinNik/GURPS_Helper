@@ -58,6 +58,11 @@ class ChoiceSkillFragment(oldSkills: List<Skill>) : DialogFragment() {
         viewModel.getAllSkills()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.forceClear()
+    }
+
     private fun initOnClick()
     {
         button_accept.setOnClickListener {

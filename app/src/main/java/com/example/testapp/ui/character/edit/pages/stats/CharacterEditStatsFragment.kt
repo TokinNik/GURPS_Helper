@@ -73,6 +73,11 @@ class CharacterEditStatsFragment(val onSave: Observable<Boolean>) : Fragment() {
         compositeDisposable.clear()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.forceClear()
+    }
+
     private fun initOnClick() {
         character_edit_collapse_other.setOnClickListener {
             if (isOtherCollapsed) {

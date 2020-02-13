@@ -59,6 +59,11 @@ class SkillEditFragment : Fragment() {
         initOnClick()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.forceClear()
+    }
+
     private fun initOnClick()
     {
         button_cancel.setOnClickListener {

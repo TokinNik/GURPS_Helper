@@ -110,6 +110,11 @@ class CharacterEditFragment : Fragment() {
         observeEditCharacterSkills()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.forceClear()
+    }
+
     private fun observeAddComplete() {
         viewModel.addCharacterComplete.observe(this, Observer {
             viewModel.getLastCharacterId()

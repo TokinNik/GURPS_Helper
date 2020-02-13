@@ -16,9 +16,8 @@ import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import java.io.InputStream
 
-class SettingsFragmentViewModel: RxViewModel() {
+class SettingsFragmentViewModel : RxViewModel() {
 
-    private val dbm: DBModelImpl by inject()
     private val dataManager: DataManager by inject()
 
     val error: LiveData<Throwable>
@@ -30,8 +29,6 @@ class SettingsFragmentViewModel: RxViewModel() {
         val appScope = Toothpick.openScope("APP")
         Toothpick.inject(this, appScope)
     }
-
-
 
     fun clearEvents()
     {

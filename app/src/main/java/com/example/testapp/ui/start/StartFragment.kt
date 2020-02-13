@@ -2,6 +2,7 @@ package com.example.testapp.ui.start
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -12,10 +13,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
+import com.example.testapp.RxTest
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
 import com.example.testapp.ui.character.CharacterItem
@@ -24,7 +27,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_start.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
@@ -86,6 +91,10 @@ class StartFragment : Fragment() {
 
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+    }
+
     override fun onResume() {
         super.onResume()
         showProgressBar()
@@ -98,6 +107,10 @@ class StartFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onPause() {
         super.onPause()
         //viewModel.clearEvents()
@@ -106,6 +119,19 @@ class StartFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         disposeBag.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.forceClear()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -159,29 +185,31 @@ class StartFragment : Fragment() {
 
     private fun onClickRx() {
         dataManager.appSettingsVault.clearSettings()//todo delete
-//        progressBar.visibility = View.VISIBLE
-//        val rxt = RxTest()
-//        rxt.rxTimerRoll()//rxCreateRollWithTime(5)
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            //.filter { it > 10 }
-//            .subscribe(
-//                {
-//                    textView.text = "Next = ${it} (${counter++})"
-//                    println(it)
-//                },
-//                {
-//                    textView.text = "Error!!!"
-//                },
-//                {
-//                    //textView.text = "Complete!!!"
-//                    progressBar.visibility = View.INVISIBLE
-//                },
-//                {
-//                    //dispose
-//                    //it.dispose()
-//                }
-//            ).let(disposeBag::add)
+        progressBar.visibility = View.VISIBLE
+        val rxt = RxTest()
+        rxt
+//            .rxTimerRoll()
+            .rxCreateRollWithTime(5)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            //.filter { it > 10 }
+            .subscribe(
+                {
+                    textView.text = "Next = ${it} (${counter++})"
+                    println(it)
+                },
+                {
+                    textView.text = "Error!!!"
+                },
+                {
+                    //textView.text = "Complete!!!"
+                    progressBar.visibility = View.INVISIBLE
+                },
+                {
+                    //dispose
+                    //it.dispose()
+                }
+            ).let(disposeBag::add)
     }
 
     private fun recyclerViewInit() {

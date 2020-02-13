@@ -5,13 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.testapp.db.entity.Character
 import com.example.testapp.di.DBModelImpl
+import com.example.testapp.ui.RxViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 
 
-class BattleFragmentViewModel: ViewModel() {
+class BattleFragmentViewModel : RxViewModel() {
 
     private val dbm: DBModelImpl by inject()
 
@@ -24,9 +25,6 @@ class BattleFragmentViewModel: ViewModel() {
     private var charactersEvent: MutableLiveData<List<Character>> = MutableLiveData()
 
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
-
-
-    private val compositeDisposable = CompositeDisposable()
 
     init {
         val appScope = Toothpick.openScope("APP")

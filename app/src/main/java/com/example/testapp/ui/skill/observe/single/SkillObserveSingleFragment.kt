@@ -60,6 +60,11 @@ class SkillObserveSingleFragment constructor(private val skillName: String) : Di
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.forceClear()
+    }
+
     private fun initOnClick() {
 
     }

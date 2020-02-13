@@ -67,6 +67,11 @@ class SkillObserveAllFragment : Fragment() {
         viewModel.getAllSkills()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.forceClear()
+    }
+
     private fun initOnClick()
     {
 

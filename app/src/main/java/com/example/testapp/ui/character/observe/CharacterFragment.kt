@@ -104,6 +104,11 @@ class CharacterFragment : Fragment() {
         viewModel.getCharacterSkillsById(id)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.forceClear()
+    }
+
     private fun initOnClick() {
         haracter_card_collapse_info.setOnClickListener {
             if (isInfoCollapsed) {

@@ -13,7 +13,7 @@ import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 
 
-class SkillObserveSingleFragmentViewModel: RxViewModel() {
+class SkillObserveSingleFragmentViewModel : RxViewModel() {
 
     private val dbm: DBModelImpl by inject()
 

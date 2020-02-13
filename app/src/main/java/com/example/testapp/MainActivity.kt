@@ -39,10 +39,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-    private val navController: NavController
-        get() = Navigation.findNavController(this, R.id.nav_host_fragment)
-
-
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         checkIntentAdd(intent)

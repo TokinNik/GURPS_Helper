@@ -12,7 +12,7 @@ import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 
 
-class CharacterEditStatsFragmentViewModel(): RxViewModel() {
+class CharacterEditStatsFragmentViewModel : RxViewModel() {
 
     private val dbm: DBModelImpl by inject()
     private val dataManager: DataManager by inject()
@@ -53,17 +53,9 @@ class CharacterEditStatsFragmentViewModel(): RxViewModel() {
         getCharacterByIdEvent =  MutableLiveData()
     }
 
-    fun setEditCharacterId(id: Int) {
-        dataManager.runtimeCharacterEdit.value?.id = id
-    }
-
     fun getEditCharacter(): Character = dataManager.runtimeCharacterEdit.value ?: Character()
 
     fun setEditCharacter(character: Character) {
         dataManager.runtimeCharacterEdit.value = character
-    }
-
-    fun clearEditCharacter(){
-        dataManager.runtimeCharacterEdit.value = Character()
     }
 }
