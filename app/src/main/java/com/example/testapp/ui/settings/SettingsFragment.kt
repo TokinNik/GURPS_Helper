@@ -7,13 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.lifecycle.Observer
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import com.example.testapp.R
-import com.example.testapp.db.entity.Skill.Skill
 import kotlinx.android.synthetic.main.fragment_settings.*
-import kotlinx.android.synthetic.main.fragment_skill_all.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
@@ -21,10 +20,6 @@ import toothpick.smoothie.viewmodel.installViewModelBinding
 class SettingsFragment : Fragment() {
 
     private val viewModel: SettingsFragmentViewModel by inject()
-
-    private val navController: NavController?
-        get() = activity?.let { Navigation.findNavController(it, R.id.nav_host_fragment) }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,10 +47,21 @@ class SettingsFragment : Fragment() {
             ColorScheme.CLASSIC -> radio_classic.isChecked = true
             ColorScheme.BRIGHT -> radio_bright.isChecked = true
         }
+        settings_fragment_night_theme.isChecked = viewModel.isNightTheme()
         settings_fragment_color_scheme_radio_group.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId){
                 R.id.radio_classic -> viewModel.setColorSchemeValue(ColorScheme.CLASSIC)
                 R.id.radio_bright -> viewModel.setColorSchemeValue(ColorScheme.BRIGHT)
+            }
+        }
+        settings_fragment_night_theme.setOnClickListener {
+            if (viewModel.isNightTheme())
+            {
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
+                viewModel.setNightTheme(false)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
+                viewModel.setNightTheme(true)
             }
         }
     }

@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Base64
 import android.view.*
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -18,6 +17,7 @@ import com.example.testapp.custom_view.outline_corner.OutlineProviders
 import com.example.testapp.databinding.FragmentCharacterBinding
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill.Skill
+import com.example.testapp.genThemeColor
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
@@ -134,16 +134,17 @@ class CharacterFragment : Fragment() {
 
     private fun setItems(items: List<Skill>)
     {
+        val colorActive = activity!!.genThemeColor(R.attr.colorSecondary)
+        val colorInactive = activity!!.genThemeColor(R.attr.colorPrimaryVariant)
         groupAdapter.clear()
-
         for(i in items)
         {
             groupAdapter.apply {
                 add(
                     SkillItem(
                         skill = SelectableData(i),
-                        colorActive = ContextCompat.getColor(context!!, R.color.accent),
-                        colorInactive = ContextCompat.getColor(context!!, R.color.primary_light)
+                        colorActive = colorActive,
+                        colorInactive = colorInactive
                     )
                 )
             }

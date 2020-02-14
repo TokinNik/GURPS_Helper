@@ -40,4 +40,10 @@ class SettingsFragmentViewModel : RxViewModel() {
     }
 
     fun getColorScheme(): ColorScheme = ColorScheme.valueOf(dataManager.appSettingsVault.colorScheme)
+
+    fun isNightTheme() = dataManager.appSettingsVault.isNightTheme
+
+    fun setNightTheme(isNightTheme: Boolean) {
+        dataManager.appSettingsVault.isNightTheme = isNightTheme
+    }
 }

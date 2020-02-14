@@ -11,9 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +19,7 @@ import com.example.testapp.R
 import com.example.testapp.RxTest
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
+import com.example.testapp.genThemeColor
 import com.example.testapp.ui.character.CharacterItem
 import com.example.testapp.util.DataManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -217,16 +216,16 @@ class StartFragment : Fragment() {
             val select = groupAdapter.getAdapterPosition(item)
             if ((item as CharacterItem).character.select) {
                 item.character.select = false
-                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
+                view.setBackgroundColor(activity!!.genThemeColor(R.attr.colorPrimaryVariant))
             }
             else {
                 item.character.select = true
-                view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.accent))
+                view.setBackgroundColor(activity!!.genThemeColor(R.attr.colorSecondary))
 
                 if (currentSelect >= 0 && currentSelect != select){
                     val prevItem = groupAdapter.getGroupAtAdapterPosition(currentSelect) as CharacterItem
                     prevItem.character.select = false
-                    prevItem.rootView.setBackgroundColor(ContextCompat.getColor(context!!, R.color.primary))
+                    prevItem.rootView.setBackgroundColor(activity!!.genThemeColor(R.attr.colorPrimaryVariant))
                 }
             }
             currentCharacter = item.character.data
@@ -242,16 +241,17 @@ class StartFragment : Fragment() {
 
     private fun addItems(items: List<Character>)
     {
+        val colorActive = activity!!.genThemeColor(R.attr.colorSecondary)
+        val colorInactive = activity!!.genThemeColor(R.attr.colorPrimaryVariant)
         groupAdapter.clear()
-
         for(i in items)
         {
             groupAdapter.apply {
                 add(
                     CharacterItem(
                         character = SelectableData(i),
-                        colorActive = ContextCompat.getColor(context!!, R.color.accent),
-                        colorInactive = ContextCompat.getColor(context!!, R.color.primary_light),//todo move to val?
+                        colorActive = colorActive,
+                        colorInactive = colorInactive,
                         onClick = {
                             openCharacter(it.data.id)
                         }

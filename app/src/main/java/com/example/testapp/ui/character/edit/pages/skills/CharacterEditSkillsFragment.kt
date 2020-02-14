@@ -13,6 +13,7 @@ import com.example.testapp.R
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill.Skill
+import com.example.testapp.genThemeColor
 import com.example.testapp.ui.character.choiseskill.ChoiceSkillFragment
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
@@ -114,14 +115,16 @@ class CharacterEditSkillsFragment(private val onSave: Observable<Boolean>) : Fra
     }
 
     private fun setItems(skillsList: List<Skill>) {
+        val colorActive = activity!!.genThemeColor(R.attr.colorSecondary)
+        val colorInactive = activity!!.genThemeColor(R.attr.colorPrimaryVariant)
         groupAdapter.clear()
         val section = Section()
         for (item in skillsList) {
             section.add(
                 SkillItem(
                     skill = SelectableData(item),
-                    colorActive = ContextCompat.getColor(context!!, R.color.accent),
-                    colorInactive = ContextCompat.getColor(context!!, R.color.primary_light)
+                    colorActive = colorActive,
+                    colorInactive = colorInactive
                 )
             )
         }
