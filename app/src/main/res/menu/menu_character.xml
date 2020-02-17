@@ -3,6 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/menu_item_character_export"
+        android:title="@string/export_character"
+        android:visible="true"
+        app:actionLayout="@layout/item_menu_export_button"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/menu_item_character_edit"
         android:title="@string/edit"
         android:visible="true"

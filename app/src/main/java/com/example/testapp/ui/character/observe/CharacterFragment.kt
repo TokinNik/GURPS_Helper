@@ -21,6 +21,7 @@ import com.example.testapp.getThemeColor
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
+import com.example.testapp.util.XMLBuilder
 import com.google.android.material.button.MaterialButton
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -65,6 +66,13 @@ class CharacterFragment : Fragment() {
             val bundle = Bundle()
             bundle.putInt("id", character.id)
             navController?.navigate(R.id.action_characterFragment_to_characterEditFragment, bundle)
+        }
+        menu.findItem(R.id.menu_item_character_export)
+            .actionView.findViewById<MaterialButton>(R.id.button_export)
+            .setOnClickListener {
+                val xmlb = XMLBuilder()
+                xmlb.saveInFile(character.name, xmlb.xmlTest(character).toString())
+                Toast.makeText(activity, "exported in file ${character.name}.gcs", Toast.LENGTH_SHORT).show()
         }
         super.onCreateOptionsMenu(menu, inflater)
     }

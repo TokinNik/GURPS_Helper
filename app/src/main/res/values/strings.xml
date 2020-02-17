@@ -47,5 +47,6 @@
     <string name="classic">Classic</string>
     <string name="bright">Bright</string>
     <string name="night">Night</string>
+    <string name="export_character">Ex-rt</string>
 
 </resources>
