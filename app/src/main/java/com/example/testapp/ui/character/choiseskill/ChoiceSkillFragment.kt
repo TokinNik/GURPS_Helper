@@ -5,14 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
 import com.example.testapp.db.entity.Skill.Skill
+import com.example.testapp.getThemeColor
 import com.example.testapp.ui.SelectableData
-import com.example.testapp.ui.skill.SkillItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_choice_skill.*
@@ -96,7 +95,8 @@ class ChoiceSkillFragment(oldSkills: List<Skill>) : DialogFragment() {
             for (item in it) {
                 groupAdapter.add(
                     ChoiceSkillItem(
-                        skill = SelectableData(item, selectedSkills.contains(item))
+                        skill = SelectableData(item, selectedSkills.contains(item)),
+                        backgroundColor = activity!!.getThemeColor(R.attr.colorPrimaryVariant)
                     )
                 )
             }

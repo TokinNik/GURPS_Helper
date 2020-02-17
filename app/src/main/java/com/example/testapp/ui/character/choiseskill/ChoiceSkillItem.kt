@@ -10,7 +10,8 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_select_skill.view.*
 class ChoiceSkillItem(
-    val skill: SelectableData<Skill>
+    val skill: SelectableData<Skill>,
+    val backgroundColor: Int
 ) : Item() {
 
     lateinit var rootView: View
@@ -22,11 +23,12 @@ class ChoiceSkillItem(
             root.clipToOutline = true
 //            root.item_skill_id.text = skill.data.id.toString()
             root.item_skill_name.text = skill.data.name
+            root.item_skill_name_loc.text = skill.data.nameLoc
             root.checkBox_select_skill.isChecked = skill.select
             root.checkBox_select_skill.setOnClickListener{
                 skill.select = skill.select.not()
             }
-
+            root.setBackgroundColor(backgroundColor)
             rootView = root
         }
     }

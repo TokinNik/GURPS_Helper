@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -15,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Skill.Skill
-import com.example.testapp.genThemeColor
+import com.example.testapp.getThemeColor
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.SkillsHeaderItem
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
@@ -80,10 +79,12 @@ class SkillObserveAllFragment : Fragment() {
 
     private fun initRecyclerView(){
         groupAdapter.setOnItemClickListener { item, view ->
-            val selectSkillDialog = SkillObserveSingleFragment((item as SkillItem).skill.data)
-            selectSkillDialog.setTargetFragment(this, 1)
-            selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
-            selectSkillDialog.show(fragmentManager!!, null)
+            if (item is SkillItem) {
+                val selectSkillDialog = SkillObserveSingleFragment(item.skill.data)
+                selectSkillDialog.setTargetFragment(this, 1)
+                selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
+                selectSkillDialog.show(fragmentManager!!, null)
+            }
         }
         recyclerView_skills.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -99,22 +100,18 @@ class SkillObserveAllFragment : Fragment() {
             onClickAdd = {
                 val bundle = Bundle()
                 bundle.putString("mode", "add")
-                navController?.navigate(
-                    R.id.action_skillObserveAllFragment_to_editSkillFragment,
-                    bundle
-                )
+                navController?.navigate(R.id.action_skillObserveAllFragment_to_editSkillFragment, bundle)
             },
             onClickDelete = {
                 if (currentSelect >= 0) {
                     viewModel.deleteSkill(currentSkill)
-                    currentSkill =
-                        Skill()
+                    currentSkill = Skill()
                     currentSelect = -1
                 }
             }
         ))
-        val colorActive = activity!!.genThemeColor(R.attr.colorSecondary)
-        val colorInactive = activity!!.genThemeColor(R.attr.colorPrimaryVariant)
+        val colorActive = activity!!.getThemeColor(R.attr.colorSecondary)
+        val colorInactive = activity!!.getThemeColor(R.attr.colorPrimaryVariant)
         for (item in skillList) {
             section.add(
                 SkillItem(

@@ -39,28 +39,32 @@ enum class CharacterPages {
     SKILLS{
         override fun color(schemeType: ColorScheme): Int = when(schemeType) {
             ColorScheme.CLASSIC -> R.color.skills_container
-            ColorScheme.BRIGHT -> android.R.color.holo_purple
+            ColorScheme.BRIGHT -> R.color.skills_container_bright
+            ColorScheme.NIGHT -> R.color.skills_container_night
             else -> android.R.color.holo_purple
         }
     },
     ADVANTAGE{
         override fun color(schemeType: ColorScheme): Int = when(schemeType) {
             ColorScheme.CLASSIC -> R.color.advantage_container
-            ColorScheme.BRIGHT -> android.R.color.holo_blue_dark
+            ColorScheme.BRIGHT -> R.color.advantage_container_bright
+            ColorScheme.NIGHT -> R.color.advantage_container_night
             else -> android.R.color.holo_blue_dark
         }
     },
     DISADVANTAGE{
         override fun color(schemeType: ColorScheme): Int = when(schemeType) {
             ColorScheme.CLASSIC -> R.color.disadvantage_container
-            ColorScheme.BRIGHT -> android.R.color.holo_red_dark
+            ColorScheme.BRIGHT -> R.color.disadvantage_container_bright
+            ColorScheme.NIGHT -> R.color.disadvantage_container_night
             else -> android.R.color.holo_red_dark
         }
     },
     QUIRKS{
         override fun color(schemeType: ColorScheme): Int = when(schemeType) {
             ColorScheme.CLASSIC -> R.color.quirks_container
-            ColorScheme.BRIGHT -> android.R.color.holo_red_light
+            ColorScheme.BRIGHT -> R.color.quirks_container_bright
+            ColorScheme.NIGHT -> R.color.quirks_container_night
             else -> android.R.color.holo_red_light
         }
     };

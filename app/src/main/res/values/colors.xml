@@ -6,12 +6,20 @@
     <color name="accent">#FFEB3B</color>
     <color name="accent_light">#FFF27D</color>
     <color name="background_light">#FFFFFF</color>
-    <color name="background_dark">#232323</color>
+    <color name="background_dark">#747474</color>
 
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="icons">#212121</color>
     <color name="divider">#BDBDBD</color>
+
+    <color name="night_primary">#4F7029</color>
+    <color name="night_primary_dark">#293F16</color>
+    <color name="night_primary_light">#42503E</color>
+    <color name="night_accent">#FFEB3B</color>
+    <color name="night_accent_light">#FFF27D</color>
+    <color name="night_background_light">#4D4D4D</color>
+    <color name="night_background_dark">#202020</color>
 
     <color name="contrast_primary">#743CB5</color>
     <color name="contrast_primary_dark">#9760C7</color>
@@ -21,9 +29,19 @@
     <color name="contrast_secondary_text">#8A8A8A</color>
     <color name="contrast_icons">#DEDEDE</color>
     <color name="contrast_divider">#424242</color>
-
+<!--Classic Scheme-->
     <color name="skills_container">#453D96</color>
     <color name="advantage_container">#007DB8</color>
     <color name="disadvantage_container">#874a33</color>
     <color name="quirks_container">#8A5E4F</color>
+<!--Bright Scheme-->
+    <color name="skills_container_bright">#FFAA66CC</color>
+    <color name="advantage_container_bright">#FF0099CC</color>
+    <color name="disadvantage_container_bright">#FFCC0000</color>
+    <color name="quirks_container_bright">#FFFF4444</color>
+<!--Night Scheme-->
+    <color name="skills_container_night">#341F3F</color>
+    <color name="advantage_container_night">#012E3D</color>
+    <color name="disadvantage_container_night">#420101</color>
+    <color name="quirks_container_night">#3F1010</color>
 </resources>

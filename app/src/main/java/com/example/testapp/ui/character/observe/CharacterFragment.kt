@@ -17,7 +17,7 @@ import com.example.testapp.custom_view.outline_corner.OutlineProviders
 import com.example.testapp.databinding.FragmentCharacterBinding
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill.Skill
-import com.example.testapp.genThemeColor
+import com.example.testapp.getThemeColor
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
@@ -134,8 +134,8 @@ class CharacterFragment : Fragment() {
 
     private fun setItems(items: List<Skill>)
     {
-        val colorActive = activity!!.genThemeColor(R.attr.colorSecondary)
-        val colorInactive = activity!!.genThemeColor(R.attr.colorPrimaryVariant)
+        val colorActive = activity!!.getThemeColor(R.attr.colorSecondary)
+        val colorInactive = activity!!.getThemeColor(R.attr.colorPrimaryVariant)
         groupAdapter.clear()
         for(i in items)
         {

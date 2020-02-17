@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,8 +12,9 @@ import com.example.testapp.R
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill.Skill
-import com.example.testapp.genThemeColor
+import com.example.testapp.getThemeColor
 import com.example.testapp.ui.character.choiseskill.ChoiceSkillFragment
+import com.example.testapp.ui.settings.ColorScheme
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
 import com.xwray.groupie.GroupAdapter
@@ -68,6 +68,9 @@ class CharacterEditSkillsFragment(private val onSave: Observable<Boolean>) : Fra
         observeErrors()
         observeCharacterSkillsById()
         observeSkillByNames()
+        observeColorScheme()
+
+        viewModel.getColorScheme()
 
         initOnClick()
     }
@@ -115,8 +118,8 @@ class CharacterEditSkillsFragment(private val onSave: Observable<Boolean>) : Fra
     }
 
     private fun setItems(skillsList: List<Skill>) {
-        val colorActive = activity!!.genThemeColor(R.attr.colorSecondary)
-        val colorInactive = activity!!.genThemeColor(R.attr.colorPrimaryVariant)
+        val colorActive = activity!!.getThemeColor(R.attr.colorSecondary)
+        val colorInactive = activity!!.getThemeColor(R.attr.colorPrimaryVariant)
         groupAdapter.clear()
         val section = Section()
         for (item in skillsList) {
@@ -141,6 +144,18 @@ class CharacterEditSkillsFragment(private val onSave: Observable<Boolean>) : Fra
         viewModel.getSkillByNamesComplete.observe(this, Observer {
             characterSkillList = it
             setItems(it)
+        })
+    }
+
+    private fun observeColorScheme() {
+        viewModel.colorScheme.observe(this, Observer {
+            view!!.setBackgroundColor(
+                resources.getColor( when (it) {
+                    ColorScheme.CLASSIC -> R.color.skills_container
+                    ColorScheme.BRIGHT -> R.color.skills_container_bright
+                    ColorScheme.NIGHT -> R.color.skills_container_night
+                }
+            ))
         })
     }
 

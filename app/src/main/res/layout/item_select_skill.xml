@@ -6,8 +6,7 @@
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     android:layout_marginBottom="10dp"
-    android:background="@color/primary"
-    android:paddingLeft="5dp">
+    android:paddingStart="5dp">
 
     <CheckBox
         android:id="@+id/checkBox_select_skill"
@@ -27,7 +26,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        tools:text="название" />
+
+        tools:text="название looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong" />
 
     <TextView
         android:id="@+id/item_skill_default"

@@ -19,7 +19,7 @@ import com.example.testapp.R
 import com.example.testapp.RxTest
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
-import com.example.testapp.genThemeColor
+import com.example.testapp.getThemeColor
 import com.example.testapp.ui.character.CharacterItem
 import com.example.testapp.util.DataManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -216,16 +216,16 @@ class StartFragment : Fragment() {
             val select = groupAdapter.getAdapterPosition(item)
             if ((item as CharacterItem).character.select) {
                 item.character.select = false
-                view.setBackgroundColor(activity!!.genThemeColor(R.attr.colorPrimaryVariant))
+                view.setBackgroundColor(activity!!.getThemeColor(R.attr.colorPrimaryVariant))
             }
             else {
                 item.character.select = true
-                view.setBackgroundColor(activity!!.genThemeColor(R.attr.colorSecondary))
+                view.setBackgroundColor(activity!!.getThemeColor(R.attr.colorSecondary))
 
                 if (currentSelect >= 0 && currentSelect != select){
                     val prevItem = groupAdapter.getGroupAtAdapterPosition(currentSelect) as CharacterItem
                     prevItem.character.select = false
-                    prevItem.rootView.setBackgroundColor(activity!!.genThemeColor(R.attr.colorPrimaryVariant))
+                    prevItem.rootView.setBackgroundColor(activity!!.getThemeColor(R.attr.colorPrimaryVariant))
                 }
             }
             currentCharacter = item.character.data
@@ -241,8 +241,8 @@ class StartFragment : Fragment() {
 
     private fun addItems(items: List<Character>)
     {
-        val colorActive = activity!!.genThemeColor(R.attr.colorSecondary)
-        val colorInactive = activity!!.genThemeColor(R.attr.colorPrimaryVariant)
+        val colorActive = activity!!.getThemeColor(R.attr.colorSecondary)
+        val colorInactive = activity!!.getThemeColor(R.attr.colorPrimaryVariant)
         groupAdapter.clear()
         for(i in items)
         {

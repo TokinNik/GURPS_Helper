@@ -6,21 +6,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
 import com.example.testapp.db.entity.Character
+import com.example.testapp.getThemeColor
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.ui.character.CharacterHorizontalItem
-import com.example.testapp.ui.character.CharacterItem
-import com.example.testapp.ui.start.StartFragmentViewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_battle.*
-import kotlinx.android.synthetic.main.fragment_start.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
@@ -73,15 +70,16 @@ class BattleFragment : Fragment() {
     private fun addItems(items: List<Character>)
     {
         groupAdapter.clear()
-
+        val colorActive = activity!!.getThemeColor(R.attr.colorSecondary)
+        val colorInactive = activity!!.getThemeColor(R.attr.colorPrimaryVariant)
         for(i in items)
         {
             groupAdapter.apply {
                 add(
                     CharacterHorizontalItem(
                         character = SelectableData(i),
-                        colorActive = ContextCompat.getColor(context!!, R.color.accent),
-                        colorInactive = ContextCompat.getColor(context!!, R.color.primary_light),//todo move to val?
+                        colorActive = colorActive,
+                        colorInactive = colorInactive,
                         onClick = {
 //                            val bundle = Bundle()
 //                            bundle.putInt("id", it.data.id)

@@ -46,12 +46,14 @@ class SettingsFragment : Fragment() {
         when(viewModel.getColorScheme()) {
             ColorScheme.CLASSIC -> radio_classic.isChecked = true
             ColorScheme.BRIGHT -> radio_bright.isChecked = true
+            ColorScheme.NIGHT -> radio_night.isChecked = true
         }
         settings_fragment_night_theme.isChecked = viewModel.isNightTheme()
         settings_fragment_color_scheme_radio_group.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId){
                 R.id.radio_classic -> viewModel.setColorSchemeValue(ColorScheme.CLASSIC)
                 R.id.radio_bright -> viewModel.setColorSchemeValue(ColorScheme.BRIGHT)
+                R.id.radio_night -> viewModel.setColorSchemeValue(ColorScheme.NIGHT)
             }
         }
         settings_fragment_night_theme.setOnClickListener {

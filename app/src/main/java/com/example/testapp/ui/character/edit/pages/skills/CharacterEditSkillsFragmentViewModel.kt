@@ -7,6 +7,7 @@ import com.example.testapp.db.entity.CharacterSkills
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.di.DBModelImpl
 import com.example.testapp.ui.RxViewModel
+import com.example.testapp.ui.settings.ColorScheme
 import com.example.testapp.util.DataManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -28,11 +29,16 @@ class CharacterEditSkillsFragmentViewModel : RxViewModel() {
     val characterSkillsByIdComplete: LiveData<List<CharacterSkills>>
         get() = characterSkillsByIdEvent
 
+    val colorScheme: LiveData<ColorScheme>
+        get() = colorSchemeEvent
+
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
 
     private var getSkillByNamesEvent: MutableLiveData<List<Skill>> = MutableLiveData()
 
     private var characterSkillsByIdEvent: MutableLiveData<List<CharacterSkills>> = MutableLiveData()
+
+    private var colorSchemeEvent: MutableLiveData<ColorScheme> = MutableLiveData()
 
     init {
         val appScope = Toothpick.openScope("APP")
@@ -78,11 +84,16 @@ class CharacterEditSkillsFragmentViewModel : RxViewModel() {
         errorEvent =  MutableLiveData()
         getSkillByNamesEvent =  MutableLiveData()
         characterSkillsByIdEvent = MutableLiveData()
+        colorSchemeEvent = MutableLiveData()
     }
 
     fun getEditCharacter(): Character = dataManager.runtimeCharacterEdit.value ?: Character()
 
     fun setEditSkills(skillList: List<Skill>) {
         dataManager.runtimeCharacterSkillsEdit.value = skillList
+    }
+
+    fun getColorScheme() {
+        colorSchemeEvent.value = ColorScheme.valueOf(dataManager.appSettingsVault.colorScheme)
     }
 }

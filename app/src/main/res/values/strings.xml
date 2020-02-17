@@ -46,5 +46,6 @@
     <string name="home">Home</string>
     <string name="classic">Classic</string>
     <string name="bright">Bright</string>
+    <string name="night">Night</string>
 
 </resources>

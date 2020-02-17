@@ -3,12 +3,12 @@
     <style name="Theme.DayNight.Base" parent="Theme.MaterialComponents"/>
 
     <style name="Theme.MyApp.Main" parent="Theme.DayNight.Base">
-        <item name="android:windowBackground">@color/background_dark</item>
-        <item name="colorPrimary">@color/contrast_primary</item>
-        <item name="colorPrimaryVariant">@color/contrast_primary_light</item>
-        <item name="colorPrimaryDark">@color/contrast_primary_dark</item>
-        <item name="colorSecondary">@color/contrast_accent</item>
-        <item name="colorSecondaryVariant">@color/accent_light</item>
+        <item name="android:windowBackground">@color/night_background_dark</item>
+        <item name="colorPrimary">@color/night_primary</item>
+        <item name="colorPrimaryVariant">@color/night_background_light</item>
+        <item name="colorPrimaryDark">@color/night_primary_dark</item>
+        <item name="colorSecondary">@color/night_accent</item>
+        <item name="colorSecondaryVariant">@color/night_accent_light</item>
     </style>
 
     <style name="Theme.MyApp.Main.NoActionBar">
@@ -16,7 +16,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="dialogFragmentStyle" parent="android:Theme.Material.Light.DialogWhenLarge">
+    <style name="dialogFragmentStyle" parent="android:Theme.Material.DialogWhenLarge">
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowMinWidthMajor">75%</item>
         <item name="android:windowMinWidthMinor">75%</item>
