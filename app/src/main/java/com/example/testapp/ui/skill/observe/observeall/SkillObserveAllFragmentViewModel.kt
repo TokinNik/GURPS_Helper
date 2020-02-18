@@ -26,11 +26,17 @@ class SkillObserveAllFragmentViewModel : RxViewModel() {
     val skills: LiveData<List<Skill>>
         get() = skillsEvent
 
+    val searchSkillsComplete: LiveData<List<Skill>>
+        get() = searchSkillsEvent
+
     val skillById: LiveData<Skill>
         get() = skillByIdEvent
 
     val deleteComplete: LiveData<Boolean>
         get() = deleteCompleteEvent
+
+    val searchSkillComplete: LiveData<Skill>
+        get() = searchSkillEvent
 
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
 
@@ -39,6 +45,10 @@ class SkillObserveAllFragmentViewModel : RxViewModel() {
     private var skillByIdEvent: MutableLiveData<Skill> = MutableLiveData()
 
     private var deleteCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
+
+    private var searchSkillEvent: MutableLiveData<Skill> = MutableLiveData()
+
+    private var searchSkillsEvent: MutableLiveData<List<Skill>> = MutableLiveData()
 
     init {
         val appScope = Toothpick.openScope("APP")
@@ -84,11 +94,39 @@ class SkillObserveAllFragmentViewModel : RxViewModel() {
                 }).let(compositeDisposable::add)
     }
 
+    fun searchSkill(query: String) {
+        dbm.getDB().skillDao().searchSkill("%$query%")//part of
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    searchSkillEvent.value = it
+                },
+                {
+                    errorEvent.value = it
+                }).let(compositeDisposable::add)
+    }
+
+    fun searchSkills(query: String) {
+        dbm.getDB().skillDao().searchSkills("$query%")//start with
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    searchSkillsEvent.value = it
+                },
+                {
+                    errorEvent.value = it
+                }).let(compositeDisposable::add)
+    }
+
     fun clearEvents()
     {
         errorEvent =  MutableLiveData()
         deleteCompleteEvent =  MutableLiveData()
         skillByIdEvent =  MutableLiveData()
         skillsEvent =  MutableLiveData()
+        searchSkillEvent =  MutableLiveData()
+        searchSkillsEvent =  MutableLiveData()
     }
 }

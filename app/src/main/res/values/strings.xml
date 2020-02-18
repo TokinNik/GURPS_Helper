@@ -55,5 +55,6 @@
     <string name="categories">Categories</string>
     <string name="defaults">Defaults</string>
     <string name="prereq_list">Prereq List</string>
+    <string name="search">Search</string>
 
 </resources>

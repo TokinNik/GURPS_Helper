@@ -17,6 +17,12 @@ interface SkillDao {
     @Query("SELECT * FROM skill WHERE name = :name")
     fun getByName(name: String): Single<Skill>
 
+    @Query("SELECT * FROM skill WHERE name LIKE :query")
+    fun searchSkill(query: String): Single<Skill>
+
+    @Query("SELECT * FROM skill WHERE name LIKE :query")
+    fun searchSkills(query: String): Flowable<List<Skill>>
+
     @Query("SELECT * FROM skill WHERE name = :name AND specialization = :specialization")
     fun getByParams(name: String, specialization: String): Single<Skill>
 

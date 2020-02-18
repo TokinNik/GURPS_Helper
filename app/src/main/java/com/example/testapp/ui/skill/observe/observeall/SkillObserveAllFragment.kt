@@ -1,10 +1,9 @@
 package com.example.testapp.ui.skill.observe.observeall
 
 import android.os.Bundle
+import android.view.*
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -18,6 +17,8 @@ import com.example.testapp.getThemeColor
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.SkillsHeaderItem
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
@@ -37,6 +38,21 @@ class SkillObserveAllFragment : Fragment() {
 
     private val navController: NavController?
         get() = activity?.let { Navigation.findNavController(it, R.id.nav_host_fragment) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_skill_observe_all, menu)
+        val item = menu.findItem(R.id.menu_item_skill_search)
+            item.actionView.findViewById<MaterialButton>(R.id.button_search).setOnClickListener {
+                val query = item.actionView.findViewById<TextInputEditText>(R.id.search_query).text
+                viewModel.searchSkills(query.toString())
+            }
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
 
     override fun onCreateView(
@@ -59,6 +75,8 @@ class SkillObserveAllFragment : Fragment() {
         observeSkillById()
         observeSkills()
         observeDeleteComplete()
+        observeSearchSkillComplete()
+        observeSearchSkillsComplete()
 
         initOnClick()
         initRecyclerView()
@@ -77,13 +95,17 @@ class SkillObserveAllFragment : Fragment() {
 
     }
 
+    private fun showSkillObserveSingleDialog(skill: Skill) {
+        val selectSkillDialog = SkillObserveSingleFragment(skill)
+        selectSkillDialog.setTargetFragment(this, 1)
+        selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
+        selectSkillDialog.show(fragmentManager!!, null)
+    }
+
     private fun initRecyclerView(){
         groupAdapter.setOnItemClickListener { item, view ->
             if (item is SkillItem) {
-                val selectSkillDialog = SkillObserveSingleFragment(item.skill.data)
-                selectSkillDialog.setTargetFragment(this, 1)
-                selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
-                selectSkillDialog.show(fragmentManager!!, null)
+                showSkillObserveSingleDialog(item.skill.data)
             }
         }
         recyclerView_skills.apply {
@@ -137,6 +159,19 @@ class SkillObserveAllFragment : Fragment() {
         /*viewModel.skillById.observe(this, Observer {
 
         })*/
+    }
+
+    private fun observeSearchSkillComplete() {
+        viewModel.searchSkillComplete.observe(this, Observer {
+            showSkillObserveSingleDialog(it)
+        })
+    }
+
+    private fun observeSearchSkillsComplete() {
+        viewModel.searchSkillsComplete.observe(this, Observer {
+            setItems(it)
+            Toast.makeText(activity, "search complete", Toast.LENGTH_SHORT).show()
+        })
     }
 
     private fun observeDeleteComplete() {
