@@ -1,5 +1,6 @@
 package com.example.testapp.util
 
+import android.os.Environment
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill.Skill
 import java.io.FileOutputStream
@@ -10,17 +11,17 @@ class GCSXmlBuilder {
         character: Character,
         skills: List<Skill>
     ) =
-        startCharacterXML("2", "kg"){
-            xmlTag("created_date") { +"13.03.2019 17:28" }
-            xmlTag("modified_date") { +"16.03.2019 12:17" }
+        startCharacterXML(character.version, character.measure){
+            xmlTag("created_date") { +character.createdDate }
+            xmlTag("modified_date") { +character.modifiedDate }
             xmlTag("profile") {
                 xmlTag("name") { +character.name }
                 xmlTag("player_name") { +character.playerName }
                 xmlTag("campaign") { +character.world }
                 xmlTag("tech_level") { +character.tl }
-                xmlTag("title") { +"title?" }
+                xmlTag("title") { +character.state }
                 xmlTag("age") { + character.age }
-                xmlTag("birthday") { +"birthday?" }
+                xmlTag("birthday") { +character.birthday }
                 xmlTag("eyes") { +character.eyes }
                 xmlTag("hair") { +character.hairs }
                 xmlTag("skin") { +character.skin }
@@ -29,7 +30,7 @@ class GCSXmlBuilder {
                 xmlTag("weight") { +character.weight }
                 xmlTag("gender") { +character.gender }
                 xmlTag("race") { +character.race }
-                xmlTag("religion") { +"religion?" }
+                xmlTag("religion") { +character.religion}
                 xmlTag("sm") { +character.sm }
                 xmlTag("notes") { +character.description }
                 xmlTag("portrait") { +character.portrait }
@@ -47,24 +48,24 @@ class GCSXmlBuilder {
             xmlTag("perception") { +character.per.toString() }
             xmlTag("speed") { +character.speed.toString() }
             xmlTag("move") { +character.move.toString() }
-            xmlAttrTag("hp_lost", Pair("total", "")) { +character.wounds }
-            xmlAttrTag("fp_lost", Pair("total", "")) { +character.fpLoss }
-            xmlAttrTag("skill_list", Pair("size", "-3")) {
-                skills.forEach {
-                    xmlAttrTag("skill", Pair("version", "2")) {
-                        xmlTag("name") { +it.name }
-                        xmlTag("name-loc") { +it.nameLoc }
-                        xmlTag("description-loc") { +it.descriptionLoc }
-                        xmlTag("tech_level") { +it.tl }
-                        xmlTag("difficulty") { +it.difficulty }
-                        xmlTag("points") { +it.points }
-                        xmlTag("reference") { +it.reference }
-                        it.categories.forEach {
+            xmlAttrTag("hp_lost", Pair("total", character.hpLossTotal)) { +character.hpLoss }
+            xmlAttrTag("fp_lost", Pair("total", character.fpLossTotal)) { +character.fpLoss }
+            xmlAttrTag("skill_list", Pair("size", character.skillListSize)) {
+                skills.forEach { skill ->
+                    xmlAttrTag("skill", Pair("version", skill.version)) {
+                        xmlTag("name") { +skill.name }
+                        xmlTag("name-loc") { +skill.nameLoc }
+                        xmlTag("description-loc") { +skill.descriptionLoc }
+                        xmlTag("tech_level") { +skill.tl }
+                        xmlTag("difficulty") { +skill.difficulty }
+                        xmlTag("points") { +skill.points }
+                        xmlTag("reference") { +skill.reference }
+                        skill.categories.forEach {
                             xmlTag("categories") {
                                 xmlTag("category") { +it }
                             }
                         }
-                        it.prereqList.forEach {prereqList ->
+                        skill.prereqList.forEach {prereqList ->
                             xmlAttrTag("prereq_list", Pair("all", if (prereqList.all)"yes" else "no")) {
                                 prereqList.skillPrereqList.forEach { skillPrereq ->
                                     xmlAttrTag("skill_prereq", Pair("has", if (skillPrereq.has)"yes" else "no")) {
@@ -75,12 +76,12 @@ class GCSXmlBuilder {
                                 }
                             }
                         }
-                        it.defaults.forEach {
+                        skill.defaults.forEach { default ->
                             xmlTag("default") {
-                                xmlTag("type") { +it.type }
-                                xmlTag("name") { +it.name }
-                                xmlTag("specialization") { +it.specialization }
-                                xmlTag("modifier") { +it.modifier }
+                                xmlTag("type") { +default.type }
+                                xmlTag("name") { +default.name }
+                                xmlTag("specialization") { +default.specialization }
+                                xmlTag("modifier") { +default.modifier }
                             }
                         }
                     }
@@ -89,7 +90,7 @@ class GCSXmlBuilder {
         }
 
     fun saveInFile(fileName: String, characterXML: String) {
-        val fos = FileOutputStream("/sdcard/$fileName.gcs")
+        val fos = FileOutputStream("${Environment.getExternalStorageDirectory().path}/$fileName.gcs")
         fos.write(characterXML.toByteArray(Charset.forName("windows-1251")))
         fos.close()
     }

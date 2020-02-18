@@ -9,10 +9,6 @@ import com.example.testapp.db.entity.Skill.PrereqList
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.db.entity.Skill.SkillPrereq
 import com.example.testapp.di.DBModelImpl
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import toothpick.Toothpick
@@ -62,10 +58,7 @@ class GCSParser @Inject constructor(){
                 when (parser.eventType) {
                     XmlPullParser.START_DOCUMENT -> Log.d(TAG, "Начало документа")
                     XmlPullParser.START_TAG -> {
-                        Log.d(
-                            TAG,
-                            "START_TAG: имя тега = ${parser.name}, уровень = ${parser.depth}, число атрибутов = ${parser.attributeCount}"
-                        )
+                        Log.d(TAG, "START_TAG: имя тега = ${parser.name}, уровень = ${parser.depth}, число атрибутов = ${parser.attributeCount}")
                         tmp = ""
                         var i = 0
                         while (i < parser.attributeCount) {
@@ -87,8 +80,6 @@ class GCSParser @Inject constructor(){
         }
     }
 
-    //fun parseGCStoData(fileName: String?): Character = parseGCStoData(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/$fileName.gcs")
-
     private fun parseGCStoData(){
         try {
             val factory = XmlPullParserFactory.newInstance()
@@ -96,17 +87,29 @@ class GCSParser @Inject constructor(){
             val file = File(filePath)
             val fis = FileInputStream(file)
             parser.setInput(fis, "windows-1251")
-//            parser.setInput(InputStreamReader(fis, Charsets.UTF_8))
-
-            //val parser: XmlPullParser = context.resources.getXml(R.xml.contacts)
             while (parser.eventType != XmlPullParser.END_DOCUMENT) {
                 when (parser.eventType) {
                     XmlPullParser.START_DOCUMENT -> Log.d(TAG, "Начало документа")
                     XmlPullParser.START_TAG -> {
                         when (parser.name) {
+                            "character" -> {
+                                character.version = parser.getAttributeValue(0)
+                                if (parser.attributeCount > 1) character.measure = parser.getAttributeValue(1)
+                            }
+                            "created_date" -> {
+                                parser.next()
+                                character.createdDate = parser.text
+                            }
+                            "modified_date" -> {
+                                parser.next()
+                                character.modifiedDate = parser.text
+                            }
                             "profile" -> parseProfile(parser)
 //                            "advantage_list" -> TODO
-                            "skill_list" -> dbm.saveCharacterSkills(parseSkillList(parser), character.id)
+                            "skill_list" -> {
+                                character.skillListSize = parser.getAttributeValue(0)
+                                dbm.saveCharacterSkills(parseSkillList(parser), character.id)
+                            }
 //                            "spell_list" -> TODO
 //                            "equipment_list" -> TODO
 //                            "notes" -> TODO
@@ -168,10 +171,14 @@ class GCSParser @Inject constructor(){
                                 character.move = parser.text.toInt()
                             }
                             "hp_lost" -> {
-                                character.wounds = parser.getAttributeValue(0)
+                                character.hpLossTotal = parser.getAttributeValue(0)
+                                parser.next()
+                                character.hpLoss = parser.text ?: ""
                             }
                             "fp_lost" -> {
-                                character.fpLoss = parser.getAttributeValue(0)
+                                character.fpLossTotal = parser.getAttributeValue(0)
+                                parser.next()
+                                character.fpLoss = parser.text ?: ""
                             }
                         }
                     }
@@ -181,7 +188,7 @@ class GCSParser @Inject constructor(){
             }
             fis.channel.close()
         } catch (t: Throwable) {
-            Log.d(TAG, "Ошибка при загрузке XML-документа: $t")
+            Log.d(TAG, "Ошибка при загрузке XML-документа: ${t.printStackTrace()}")
         }
     }
 
@@ -218,8 +225,10 @@ class GCSParser @Inject constructor(){
         val parsedDefaults = mutableListOf<Default>()
         val parsedPrereqList = mutableListOf<PrereqList>()
         var prereqParentCounter = 0
-        val parsedSkill =
-            Skill(container = container)
+        val parsedSkill = Skill(
+            container = container,
+            version = parser.getAttributeValue(0)
+        )
         var currentTag = ""
         while (true) {
             when (parser.eventType) {
@@ -371,9 +380,9 @@ class GCSParser @Inject constructor(){
                         "player_name" -> {character.playerName = parser.text ?: ""}
                         "campaign" -> {character.world = parser.text ?: ""}
                         "tech_level" -> {character.tl = parser.text ?: ""}
-                        //"title" -> TODO
+                        "title" -> {character.state = parser.text ?: ""}
                         "age" -> {character.age = parser.text ?: ""}
-                        //"birthday" -> TODO
+                        "birthday" -> {character.birthday = parser.text ?: ""}
                         "eyes" -> { character.eyes = parser.text ?: ""}
                         "hair" -> { character.hairs = parser.text ?: ""}
                         "skin" -> { character.skin = parser.text ?: ""}
@@ -382,7 +391,7 @@ class GCSParser @Inject constructor(){
                         "weight" -> { character.weight = parser.text ?: ""}
                         "gender" -> { character.gender = parser.text ?: ""}
                         "race" -> { character.race = parser.text ?: ""}
-//                        "religion" -> TODO
+                        "religion" -> {character.religion = parser.text ?: ""}
                         "sm" -> { character.sm = parser.text ?: ""}
                         "notes" -> { character.description = parser.text ?: ""}
                         "portrait" -> { character.portrait = parser.text ?: "" }

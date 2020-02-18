@@ -8,16 +8,24 @@ import androidx.room.PrimaryKey
 data class Character(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
+    //meta info
+    var version: String = "2",
+    var measure: String = "kg",
+    var createdDate: String = "",
+    var modifiedDate: String = "",
+    var skillListSize: String = "0",
     //other
     var name: String = "",
     var playerName: String = "",
     var world: String = "",
     var state: String = "",
     var age: String = "",
+    var birthday: String = "",
     var eyes: String = "",
     var hairs: String = "",
     var skin: String = "",
     var race: String = "",
+    var religion: String = "",
     var gender: String = "",
     var description: String = "",
     var portrait: String = "",
@@ -43,8 +51,10 @@ data class Character(
     var per: Int = 0,
     var fp: Int = 0,
     //dynamic stats
-    var wounds: String = "",
+    var hpLoss: String = "",
+    var hpLossTotal: String = "",
     var fpLoss: String = "",
+    var fpLossTotal: String = "",
     var currentLoad: Int = 0,
 
     var drScull: Int = 2,//todo split in other classes

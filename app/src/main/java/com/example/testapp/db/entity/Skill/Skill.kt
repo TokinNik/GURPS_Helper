@@ -8,7 +8,10 @@ import androidx.room.PrimaryKey
 data class Skill(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
     @Ignore
+    //Meta info
     var container: String = "empty",
+    var version: String = "2",
+    //Main info
     var name: String = "",
     var nameLoc: String = "",
     var descriptionLoc: String = "",
