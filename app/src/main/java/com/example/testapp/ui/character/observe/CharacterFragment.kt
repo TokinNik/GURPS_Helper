@@ -21,7 +21,7 @@ import com.example.testapp.getThemeColor
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
-import com.example.testapp.util.XMLBuilder
+import com.example.testapp.util.GCSXmlBuilder
 import com.google.android.material.button.MaterialButton
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -70,8 +70,12 @@ class CharacterFragment : Fragment() {
         menu.findItem(R.id.menu_item_character_export)
             .actionView.findViewById<MaterialButton>(R.id.button_export)
             .setOnClickListener {
-                val xmlb = XMLBuilder()
-                xmlb.saveInFile(character.name, xmlb.xmlTest(character).toString())
+                val xmlb = GCSXmlBuilder()
+                var skills = mutableListOf<Skill>()
+                for (i in 0 until groupAdapter.itemCount){
+                    skills.add((groupAdapter.getItem(i) as SkillItem).skill.data)
+                }
+                xmlb.saveInFile(character.name, xmlb.xmlTest(character, skills.toList()).toString())
                 Toast.makeText(activity, "exported in file ${character.name}.gcs", Toast.LENGTH_SHORT).show()
         }
         super.onCreateOptionsMenu(menu, inflater)

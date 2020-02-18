@@ -59,10 +59,11 @@ open class XML(name: String) : TagWithText(name) {
 
     fun xmlTag(name: String, init: XML.() -> Unit) = initTag(XML(name), init)
 
-    fun xmlAttrTag(name: String, attr: Pair<String, String>, init: AttrTag.() -> Unit) {
+    fun xmlAttrTag(name: String, attr: Pair<String, String>, init: AttrTag.() -> Unit): AttrTag {
         val tag = initTag(AttrTag(name, attr), init)
         tag.attrName = attr.first
         tag.attrValue = attr.second
+        return tag
     }
 
     fun character(version: String, measure: String, init: CharacterTag.() -> Unit) {
@@ -79,6 +80,15 @@ open class AttrTag(name: String, attr: Pair<String, String>) : TagWithText(name)
         set(value) {
             attributes[attrName] = value
         }
+
+    fun xmlTag(name: String, init: XML.() -> Unit) = initTag(XML(name), init)
+
+    fun xmlAttrTag(name: String, attr: Pair<String, String>, init: AttrTag.() -> Unit): AttrTag {
+        val tag = initTag(AttrTag(name, attr), init)
+        tag.attrName = attr.first
+        tag.attrValue = attr.second
+        return tag
+    }
 }
 
 class CharacterTag : XML("character") {

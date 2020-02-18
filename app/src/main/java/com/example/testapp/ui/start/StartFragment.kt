@@ -22,7 +22,6 @@ import com.example.testapp.db.entity.Character
 import com.example.testapp.getThemeColor
 import com.example.testapp.ui.character.CharacterItem
 import com.example.testapp.util.DataManager
-import com.example.testapp.util.XMLBuilder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.xwray.groupie.GroupAdapter
@@ -34,8 +33,6 @@ import kotlinx.android.synthetic.main.fragment_start.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
-import java.io.FileOutputStream
-import java.nio.charset.Charset
 
 class StartFragment : Fragment() {
 
