@@ -275,7 +275,7 @@ class GCSParser @Inject constructor(){
             parent = parent
         )
         val parsedSkillPrereq = mutableListOf<SkillPrereq>()
-        //val parsedAdvPrereq = mutableListOf<AdvantsgePrereq>()
+        //val parsedAdvPrereq = mutableListOf<AdvantagePrereq>()
         //val parsedAttrPrereq = mutableListOf<AttributePrereq>()
         parser.next()
         while (true) {
@@ -285,7 +285,7 @@ class GCSParser @Inject constructor(){
                         "skill_prereq" -> parsedSkillPrereq.add(parseSkillPrereq(parser))
                         //"advantage_prereq" -> parsedAdvPrereq.add(parseAdvPrereq(parser))
                         //"attribute_prereq" -> parsedAttrPrereq.add(parseAttrPrereq(parser))
-                        "prereq_list" -> parsePrereqList(parser, parsedPrereqListList, parsedPrereqList.depth++, parsedPrereqList.parent++)
+                        "prereq_list" -> parsePrereqList(parser, parsedPrereqListList, parsedPrereqList.depth+1, parsedPrereqList.parent+1)
                     }
                 }
                 XmlPullParser.END_TAG -> if (parser.name == "prereq_list") {

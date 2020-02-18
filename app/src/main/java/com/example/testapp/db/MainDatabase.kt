@@ -17,7 +17,7 @@ import com.example.testapp.db.entity.Skill.Skill
         Skill::class,
         CharacterSkills::class
     ],
-    version = 31,
+    version = 37,
     exportSchema = false
 )
 @TypeConverters(IntListConverter::class, StringListConverter::class, SkillDefaultConverter::class, PrereqListConverter::class)

@@ -48,5 +48,12 @@
     <string name="bright">Bright</string>
     <string name="night">Night</string>
     <string name="export_character">Ex-rt</string>
+    <string name="specialization">Specialization</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="skill_points">Skill Points</string>
+    <string name="skill_parry">Skill Parry</string>
+    <string name="categories">Categories</string>
+    <string name="defaults">Defaults</string>
+    <string name="prereq_list">Prereq List</string>
 
 </resources>

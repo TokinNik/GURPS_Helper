@@ -6,10 +6,10 @@ import com.example.testapp.db.entity.Skill.SkillPrereq
 class SkillPrereqConverter {
 
     @TypeConverter
-    fun fromList(list: List<SkillPrereq>): String = list.joinToString(",") { "${it.has}|${it.nameCompare}|${it.name}|${it.specializationCompare}|${it.specialization}|${it.levelCompare}|${it.level}"}
+    fun fromList(list: List<SkillPrereq>): String = list.joinToString("*") { "${it.has}|${it.nameCompare}|${it.name}|${it.specializationCompare}|${it.specialization}|${it.levelCompare}|${it.level}"}
 
     @TypeConverter
-    fun toList(data: String): List<SkillPrereq> = data.split(",").map { list ->
+    fun toList(data: String): List<SkillPrereq> = data.split("*").map { list ->
         if (!list.isBlank()) {
             var i = 0
             val skillPrereq = SkillPrereq()

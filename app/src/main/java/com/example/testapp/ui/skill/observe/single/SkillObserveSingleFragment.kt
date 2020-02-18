@@ -88,7 +88,7 @@ class SkillObserveSingleFragment constructor(private val skillName: String) : Di
     }
 
     private fun setDataInFields() {
-        skill_observe_single_name.text = currentSkill.name
+        //skill_observe_single_name.text = currentSkill.name
         skill_observe_single_name_loc.text = currentSkill.nameLoc
         skill_observe_single_description.text = currentSkill.descriptionLoc
         skill_observe_single_tl.text = currentSkill.tl
@@ -97,8 +97,19 @@ class SkillObserveSingleFragment constructor(private val skillName: String) : Di
         skill_observe_single_points.text = currentSkill.points
         skill_observe_single_reference.text = currentSkill.reference
         skill_observe_single_parry.text = currentSkill.parry
-        skill_observe_single_categories.text = currentSkill.categories.toString()
-        skill_observe_single_default.text = currentSkill.defaults.toString()
-        skill_observe_single_prereq.text = currentSkill.prereqList.toString()
+        skill_observe_single_categories.text = currentSkill.categories.joinToString(""){ "$it\n" }
+        skill_observe_single_default.text = currentSkill.defaults
+            .map{ "${it.type} ${it.name} ${it.specialization} ${it.modifier}" }
+            .joinToString(""){ "$it\n" }
+        skill_observe_single_prereq.text = currentSkill.prereqList
+            .filter { it.skillPrereqList.isNotEmpty() }
+            .map{ prereqList ->
+                "${if(prereqList.all) "All of;\n" else "Some of:\n"}${
+                    prereqList.skillPrereqList
+                        .map { "${it.name} ${if(it.level.isNotBlank()) "level =" else ""} ${it.level} ${if(it.specialization.isNotBlank()) "spec. =" else ""} ${it.specialization}" }
+                        .joinToString(""){ "$it\n" }}"
+                }
+            .joinToString(""){ "$it\n" }
+        println(currentSkill.prereqList.toString())
     }
 }

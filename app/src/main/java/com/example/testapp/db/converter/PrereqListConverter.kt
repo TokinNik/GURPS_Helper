@@ -8,7 +8,7 @@ class PrereqListConverter {
     private val skillConverter = SkillPrereqConverter()
 
     @TypeConverter
-    fun fromList(list: List<PrereqList>): String = list.joinToString(",") { "${it.all}+${it.depth}+${it.parent}+${skillConverter.fromList(it.skillPrereqList)}"}
+    fun fromList(list: List<PrereqList>): String = list.joinToString(","){ "${it.all}+${it.depth}+${it.parent}+${skillConverter.fromList(it.skillPrereqList)}"}
 
     @TypeConverter
     fun toList(data: String): List<PrereqList> = data.split(",").map { list ->
