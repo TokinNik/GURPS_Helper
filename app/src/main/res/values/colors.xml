@@ -18,7 +18,7 @@
     <color name="night_primary_light">#42503E</color>
     <color name="night_accent">#FFEB3B</color>
     <color name="night_accent_light">#FFF27D</color>
-    <color name="night_background_light">#4D4D4D</color>
+    <color name="night_background_light">#804D4D4D</color>
     <color name="night_background_dark">#202020</color>
 
     <color name="contrast_primary">#743CB5</color>
