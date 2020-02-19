@@ -13,12 +13,25 @@
             />
 
         <variable
+            name="bindCharacter"
+            type="com.example.testapp.ui.character.edit.pages.BindingCharacter"
+            />
+
+        <variable
             name="onClickPlus"
-            type="com.example.testapp.ui.character.edit.StatCounterPlusButtonListener" />
+            type="com.example.testapp.ui.character.edit.StatCounterIntPlusButtonListener" />
 
         <variable
             name="onClickMinus"
-            type="com.example.testapp.ui.character.edit.StatCounterMinusButtonListener" />
+            type="com.example.testapp.ui.character.edit.StatCounterIntMinusButtonListener" />
+
+        <variable
+            name="onClickPlusFloat"
+            type="com.example.testapp.ui.character.edit.StatCounterFloatPlusButtonListener" />
+
+        <variable
+            name="onClickMinusFloat"
+            type="com.example.testapp.ui.character.edit.StatCounterFloatMinusButtonListener" />
 
     </data>
 
@@ -43,6 +56,37 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="4dp"
                 app:srcCompat="@mipmap/ic_launcher_round" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/total_points" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@={`` + bindCharacter.totalPoints}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/earn_points" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@={`` + bindCharacter.earnPoints}" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/character_edit_other_1"
@@ -343,8 +387,8 @@
                         android:text="@string/st"
                         android:textStyle="bold" />
 
-                    <include layout="@layout/stat_counter" android:id="@+id/character_edit_st_counter"
-                        app:stat="@={character.st}"
+                    <include layout="@layout/stat_counter_int" android:id="@+id/character_edit_st_counter"
+                        app:stat="@={bindCharacter.st}"
                         app:onClickPlus="@{onClickPlus}"
                         app:onClickMinus="@{onClickMinus}"/>
 
@@ -357,8 +401,8 @@
                         android:text="@string/hp"
                         android:textStyle="bold" />
 
-                    <include layout="@layout/stat_counter" android:id="@+id/character_edit_hp_counter"
-                        app:stat="@={character.hp}"
+                    <include layout="@layout/stat_counter_int" android:id="@+id/character_edit_hp_counter"
+                        app:stat="@={bindCharacter.hp}"
                         app:onClickPlus="@{onClickPlus}"
                         app:onClickMinus="@{onClickMinus}"/>
                 </TableRow>
@@ -376,8 +420,8 @@
                         android:text="@string/dx"
                         android:textStyle="bold" />
 
-                    <include layout="@layout/stat_counter" android:id="@+id/character_edit_dx_counter"
-                        app:stat="@={character.dx}"
+                    <include layout="@layout/stat_counter_int" android:id="@+id/character_edit_dx_counter"
+                        app:stat="@={bindCharacter.dx}"
                         app:onClickPlus="@{onClickPlus}"
                         app:onClickMinus="@{onClickMinus}"/>
 
@@ -390,8 +434,8 @@
                         android:text="@string/move"
                         android:textStyle="bold" />
 
-                    <include layout="@layout/stat_counter" android:id="@+id/character_edit_move_counter"
-                        app:stat="@={character.move}"
+                    <include layout="@layout/stat_counter_int" android:id="@+id/character_edit_move_counter"
+                        app:stat="@={bindCharacter.move}"
                         app:onClickPlus="@{onClickPlus}"
                         app:onClickMinus="@{onClickMinus}"/>
 
@@ -404,10 +448,10 @@
                         android:text="@string/speed"
                         android:textStyle="bold" />
 
-                    <include layout="@layout/stat_counter" android:id="@+id/character_edit_speed_counter"
-                        app:stat="@={character.speed}"
-                        app:onClickPlus="@{onClickPlus}"
-                        app:onClickMinus="@{onClickMinus}"/>
+                    <include layout="@layout/stat_counter_float" android:id="@+id/character_edit_speed_counter"
+                        app:stat="@={bindCharacter.speed}"
+                        app:onClickPlus="@{onClickPlusFloat}"
+                        app:onClickMinus="@{onClickMinusFloat}"/>
                 </TableRow>
 
                 <TableRow
@@ -423,8 +467,8 @@
                         android:text="@string/iq"
                         android:textStyle="bold" />
 
-                    <include layout="@layout/stat_counter" android:id="@+id/character_edit_iq_counter"
-                        app:stat="@={character.iq}"
+                    <include layout="@layout/stat_counter_int" android:id="@+id/character_edit_iq_counter"
+                        app:stat="@={bindCharacter.iq}"
                         app:onClickPlus="@{onClickPlus}"
                         app:onClickMinus="@{onClickMinus}"/>
 
@@ -437,8 +481,8 @@
                         android:text="@string/will"
                         android:textStyle="bold" />
 
-                    <include layout="@layout/stat_counter" android:id="@+id/character_edit_will_counter"
-                        app:stat="@={character.will}"
+                    <include layout="@layout/stat_counter_int" android:id="@+id/character_edit_will_counter"
+                        app:stat="@={bindCharacter.will}"
                         app:onClickPlus="@{onClickPlus}"
                         app:onClickMinus="@{onClickMinus}"/>
 
@@ -451,8 +495,8 @@
                         android:text="@string/per"
                         android:textStyle="bold" />
 
-                    <include layout="@layout/stat_counter" android:id="@+id/character_edit_per_counter"
-                        app:stat="@={character.per}"
+                    <include layout="@layout/stat_counter_int" android:id="@+id/character_edit_per_counter"
+                        app:stat="@={bindCharacter.per}"
                         app:onClickPlus="@{onClickPlus}"
                         app:onClickMinus="@{onClickMinus}"/>
                 </TableRow>
@@ -470,8 +514,8 @@
                         android:text="@string/ht"
                         android:textStyle="bold" />
 
-                    <include layout="@layout/stat_counter" android:id="@+id/character_edit_ht_counter"
-                        app:stat="@={character.ht}"
+                    <include layout="@layout/stat_counter_int" android:id="@+id/character_edit_ht_counter"
+                        app:stat="@={bindCharacter.ht}"
                         app:onClickPlus="@{onClickPlus}"
                         app:onClickMinus="@{onClickMinus}"/>
 
@@ -484,8 +528,8 @@
                         android:text="@string/fp"
                         android:textStyle="bold" />
 
-                    <include layout="@layout/stat_counter" android:id="@+id/character_edit_fp_counter"
-                        app:stat="@={character.fp}"
+                    <include layout="@layout/stat_counter_int" android:id="@+id/character_edit_fp_counter"
+                        app:stat="@={bindCharacter.fp}"
                         app:onClickPlus="@{onClickPlus}"
                         app:onClickMinus="@{onClickMinus}"/>
                 </TableRow>

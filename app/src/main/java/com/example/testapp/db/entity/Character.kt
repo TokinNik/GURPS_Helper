@@ -46,7 +46,7 @@ data class Character(
     var ht: Int = 10,
     var hp: Int = 0,
     var move: Int = 0,
-    var speed: Int = 0,
+    var speed: Float = 0f,
     var will: Int = 0,
     var per: Int = 0,
     var fp: Int = 0,

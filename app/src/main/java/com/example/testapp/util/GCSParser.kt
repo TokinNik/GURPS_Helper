@@ -164,7 +164,7 @@ class GCSParser @Inject constructor(){
                             }
                             "speed" -> {
                                 parser.next()
-                                character.speed = parser.text.toInt()
+                                character.speed = parser.text.toFloat()
                             }
                             "move" -> {
                                 parser.next()

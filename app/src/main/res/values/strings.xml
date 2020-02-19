@@ -56,5 +56,7 @@
     <string name="defaults">Defaults</string>
     <string name="prereq_list">Prereq List</string>
     <string name="search">Search</string>
+    <string name="total_points">Total Points</string>
+    <string name="earn_points">Earn Points</string>
 
 </resources>

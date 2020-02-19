@@ -10,8 +10,12 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.example.testapp.databinding.PageCharacterEditStatsBinding
 import com.example.testapp.db.entity.Character
-import com.example.testapp.ui.character.edit.StatCounterMinusButtonListener
-import com.example.testapp.ui.character.edit.StatCounterPlusButtonListener
+import com.example.testapp.ui.character.edit.StatCounterFloatMinusButtonListener
+import com.example.testapp.ui.character.edit.StatCounterFloatPlusButtonListener
+import com.example.testapp.ui.character.edit.StatCounterIntMinusButtonListener
+import com.example.testapp.ui.character.edit.StatCounterIntPlusButtonListener
+import com.example.testapp.ui.character.edit.pages.BindingCharacter
+import com.example.testapp.util.GurpsCalculations
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.page_character_edit_stats.*
@@ -22,8 +26,10 @@ import toothpick.smoothie.viewmodel.installViewModelBinding
 class CharacterEditStatsFragment(val onSave: Observable<Boolean>) : Fragment() {
 
     private val viewModel: CharacterEditStatsFragmentViewModel by inject()
+    private val gurpsCalculations: GurpsCalculations by inject()
     private var isOtherCollapsed = true
     private val compositeDisposable = CompositeDisposable()
+    private lateinit var bindCharacter: BindingCharacter
     private lateinit var character: Character
     private lateinit var characterEditBinding: PageCharacterEditStatsBinding
 
@@ -32,14 +38,10 @@ class CharacterEditStatsFragment(val onSave: Observable<Boolean>) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         characterEditBinding = PageCharacterEditStatsBinding.inflate(inflater, container, false)
-        characterEditBinding.onClickPlus =
-            StatCounterPlusButtonListener(
-                100
-            )
-        characterEditBinding.onClickMinus =
-            StatCounterMinusButtonListener(
-                0
-            )
+        characterEditBinding.onClickPlus = StatCounterIntPlusButtonListener(100)
+        characterEditBinding.onClickMinus = StatCounterIntMinusButtonListener(0)
+        characterEditBinding.onClickPlusFloat = StatCounterFloatPlusButtonListener(100f, 0.25f)
+        characterEditBinding.onClickMinusFloat = StatCounterFloatMinusButtonListener(0f, 0.25f)
         return characterEditBinding.root
     }
 
@@ -52,13 +54,16 @@ class CharacterEditStatsFragment(val onSave: Observable<Boolean>) : Fragment() {
 
         viewModel.clearEvents()
         character = viewModel.getEditCharacter()
+        bindCharacter = BindingCharacter(character) {characterEditBinding.invalidateAll()}
         if (character.id != 0){
             viewModel.getCharacterById(character.id)
         } else {
             characterEditBinding.character = character
+            characterEditBinding.bindCharacter = bindCharacter
         }
 
         onSave.subscribe{
+            copyCharacterBindParam()
             if (it) viewModel.setEditCharacter(character)
         }.let(compositeDisposable::add)
 
@@ -66,6 +71,23 @@ class CharacterEditStatsFragment(val onSave: Observable<Boolean>) : Fragment() {
         observeErrors()
 
         initOnClick()
+    }
+
+    private fun copyCharacterBindParam() {
+        character.apply {
+            st = bindCharacter.st
+            dx = bindCharacter.dx
+            iq = bindCharacter.iq
+            ht = bindCharacter.ht
+            hp = bindCharacter.realHp
+            per = bindCharacter.realPer
+            will = bindCharacter.realWill
+            fp = bindCharacter.realFp
+            move = bindCharacter.realMove
+            speed = bindCharacter.realSpeed
+            totalPoints = bindCharacter.totalPoints
+            earnPoints = bindCharacter.earnPoints
+        }
     }
 
     override fun onStop() {
@@ -99,7 +121,9 @@ class CharacterEditStatsFragment(val onSave: Observable<Boolean>) : Fragment() {
     {
         viewModel.getCharacterByIdComplete.observe(this, Observer {
             character = it
+            bindCharacter = BindingCharacter(character) {characterEditBinding.invalidateAll()}
             characterEditBinding.character = character
+            characterEditBinding.bindCharacter = bindCharacter
             setDataInFields(it)
         })
     }

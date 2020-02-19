@@ -19,9 +19,11 @@ import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.getThemeColor
 import com.example.testapp.ui.SelectableData
+import com.example.testapp.ui.character.edit.pages.BindingCharacter
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
 import com.example.testapp.util.GCSXmlBuilder
+import com.example.testapp.util.GurpsCalculations
 import com.google.android.material.button.MaterialButton
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -39,6 +41,8 @@ class CharacterFragment : Fragment() {
     private var isInfoCollapsed = false
 
     private val viewModel: CharacterFragmentViewModel by inject()
+
+    private val gurpsCalculations: GurpsCalculations by inject()
 
     private val navController: NavController?
         get() = activity?.let {
@@ -172,7 +176,7 @@ class CharacterFragment : Fragment() {
     private fun observeCharacterById() {
         viewModel.characterById.observe(this, Observer {
             character = it
-            characterBinding.character = character
+            characterBinding.character = gurpsCalculations.getReMathCharacter(character)
             setDataInFields(it)
         })
     }

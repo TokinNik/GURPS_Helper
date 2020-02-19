@@ -14,11 +14,11 @@
 
         <variable
             name="onClickPlus"
-            type="com.example.testapp.ui.character.edit.StatCounterPlusButtonListener" />
+            type="com.example.testapp.ui.character.edit.StatCounterIntPlusButtonListener" />
 
         <variable
             name="onClickMinus"
-            type="com.example.testapp.ui.character.edit.StatCounterMinusButtonListener" />
+            type="com.example.testapp.ui.character.edit.StatCounterIntMinusButtonListener" />
 
     </data>
 

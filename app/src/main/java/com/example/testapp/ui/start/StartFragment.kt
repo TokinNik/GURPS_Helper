@@ -86,8 +86,6 @@ class StartFragment : Fragment() {
         observeParseCharacterComplete()
 
         recyclerViewInit()
-
-
     }
 
     override fun onAttach(context: Context) {

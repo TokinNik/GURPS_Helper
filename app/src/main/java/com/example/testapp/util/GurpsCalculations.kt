@@ -1,31 +1,33 @@
 package com.example.testapp.util
 
 import com.example.testapp.db.entity.Character
+import com.example.testapp.ui.character.edit.pages.BindingCharacter
+import javax.inject.Inject
 
-class GurpsCalculations {
+class GurpsCalculations @Inject constructor() {
 
-    fun mathMove(character: Character): Int {
-        return (character.ht + character.dx) / 4 + character.speed + character.move
+    fun mathMove(move: Int, speed: Float, ht: Int, dx: Int): Int {
+        return ((ht + dx) / 4 + speed + move).toInt()
     }
 
-    fun mathSpeed(character: Character): Float {
-        return (character.ht + character.dx) / 4f + character.speed
+    fun mathSpeed(speed: Float, ht: Int, dx: Int): Float {
+        return (ht + dx) / 4f + speed
     }
 
-    fun mathHP(character: Character): Int {
-        return character.hp + character.st
+    fun mathHP(hp: Int, st: Int): Int {
+        return hp + st
     }
 
-    fun mathFP(character: Character): Int {
-        return character.fp + character.st
+    fun mathFP(fp: Int, st: Int): Int {
+        return fp + st
     }
 
-    fun mathWill(character: Character): Int {
-        return character.will + character.iq
+    fun mathWill(will: Int, iq: Int): Int {
+        return will + iq
     }
 
-    fun mathPer(character: Character): Int {
-        return character.per + character.iq
+    fun mathPer(per: Int, iq: Int): Int {
+        return per + iq
     }
 
     fun mathMeleBaseDamageThr(character: Character): Dice {
@@ -34,6 +36,38 @@ class GurpsCalculations {
 
     fun mathMeleBaseDamageSwg(character: Character): Dice {
         return MeleDamage.SWING.dmg(character.st)
+    }
+
+    fun reMath(character: BindingCharacter): Int {
+
+        return mathMainStats(character)
+    }
+
+    private fun mathMainStats(character: BindingCharacter): Int {
+        var total = character.totalPoints
+        total -= ((character.st - 10) * 10)
+        total -= ((character.dx - 10) * 20)
+        total -= ((character.iq - 10) * 20)
+        total -= ((character.ht - 10) * 10)
+        total -= (character.realHp * 2)
+        total -= (character.realPer * 5)
+        total -=(character.realWill * 5)
+        total -= (character.realFp * 3)
+        total -= (character.realSpeed/0.25f * 5).toInt()
+        total -= (character.realMove * 5)
+        return total
+    }
+
+    fun getReMathCharacter(character: Character): Character {
+        character.apply {
+            hp = mathHP(hp, st)
+            per = mathPer(per, iq)
+            will = mathWill(will, iq)
+            move = mathMove(move, speed, ht, dx)
+            speed = mathSpeed(speed, ht, dx)
+            fp = mathFP(fp, st)
+        }
+        return character
     }
 
     enum class MeleDamage {
