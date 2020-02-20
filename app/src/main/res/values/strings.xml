@@ -60,8 +60,23 @@
     <string name="skip">Skip</string>
     <string name="attack">Attack</string>
     <string name="def">Def</string>
+    <string name="defence">Defence</string>
     <string name="action">Action</string>
     <string name="gt">&gt;</string>
     <string name="lt">&lt;</string>
+    <string name="attack_type">Attack Type</string>
+    <string name="range">Range</string>
+    <string name="melee">Melee</string>
+    <string name="choice_attack_type">Choice attack type</string>
+    <string name="modificator">Modificator</string>
+    <string name="target">Target</string>
+    <string name="freehand">Freehand</string>
+    <string name="skill_value">Skill value</string>
+    <string name="weapon">Weapon</string>
+    <string name="roll">Roll</string>
+    <string name="dmg">Dmg</string>
+    <string name="reach">Reach</string>
+    <string name="assessment">Assessment</string>
+    <string name="attacker_pose">Attacker pose</string>
 
 </resources>

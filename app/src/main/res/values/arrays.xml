@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="attack_targets">
+        <item>Body (0)</item>
+        <item>Random (0)</item>
+        <item>Hand (-2)</item>
+        <item>Shield hand (-4)</item>
+        <item>Leg (-2)</item>
+        <item>Foot (-4)</item>
+        <item>Wrist (-4)</item>
+        <item>Shield wrist (-8)</item>
+        <item>Skull (-7)</item>
+        <item>Face (-8)</item>
+        <item>Neck (-5)</item>
+        <item>Groin (-3)</item>
+        <item>Eye (-9)</item>
+        <item>Vital organs (-3)</item>
+        <item>Wing (-2)</item>
+        <item>Tail (-3)</item>
+        <item>Weapon (reach C)(-5)</item>
+        <item>Weapon (reach C)(-4)</item>
+        <item>Weapon (reach C)(-3)</item>
+    </string-array>
+    <string-array name="attack_assessment">
+        <item>No (0)</item>
+        <item>1 round (+1)</item>
+        <item>2 rounds (+2)</item>
+        <item>3 rounds (+3)</item>
+    </string-array>
+    <string-array name="attack_poses">
+        <item>Stand (0)</item>
+        <item>Kneeling | Sitting | Crouching (-2)</item>
+        <item>Lying down (reach C weapon only) (-4)</item>
+    </string-array>
+</resources>

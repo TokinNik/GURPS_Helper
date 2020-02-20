@@ -1,6 +1,7 @@
 package com.example.testapp.ui.battle
 
 
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,11 +19,17 @@ import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.getThemeColor
 import com.example.testapp.ui.SelectableData
+import com.example.testapp.ui.battle.actions.action.BattleActionActionFragment
+import com.example.testapp.ui.battle.actions.attack_melee.BattleActionAttackMeleeFragment
+import com.example.testapp.ui.battle.actions.attack_range.BattleActionAttackRangeFragment
+import com.example.testapp.ui.battle.actions.defence.BattleActionDefenceFragment
+import com.example.testapp.ui.battle.actions.move.BattleActionMoveFragment
 import com.example.testapp.ui.character.CharacterCard
 import com.example.testapp.ui.character.CharacterHorizontalItem
 import com.example.testapp.ui.settings.ColorScheme
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
 import com.example.testapp.util.GurpsCalculations
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.card_character_all.*
@@ -102,16 +109,16 @@ class BattleFragment : Fragment() {
             switchSelect()
         }
         battle_action.setOnClickListener {
-            switchSelect()
+            setActionActionDialog(activeCharacter.character.data)
         }
         battle_defence.setOnClickListener {
-            switchSelect()
+            setDefenceActionDialog(activeCharacter.character.data)
         }
         battle_attack.setOnClickListener {
-            switchSelect()
+            setAttackActionDialog(activeCharacter.character.data)
         }
         battle_move.setOnClickListener {
-            switchSelect()
+            setMoveActionDialog(activeCharacter.character.data)
         }
         battle_collapse_actions.setOnClickListener {
             if (isActionsCollapsed) {
@@ -158,10 +165,45 @@ class BattleFragment : Fragment() {
     }
 
     private fun setSkillInfoDialog(skill: Skill) {
-        val selectSkillDialog = SkillObserveSingleFragment(skill)
-        selectSkillDialog.setTargetFragment(this, 1)
-        selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
-        selectSkillDialog.show(fragmentManager!!, null)
+        val dialog = SkillObserveSingleFragment(skill)
+        setDialog(dialog)
+    }
+
+    private fun setAttackActionDialog(character: Character) {
+        val builder = MaterialAlertDialogBuilder(activity)
+        builder
+            .setTitle(R.string.attack)
+            .setMessage(R.string.choice_attack_type)
+            .setPositiveButton(R.string.range) { dialogInterface: DialogInterface, i: Int ->
+                setDialog(BattleActionAttackRangeFragment())
+                dialogInterface.dismiss()
+            }
+            .setNegativeButton(R.string.melee) { dialogInterface: DialogInterface, i: Int ->
+                setDialog(BattleActionAttackMeleeFragment())
+                dialogInterface.dismiss()
+            }
+            .create().show()
+    }
+
+    private fun setDefenceActionDialog(character: Character) {
+        val dialog = BattleActionDefenceFragment()//todo
+        setDialog(dialog)
+    }
+
+    private fun setMoveActionDialog(character: Character) {
+        val dialog = BattleActionMoveFragment()//todo
+        setDialog(dialog)
+    }
+
+    private fun setActionActionDialog(character: Character) {
+        val dialog = BattleActionActionFragment()//todo
+        setDialog(dialog)
+    }
+
+    private fun setDialog(dialog: DialogFragment) {
+        dialog.setTargetFragment(this, 1)
+        dialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
+        dialog.show(fragmentManager!!, null)
     }
 
     private fun switchSelect() {
@@ -180,10 +222,10 @@ class BattleFragment : Fragment() {
             activeCharacter = (groupAdapterQueue.getItem(position) as CharacterHorizontalItem)
             activeCharacter.character.select = true
             recyclerView_characters_queue.layoutManager?.scrollToPosition(activeCharacterPos)
-            groupAdapterQueue.notifyItemChanged(activeCharacterPos)
             battleBinding.character = gurpsCalculations.getReMathCharacter(activeCharacter.character.data)
             character_card_root.visibility = View.VISIBLE
             viewModel.getCharacterSkillsById(activeCharacter.character.data.id)
+            groupAdapterQueue.notifyItemChanged(activeCharacterPos)
             characterCard.setImage(activeCharacter.character.data.portrait)
         }
     }
@@ -225,6 +267,6 @@ class BattleFragment : Fragment() {
     }
 
     private fun showProgressBar() {
-        //battle_fragment_progress_bar.visibility = View.VISIBLE
+        //battle_fragment_progress_bar.visibility = View.VISIBLE//todo in memu or flat mode
     }
 }

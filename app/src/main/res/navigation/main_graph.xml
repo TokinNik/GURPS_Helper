@@ -52,9 +52,11 @@
         android:label="fragment_character_edit"
         tools:layout="@layout/fragment_character_edit" >
         <action
-            android:id="@+id/action_characterEditFragment_to_choiceSkillFragment"
-            app:destination="@id/choiceSkillFragment"
-            app:launchSingleTop="true" />
+            android:id="@+id/action_characterEditFragment_to_characterEditSkillsFragment"
+            app:destination="@id/characterEditSkillsFragment" />
+        <action
+            android:id="@+id/action_characterEditFragment_to_characterEditStatsFragment"
+            app:destination="@id/characterEditStatsFragment" />
     </fragment>
     <fragment
         android:id="@+id/editSkillFragment"
@@ -80,7 +82,26 @@
         android:id="@+id/battleFragment"
         android:name="com.example.testapp.ui.battle.BattleFragment"
         android:label="fragment_battle"
-        tools:layout="@layout/fragment_battle" />
+        tools:layout="@layout/fragment_battle" >
+        <action
+            android:id="@+id/action_battleFragment_to_skillObserveSingleFragment"
+            app:destination="@id/skillObserveSingleFragment" />
+        <action
+            android:id="@+id/action_battleFragment_to_battleActionAttackFragment"
+            app:destination="@id/battleActionAttackRangeFragment" />
+        <action
+            android:id="@+id/action_battleFragment_to_battleActionDefenceFragment"
+            app:destination="@id/battleActionDefenceFragment" />
+        <action
+            android:id="@+id/action_battleFragment_to_battleActionActionFragment"
+            app:destination="@id/battleActionActionFragment" />
+        <action
+            android:id="@+id/action_battleFragment_to_battleActionMoveFragment"
+            app:destination="@id/battleActionMoveFragment" />
+        <action
+            android:id="@+id/action_battleFragment_to_battleActionAttackMeleeFragment"
+            app:destination="@id/battleActionAttackMeleeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/skillObserveSingleFragment"
         android:name="com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment"
@@ -90,4 +111,36 @@
         android:name="com.example.testapp.ui.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <dialog
+        android:id="@+id/battleActionAttackRangeFragment"
+        android:name="com.example.testapp.ui.battle.actions.attack_range.BattleActionAttackRangeFragment"
+        android:label="BattleActionAttackFragment" />
+    <dialog
+        android:id="@+id/battleActionActionFragment"
+        android:name="com.example.testapp.ui.battle.actions.action.BattleActionActionFragment"
+        android:label="BattleActionActionFragment" />
+    <dialog
+        android:id="@+id/battleActionMoveFragment"
+        android:name="com.example.testapp.ui.battle.actions.move.BattleActionMoveFragment"
+        android:label="BattleActionMoveFragment" />
+    <dialog
+        android:id="@+id/battleActionDefenceFragment"
+        android:name="com.example.testapp.ui.battle.actions.defence.BattleActionDefenceFragment"
+        android:label="BattleActionDefenceFragment" />
+    <fragment
+        android:id="@+id/characterEditSkillsFragment"
+        android:name="com.example.testapp.ui.character.edit.pages.skills.CharacterEditSkillsFragment"
+        android:label="CharacterEditSkillsFragment" >
+        <action
+            android:id="@+id/action_characterEditSkillsFragment_to_choiceSkillFragment"
+            app:destination="@id/choiceSkillFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/characterEditStatsFragment"
+        android:name="com.example.testapp.ui.character.edit.pages.stats.CharacterEditStatsFragment"
+        android:label="CharacterEditStatsFragment" />
+    <dialog
+        android:id="@+id/battleActionAttackMeleeFragment"
+        android:name="com.example.testapp.ui.battle.actions.attack_melee.BattleActionAttackMeleeFragment"
+        android:label="BattleActionAttackMeleeFragment" />
 </navigation>
