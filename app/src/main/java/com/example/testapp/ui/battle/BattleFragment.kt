@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
+import com.example.testapp.custom_view.outline_corner.OutlineProviders
 import com.example.testapp.databinding.FragmentBattleBinding
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill.Skill
@@ -75,6 +76,10 @@ class BattleFragment : Fragment() {
                 setSkillInfoDialog(it)
             }
         )
+
+        val radius = 32f
+        battle_actions_layout.outlineProvider = OutlineProviders(radius, OutlineProviders.OutlineType.ROUND_RECT_TOP)
+        battle_actions_layout.clipToOutline = true
 
         observeCharacters()
         observeColorScheme()
@@ -202,7 +207,7 @@ class BattleFragment : Fragment() {
                 if (it == ColorScheme.NIGHT)
                     resources.getColor(R.color.night_background_dark)//todo with attr activity!!.getThemeColor(R.attr.???)
                 else
-                    resources.getColor(R.color.background_light)
+                    resources.getColor(R.color.background_dark)
             )
             characterCard.setColorScheme(it)
         })
