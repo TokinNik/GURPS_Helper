@@ -18,6 +18,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/character_card_root"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -388,7 +389,7 @@
         </com.google.android.flexbox.FlexboxLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/haracter_card_collapse_info"
+            android:id="@+id/character_card_collapse_info"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="35dp"

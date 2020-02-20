@@ -19,6 +19,7 @@ import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.getThemeColor
 import com.example.testapp.ui.SelectableData
+import com.example.testapp.ui.character.CharacterCard
 import com.example.testapp.ui.character.edit.pages.BindingCharacter
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
@@ -37,8 +38,8 @@ class CharacterFragment : Fragment() {
 
     private lateinit var character: Character
     private lateinit var characterBinding: FragmentCharacterBinding
+    private lateinit var characterCard: CharacterCard
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
-    private var isInfoCollapsed = false
 
     private val viewModel: CharacterFragmentViewModel by inject()
 
@@ -95,24 +96,22 @@ class CharacterFragment : Fragment() {
         viewModel.clearEvents()
         viewModel.getColorScheme()
 
-        character_card_pager.adapter = ViewPagerCharacterAdapter()
-        character_card_pager.offscreenPageLimit = 4
-
-        val radius = 32f
-        character_card_pager.outlineProvider = OutlineProviders(radius, OutlineProviders.OutlineType.ROUND_RECT_TOP)
-        character_card_pager.clipToOutline = true
-
-        recyclerViewInit()
+        characterCard = CharacterCard(
+            cardRoot = character_card_root,
+            groupAdapter = groupAdapter,
+            colorActive = activity!!.getThemeColor(R.attr.colorSecondary),
+            colorInactive = activity!!.getThemeColor(R.attr.colorPrimaryVariant),
+            onSkillClick = {
+                setSkillInfoDialog(it)
+            }
+        )
 
         observeColorScheme()
         observeCharacterById()
         observeErrors()
         observeDeleteComplete()
         observeCharacterSkillsById()
-        observeSkillByName()
         observeSkillByNames()
-
-        initOnClick()
 
         val id = arguments?.getInt("id", 0) ?: 0
         showProgressBar()
@@ -125,51 +124,16 @@ class CharacterFragment : Fragment() {
         viewModel.forceClear()
     }
 
-    private fun initOnClick() {
-        haracter_card_collapse_info.setOnClickListener {
-            if (isInfoCollapsed) {
-                isInfoCollapsed = false
-                character_card_other_info.visibility = View.VISIBLE
-            } else {
-                isInfoCollapsed = true
-                character_card_other_info.visibility = View.GONE
-            }
-        }
-    }
-
-    private fun recyclerViewInit() {
-        groupAdapter.setOnItemClickListener { item, view ->
-            val selectSkillDialog = SkillObserveSingleFragment((item as SkillItem).skill.data)
-            selectSkillDialog.setTargetFragment(this, 1)
-            selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
-            selectSkillDialog.show(fragmentManager!!, null)
-        }
-
-        (character_card_pager.adapter as ViewPagerCharacterAdapter).groupAdapter = groupAdapter
-    }
-
-    private fun setItems(items: List<Skill>)
-    {
-        val colorActive = activity!!.getThemeColor(R.attr.colorSecondary)
-        val colorInactive = activity!!.getThemeColor(R.attr.colorPrimaryVariant)
-        groupAdapter.clear()
-        for(i in items)
-        {
-            groupAdapter.apply {
-                add(
-                    SkillItem(
-                        skill = SelectableData(i),
-                        colorActive = colorActive,
-                        colorInactive = colorInactive
-                    )
-                )
-            }
-        }
+    private fun setSkillInfoDialog(skill: Skill) {
+        val selectSkillDialog = SkillObserveSingleFragment(skill)
+        selectSkillDialog.setTargetFragment(this, 1)
+        selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
+        selectSkillDialog.show(fragmentManager!!, null)
     }
 
     private fun observeColorScheme() {
         viewModel.colorScheme.observe(this, Observer {
-            (character_card_pager.adapter as ViewPagerCharacterAdapter).schemeType = it
+            characterCard.setColorScheme(it)
         })
     }
 
@@ -177,13 +141,7 @@ class CharacterFragment : Fragment() {
         viewModel.characterById.observe(this, Observer {
             character = it
             characterBinding.character = gurpsCalculations.getReMathCharacter(character)
-            setDataInFields(it)
-        })
-    }
-
-    private fun observeSkillByName() {
-        viewModel.getSkillByNameComplete.observe(this, Observer {
-            println(it)
+            characterCard.setImage(it.portrait)
         })
     }
 
@@ -196,7 +154,7 @@ class CharacterFragment : Fragment() {
     private fun observeSkillByNames()
     {
         viewModel.getSkillByNamesComplete.observe(this, Observer {
-            setItems(it)
+            characterCard.setItems(it)
             hideProgressBar()
         })
     }
@@ -212,13 +170,6 @@ class CharacterFragment : Fragment() {
             Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
             println("ERROR!!! ${it.printStackTrace()}")
         })
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setDataInFields(ch: Character) {
-        val bytes = Base64.decode(ch.portrait, Base64.DEFAULT)
-        val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-        character_card_image.setImageBitmap(image)
     }
 
     private fun hideProgressBar() {

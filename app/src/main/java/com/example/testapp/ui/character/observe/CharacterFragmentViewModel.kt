@@ -33,9 +33,6 @@ class CharacterFragmentViewModel : RxViewModel() {
      val characterSkillsByIdComplete: LiveData<List<CharacterSkills>>
         get() = characterSkillsByIdEvent
 
-    val getSkillByNameComplete: LiveData<Skill>
-        get() = getSkillByNameEvent
-
     val getSkillByNamesComplete: LiveData<List<Skill>>
         get() = getSkillByNamesEvent
 
@@ -50,7 +47,6 @@ class CharacterFragmentViewModel : RxViewModel() {
 
     private var characterSkillsByIdEvent: MutableLiveData<List<CharacterSkills>> = MutableLiveData()
 
-    private var getSkillByNameEvent: MutableLiveData<Skill> = MutableLiveData()
 
     private var getSkillByNamesEvent: MutableLiveData<List<Skill>> = MutableLiveData()
 
@@ -116,8 +112,8 @@ class CharacterFragmentViewModel : RxViewModel() {
         deleteCompleteEvent =  MutableLiveData()
         characterByIdEvent =  MutableLiveData()
         characterSkillsByIdEvent = MutableLiveData()
-        getSkillByNameEvent = MutableLiveData()
         getSkillByNamesEvent = MutableLiveData()
+        colorSchemeEvent = MutableLiveData()
     }
 
     fun getColorScheme() {

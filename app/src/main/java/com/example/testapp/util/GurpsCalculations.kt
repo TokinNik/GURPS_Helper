@@ -59,7 +59,8 @@ class GurpsCalculations @Inject constructor() {
     }
 
     fun getReMathCharacter(character: Character): Character {
-        character.apply {
+        val newCharacter = character.copy()
+            newCharacter.apply {
             hp = mathHP(hp, st)
             per = mathPer(per, iq)
             will = mathWill(will, iq)
@@ -67,7 +68,7 @@ class GurpsCalculations @Inject constructor() {
             speed = mathSpeed(speed, ht, dx)
             fp = mathFP(fp, st)
         }
-        return character
+        return newCharacter
     }
 
     enum class MeleDamage {

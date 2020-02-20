@@ -25,7 +25,6 @@ class CharacterHorizontalItem(
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
         viewHolder.apply {
-            root.item_horizontal_character_id.text = character.data.id.toString()
             root.item_horizontal_character_name.text = character.data.name
             val bytes = Base64.decode(character.data.portrait, Base64.DEFAULT)
             val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
