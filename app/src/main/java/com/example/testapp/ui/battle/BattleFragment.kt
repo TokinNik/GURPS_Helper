@@ -19,6 +19,7 @@ import com.example.testapp.getThemeColor
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.ui.character.CharacterCard
 import com.example.testapp.ui.character.CharacterHorizontalItem
+import com.example.testapp.ui.settings.ColorScheme
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
 import com.example.testapp.util.GurpsCalculations
 import com.xwray.groupie.GroupAdapter
@@ -38,7 +39,7 @@ class BattleFragment : Fragment() {
     private val groupAdapterSkills = GroupAdapter<GroupieViewHolder>()
 
     private var activeCharacterPos = 0
-    private var isInfoCollapsed = false
+    private var isActionsCollapsed = true
 
     private lateinit var characterCard: CharacterCard
     private lateinit var battleBinding: FragmentBattleBinding
@@ -92,16 +93,30 @@ class BattleFragment : Fragment() {
     }
 
     private fun initOnClick() {
-        button_add.setOnClickListener {
+        battle_skip.setOnClickListener {
             switchSelect()
         }
-        character_card_collapse_info.setOnClickListener {
-            if (isInfoCollapsed) {
-                isInfoCollapsed = false
-                character_card_other_info.visibility = View.VISIBLE
+        battle_action.setOnClickListener {
+            switchSelect()
+        }
+        battle_defence.setOnClickListener {
+            switchSelect()
+        }
+        battle_attack.setOnClickListener {
+            switchSelect()
+        }
+        battle_move.setOnClickListener {
+            switchSelect()
+        }
+        battle_collapse_actions.setOnClickListener {
+            if (isActionsCollapsed) {
+                isActionsCollapsed = false
+                battle_collapse_actions.text = getString(R.string.gt)//todo in image
+                battle_actions_layout.visibility = View.VISIBLE
             } else {
-                isInfoCollapsed = true
-                character_card_other_info.visibility = View.GONE
+                isActionsCollapsed = true
+                battle_collapse_actions.text = getString(R.string.lt)
+                battle_actions_layout.visibility = View.GONE
             }
         }
     }
@@ -183,6 +198,12 @@ class BattleFragment : Fragment() {
 
     private fun observeColorScheme() {
         viewModel.colorScheme.observe(this, Observer {
+            battle_actions_layout.setBackgroundColor(
+                if (it == ColorScheme.NIGHT)
+                    resources.getColor(R.color.night_background_dark)//todo with attr activity!!.getThemeColor(R.attr.???)
+                else
+                    resources.getColor(R.color.background_light)
+            )
             characterCard.setColorScheme(it)
         })
     }

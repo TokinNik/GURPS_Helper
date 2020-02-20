@@ -26,7 +26,7 @@ class ViewPagerCharacterAdapter : RecyclerView.Adapter<PagerVH>() {
 
     override fun onBindViewHolder(holder: PagerVH, position: Int) = holder.itemView.run {
         character_card_page_text.text = CharacterPages.values()[position].name
-        test_linear_layout.setBackgroundResource(CharacterPages.values()[position].color(schemeType))
+        sadq_linear_layout.setBackgroundResource(CharacterPages.values()[position].color(schemeType))
         if ( character_card_skills_list.layoutManager == null ) character_card_skills_list.layoutManager = layoutManager
         character_card_skills_list.adapter = groupAdapter
     }
