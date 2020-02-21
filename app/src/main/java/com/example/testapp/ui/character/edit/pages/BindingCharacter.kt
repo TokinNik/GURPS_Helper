@@ -15,7 +15,6 @@ class BindingCharacter(character: Character, private val reMath: ()-> Unit) {
     var earnPoints: Int = 0
         set(value) {
             field = value
-            println("SET EARN_POINTS - $value")
             reMath.invoke()
         }
     var disadvPoints: Int = 0
@@ -25,27 +24,23 @@ class BindingCharacter(character: Character, private val reMath: ()-> Unit) {
     var st: Int = 0
         set(value) {
             field = value
-            println("SET ST - $value")
             xreMathPoints()
         }
 
     var dx: Int = 0
         set(value) {
             field = value
-            println("SET DX - $value")
             xreMathPoints()
         }
 
     var iq: Int = 0
         set(value) {
             field = value
-            println("SET IQ - $value")
             xreMathPoints()
         }
     var ht: Int = 0
         set(value) {
             field = value
-            println("SET HT - $value")
             xreMathPoints()
         }
     var realHp: Int = 0

@@ -1,14 +1,20 @@
 package com.example.testapp.ui.battle.actions.attack_melee
 
+import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
 import com.example.testapp.R
+import com.example.testapp.databinding.FragmentBattleActionAttackMeleeBinding
 import com.example.testapp.ui.battle.actions.attack_range.BattleActionAttackRangeFragmentViewModel
+import com.example.testapp.ui.character.edit.StatCounterIntMinusButtonListener
+import com.example.testapp.ui.character.edit.StatCounterIntPlusButtonListener
+import com.example.testapp.util.RollUtil
+import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.fragment_battle_action_attack_melee.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
@@ -17,13 +23,24 @@ import toothpick.smoothie.viewmodel.installViewModelBinding
 class BattleActionAttackMeleeFragment : DialogFragment() {
 
     private val viewModelRange: BattleActionAttackRangeFragmentViewModel by inject()
+    private val rollUtil: RollUtil by inject()
+
+    private lateinit var binding: FragmentBattleActionAttackMeleeBinding
+
+    private var actionAttackMeleeDataV2 = ActionAttackMeleeDataV2{ binding.invalidateAll() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         dialog?.setTitle(R.string.attack)
-        return inflater.inflate(R.layout.fragment_battle_action_attack_melee, container, false)
+        binding = FragmentBattleActionAttackMeleeBinding.inflate(inflater, container, false)
+        binding.meleeAttackData = actionAttackMeleeDataV2
+        binding.onClickPlus = StatCounterIntPlusButtonListener(100)
+        binding.onClickMinus = StatCounterIntMinusButtonListener(-100)
+        binding.onClickPlusZero = StatCounterIntPlusButtonListener(0)
+        binding.onClickMinusZero = StatCounterIntMinusButtonListener(0)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -37,6 +54,14 @@ class BattleActionAttackMeleeFragment : DialogFragment() {
 
         observeErrors()
 
+        initOnClick()
+
+        hideKeyboard()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideKeyboard()
     }
 
     override fun onDestroyView() {
@@ -45,7 +70,10 @@ class BattleActionAttackMeleeFragment : DialogFragment() {
     }
 
     private fun initOnClick() {
-
+        battle_action_attack_roll.setOnClickListener {
+            val rollValue = rollUtil.roll3D6()
+            Toast.makeText(activity, "Roll on(${actionAttackMeleeDataV2.result}) Result = $rollValue (${rollValue <= actionAttackMeleeDataV2.result || rollValue == 3})", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun observeErrors() {
@@ -53,5 +81,11 @@ class BattleActionAttackMeleeFragment : DialogFragment() {
             Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
             println("ERROR!!! $it")
         })
+    }
+
+    private fun hideKeyboard()
+    {
+        (activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+            .hideSoftInputFromWindow(battle_action_attack_mele_st.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 }

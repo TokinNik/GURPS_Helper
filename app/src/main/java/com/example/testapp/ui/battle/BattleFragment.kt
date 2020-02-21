@@ -202,7 +202,7 @@ class BattleFragment : Fragment() {
 
     private fun setDialog(dialog: DialogFragment) {
         dialog.setTargetFragment(this, 1)
-        dialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
+        dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.dialogFragmentStyle)
         dialog.show(fragmentManager!!, null)
     }
 

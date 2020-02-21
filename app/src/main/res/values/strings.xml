@@ -78,5 +78,6 @@
     <string name="reach">Reach</string>
     <string name="assessment">Assessment</string>
     <string name="attacker_pose">Attacker pose</string>
+    <string name="common_attack">Common Attack</string>
 
 </resources>

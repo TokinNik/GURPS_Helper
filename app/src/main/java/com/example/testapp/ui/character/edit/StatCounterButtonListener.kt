@@ -6,6 +6,12 @@ import com.example.testapp.databinding.StatCounterFloatBinding
 import com.example.testapp.databinding.StatCounterIntBinding
 
 class StatCounterIntPlusButtonListener(private val maxValue: Int) {
+    constructor(maxValue: Int, onClick: () -> Unit) : this(maxValue) {
+        onClickAction = onClick
+    }
+
+    private var onClickAction: () -> Unit = {}
+
     fun onClick(textView: View) {
         val bind: StatCounterIntBinding? = DataBindingUtil.findBinding(textView)
         if (bind != null) {
@@ -14,12 +20,18 @@ class StatCounterIntPlusButtonListener(private val maxValue: Int) {
             bind.let {
                 it.stat = stat
                 it.invalidateAll()
+                onClickAction.invoke()
             }
         }
     }
 }
 
 class StatCounterIntMinusButtonListener(private val minValue: Int) {
+    constructor(minValue: Int, onClick: () -> Unit) : this(minValue) {
+        onClickAction = onClick
+    }
+
+    private var onClickAction: () -> Unit = {}
     fun onClick( textView: View) {
         val bind: StatCounterIntBinding? = DataBindingUtil.findBinding(textView)
         if (bind != null) {
@@ -28,11 +40,17 @@ class StatCounterIntMinusButtonListener(private val minValue: Int) {
             bind.let {
                 it.stat = stat
                 it.invalidateAll()
+                onClickAction.invoke()
             }
         }
     }
 }
 class StatCounterFloatPlusButtonListener(private val maxValue: Float, private val step: Float) {
+    constructor(maxValue: Float, step: Float, onClick: () -> Unit) : this(maxValue, step) {
+        onClickAction = onClick
+    }
+
+    private var onClickAction: () -> Unit = {}
     fun onClick(textView: View) {
         val bind: StatCounterFloatBinding? = DataBindingUtil.findBinding(textView)
         if (bind != null) {
@@ -41,12 +59,19 @@ class StatCounterFloatPlusButtonListener(private val maxValue: Float, private va
             bind.let {
                 it.stat = stat
                 it.invalidateAll()
+                onClickAction.invoke()
             }
         }
     }
 }
 
 class StatCounterFloatMinusButtonListener(private val minValue: Float, private val step: Float) {
+    constructor(minValue: Float, step: Float, onClick: () -> Unit) : this(minValue, step) {
+        onClickAction = onClick
+    }
+
+    private var onClickAction: () -> Unit = {}
+
     fun onClick( textView: View) {
         val bind: StatCounterFloatBinding? = DataBindingUtil.findBinding(textView)
         if (bind != null) {
@@ -55,6 +80,7 @@ class StatCounterFloatMinusButtonListener(private val minValue: Float, private v
             bind.let {
                 it.stat = stat
                 it.invalidateAll()
+                onClickAction.invoke()
             }
         }
     }

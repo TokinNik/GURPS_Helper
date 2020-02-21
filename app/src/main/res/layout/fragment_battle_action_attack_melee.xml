@@ -1,317 +1,538 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
 
-    <LinearLayout
-        android:id="@+id/weapon_layout"
+        <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
+        <import type="android.widget.RadioGroup.OnCheckedChangeListener"/>
+
+        <variable
+            name="meleeAttackData"
+            type="com.example.testapp.ui.battle.actions.attack_melee.ActionAttackMeleeDataV2" />
+
+        <variable
+            name="onClickPlus"
+            type="com.example.testapp.ui.character.edit.StatCounterIntPlusButtonListener" />
+
+        <variable
+            name="onClickMinus"
+            type="com.example.testapp.ui.character.edit.StatCounterIntMinusButtonListener" />
+
+        <variable
+            name="onClickPlusZero"
+            type="com.example.testapp.ui.character.edit.StatCounterIntPlusButtonListener" />
+
+        <variable
+            name="onClickMinusZero"
+            type="com.example.testapp.ui.character.edit.StatCounterIntMinusButtonListener" />
+
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
+
 
         <TextView
+            android:id="@+id/attack_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="8dp"
-            android:text="@string/weapon" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="8dp"
-            android:text="@string/dmg" />
-
-        <TextView
-            android:id="@+id/battle_action_attack_mele_damage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="8dp"
-            android:text="1d"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="8dp"
-            android:text="@string/st" />
-
-        <TextView
-            android:id="@+id/battle_action_attack_mele_st"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="8dp"
-            android:text="10"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="8dp"
-            android:text="@string/reach" />
-
-        <TextView
-            android:id="@+id/battle_action_attack_mele_reach"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="8dp"
-            android:text="1"/>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/skill_value_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weapon_layout">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="8dp"
-            android:text="@string/skill_value" />
-
-        <include layout="@layout/stat_counter_int"/>
-
-    </LinearLayout>
-
-    <CheckBox
-        android:id="@+id/battle_action_attack_mele_freehand"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/freehand"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/skill_value_layout" />
-
-
-    <LinearLayout
-        android:id="@+id/target_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/battle_action_attack_mele_freehand">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="8dp"
-            android:text="@string/target" />
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:entries="@array/attack_targets"
-            android:layout_weight="1" />
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/skill_modif_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/target_layout">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="8dp"
-            android:text="@string/modificator" />
-
-        <include layout="@layout/stat_counter_int"/>
-
-    </LinearLayout>
-
-    <ScrollView
-        android:id="@+id/battle_action_attack_melee_other"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/battle_action_attack_roll"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/skill_modif_layout">
+            android:layout_marginTop="4dp"
+            android:text="@string/attack"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            android:id="@+id/weapon_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_marginStart="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/attack_title">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="4dp"
-                    android:text="@string/assessment" />
-
-                <Spinner
-                    android:id="@+id/battle_action_attack_mele_todo_0"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/attack_assessment"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="4dp"
-                    android:text="@string/attacker_pose" />
-
-                <Spinner
-                    android:id="@+id/battle_action_attack_mele_todo_01"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/attack_poses"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-
-            <CheckBox
-                android:id="@+id/battle_action_attack_mele_todo_1"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="text" />
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:text="@string/weapon" />
 
-            <CheckBox
-                android:id="@+id/battle_action_attack_mele_todo_2"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="text|text|text|text|text|text|text|text|text|text|text|text|text|text|text|" />
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:text="@string/dmg" />
 
-            <CheckBox
-                android:id="@+id/battle_action_attack_mele_todo_3"
+            <!--           todo add Text Formatter-->
+            <EditText
+                android:id="@+id/battle_action_attack_mele_damage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="text" />
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:inputType="text"
+                android:text="@{`` + meleeAttackData.weaponDmg.toString()}" />
 
-            <CheckBox
-                android:id="@+id/battle_action_attack_mele_todo_4"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="text" />
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:text="@string/st" />
 
-            <CheckBox
-                android:id="@+id/battle_action_attack_mele_todo_5"
+            <EditText
+                android:id="@+id/battle_action_attack_mele_st"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="text" />
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:inputType="numberDecimal"
+                android:text="@={`` + meleeAttackData.handSt}" />
 
-            <CheckBox
-                android:id="@+id/battle_action_attack_mele_todo_6"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="text" />
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:text="@string/reach" />
 
-            <CheckBox
-                android:id="@+id/battle_action_attack_mele_todo_7"
+            <EditText
+                android:id="@+id/battle_action_attack_mele_reach"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="text" />
-
-            <CheckBox
-                android:id="@+id/battle_action_attack_mele_todo_8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="text" />
-
-            <CheckBox
-                android:id="@+id/battle_action_attack_mele_todo_9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="text" />
-
-            <CheckBox
-                android:id="@+id/battle_action_attack_mele_todo_10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="text" />
-
-            <CheckBox
-                android:id="@+id/battle_action_attack_mele_todo_11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="text" />
-
-            <CheckBox
-                android:id="@+id/battle_action_attack_mele_todo_12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="text" />
-
-            <CheckBox
-                android:id="@+id/battle_action_attack_mele_todo_13"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="text" />
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:inputType="numberDecimal"
+                android:text="@={`` + meleeAttackData.weaponReach}" />
 
         </LinearLayout>
-    </ScrollView>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/battle_action_attack_roll"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/battle_action_attack_melee_other"
-        android:text="@string/roll" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:id="@+id/skill_value_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/weapon_layout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:text="@string/skill_value" />
+
+            <include
+                layout="@layout/stat_counter_int"
+                app:onClickMinus="@{onClickMinus}"
+                app:onClickPlus="@{onClickPlus}"
+                app:stat="@={meleeAttackData.skillValue}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/target" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:entries="@array/attack_targets" />
+
+        </LinearLayout>
+
+
+        <CheckBox
+            android:id="@+id/battle_action_attack_mele_freehand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:checked="@{meleeAttackData.otherModifications.get(0).isChecked ? true : false}"
+            android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(0).name)}"
+            android:text="@{meleeAttackData.otherModifications.get(0).getFullName()}"
+            app:layout_constraintStart_toEndOf="@+id/skill_modif_layout"
+            app:layout_constraintTop_toBottomOf="@+id/skill_value_layout" />
+
+        <LinearLayout
+            android:id="@+id/skill_modif_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/skill_value_layout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:text="@string/modificator" />
+
+            <include
+                layout="@layout/stat_counter_int"
+                app:onClickMinus="@{onClickMinus}"
+                app:onClickPlus="@{onClickPlus}"
+                app:stat="@={meleeAttackData.modification}" />
+
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/battle_action_attack_melee_other"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/battle_action_attack_roll"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/skill_modif_layout">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="4dp"
+                        android:text="@string/assessment" />
+
+                    <Spinner
+                        android:id="@+id/battle_action_attack_melee_other_mod_0"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:entries="@array/attack_assessment" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="4dp"
+                        android:text="@string/attacker_pose" />
+
+                    <Spinner
+                        android:id="@+id/battle_action_attack_melee_other_mod_01"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:entries="@array/attack_poses" />
+
+                </LinearLayout>
+
+                <RadioGroup
+                    android:id="@+id/settings_fragment_color_scheme_radio_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+<!--todo why this work??? Unknown attribute onCheckedChanged... -->
+                    <RadioButton
+                        android:id="@+id/battle_action_attack_melee_other_mod_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:onCheckedChanged="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(1).name)}"
+                        android:text="@{meleeAttackData.otherModifications.get(1).getFullName()}" />
+
+                    <RadioButton
+                        android:id="@+id/battle_action_attack_melee_other_mod_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:onCheckedChanged="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(2).name)}"
+                        android:text="@{meleeAttackData.otherModifications.get(2).getFullName()}" />
+
+                    <RadioButton
+                        android:id="@+id/battle_action_attack_melee_other_mod_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:onCheckedChanged="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(3).name)}"
+                        android:text="@{meleeAttackData.otherModifications.get(3).getFullName()}" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:checked="true"
+                        android:text="@string/common_attack" />
+
+                </RadioGroup>
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(4).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(4).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(4).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(5).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(5).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(5).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(6).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(6).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(6).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(7).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(7).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(7).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(8).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(8).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(8).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(9).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(9).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(9).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(10).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(10).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(10).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(11).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(11).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(11).getFullName()}" />
+
+                <LinearLayout
+                    android:id="@+id/battle_action_attack_melee_other_mod_12_val"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:orientation="horizontal"
+                    android:visibility="@{meleeAttackData.otherModifications.get(11).isChecked ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/skill_value_layout">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/modificator" />
+
+                    <include
+                        layout="@layout/stat_counter_int"
+                        app:onClickMinus="@{onClickMinus}"
+                        app:onClickPlus="@{onClickPlusZero}"
+                        app:stat="@={meleeAttackData.otherModifications.get(11).secondMod}" />
+
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(12).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(12).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(12).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:visibility="@{meleeAttackData.otherModifications.get(12).isChecked ? View.VISIBLE : View.GONE}"
+                    android:checked="@{meleeAttackData.otherModifications.get(13).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(13).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(13).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(14).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(14).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(14).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(15).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(15).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(15).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(16).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(16).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(16).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_17"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(17).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(17).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(17).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_18"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(18).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(18).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(18).getFullName()}" />
+
+                <LinearLayout
+                    android:id="@+id/battle_action_attack_melee_other_mod_22_val"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:orientation="horizontal"
+                    android:visibility="@{meleeAttackData.otherModifications.get(18).isChecked ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/skill_value_layout">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/modificator" />
+
+                    <include
+                        layout="@layout/stat_counter_int"
+                        app:onClickMinus="@{onClickMinusZero}"
+                        app:onClickPlus="@{onClickPlus}"
+                        app:stat="@={meleeAttackData.otherModifications.get(18).secondMod}" />
+
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(19).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(19).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(19).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(20).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(20).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(20).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(21).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(21).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(21).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_melee_other_mod_22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{meleeAttackData.otherModifications.get(22).isChecked ? true : false}"
+                    android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(22).name)}"
+                    android:text="@{meleeAttackData.otherModifications.get(22).getFullName()}" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/battle_action_attack_roll"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text='@{"Roll (" + meleeAttackData.result + ")"}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/battle_action_attack_melee_other" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+
