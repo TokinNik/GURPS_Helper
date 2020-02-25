@@ -1,6 +1,7 @@
 package com.example.testapp.ui.battle.actions.attack_melee
 
 import com.example.testapp.util.Dice
+import kotlin.reflect.KClass
 
 class ActionAttackMeleeDataV2(private val onItemCheck: () -> Unit) {
 
@@ -15,8 +16,13 @@ class ActionAttackMeleeDataV2(private val onItemCheck: () -> Unit) {
             result += value
             onItemCheck.invoke()
         }
-    //    var isFreehand: Boolean = false,
-    var target: String = "Body (0)"//todo with enum?
+    var target: Int = 0
+    set(value) {
+        result -= field
+        field = value
+        result += value
+        onItemCheck.invoke()
+    }
     var modification: Int = 0
     set(value) {
         result -= field
@@ -24,9 +30,27 @@ class ActionAttackMeleeDataV2(private val onItemCheck: () -> Unit) {
         result += value
         onItemCheck.invoke()
     }
-    var assessment: String = "No (0)"//todo with enum?
-    var attackerPose: String = "Stand (0)"//todo with enum?
-    var visibility: Int = 0//todo with enum?
+    var assessment: Int = 0
+        set(value) {
+            result -= field
+            field = value
+            result += value
+            onItemCheck.invoke()
+        }
+    var attackerPose: Int = 0
+    set(value) {
+        result -= field
+        field = value
+        result += value
+        onItemCheck.invoke()
+    }
+    var visibility: Int = 0
+    set(value) {
+        result -= field
+        field = value
+        result += value
+        onItemCheck.invoke()
+    }
     var otherModifications: List<CheckModificator> = emptyList()
     var deceptiveAttackPenalty: Int = 0
         set(value) {
@@ -37,9 +61,8 @@ class ActionAttackMeleeDataV2(private val onItemCheck: () -> Unit) {
         }
     var closeCombatShieldDB: Int = 0
         set(value) {
-            result += field
+            result += field - value
             field = value
-            result -= value
             onItemCheck.invoke()
         }
     init {
@@ -83,24 +106,31 @@ class ActionAttackMeleeDataV2(private val onItemCheck: () -> Unit) {
         onItemCheck.invoke()//todo work without it in page_character_edit_stat, why???
     }
 
-    fun getResultModification(): Int {
-        var result = 0
-        otherModifications
-            .filter { it.isChecked }
-            .map { it.modification }
-            .forEach { result += it }
-        result += modification
-        result += visibility
-        result += deceptiveAttackPenalty
-        result += closeCombatShieldDB
-//        result += target
-//        result += assessment todo
-//        result += attackerPose
+    fun onItemSelected(selectedItemPosition: Int, spinnerEnumType: SpinnerEnumType) {
+        when(spinnerEnumType) {
+            SpinnerEnumType.ASSESSMENT -> assessment = Assessment.values()[selectedItemPosition].modification
+            SpinnerEnumType.ATTACK_POSE -> attackerPose = AttackPose.values()[selectedItemPosition].modification
+            SpinnerEnumType.ATTACK_TARGET -> target = AttackTarget.values()[selectedItemPosition].modification
+            SpinnerEnumType.ENVIRONMENT_VISIBILITY -> visibility = EnvironmentVisibility.values()[selectedItemPosition].modification
+        }
+    }
 
-        return result
+    fun getStringListWithEnum(spinnerEnumType: SpinnerEnumType): List<String> {
+        return when(spinnerEnumType) {
+            SpinnerEnumType.ASSESSMENT -> Assessment.values().map { "${it.clearName} ${if(it.modification > 0 ) "(+${it.modification})" else "(${it.modification})"}" }
+            SpinnerEnumType.ATTACK_POSE -> AttackPose.values().map { "${it.clearName} ${if(it.modification > 0 ) "(+${it.modification})" else "(${it.modification})"}" }
+            SpinnerEnumType.ATTACK_TARGET -> AttackTarget.values().map { "${it.clearName} ${if(it.modification > 0 ) "(+${it.modification})" else "(${it.modification})"}" }
+            SpinnerEnumType.ENVIRONMENT_VISIBILITY -> EnvironmentVisibility.values().map { "${it.clearName} ${if(it.modification > 0 ) "(+${it.modification})" else "(${it.modification})"}" }
+        }
     }
 }
 
+enum class SpinnerEnumType {
+    ASSESSMENT,
+    ATTACK_POSE,
+    ATTACK_TARGET,
+    ENVIRONMENT_VISIBILITY;
+}
 class CheckModificator(
     var name: String = "Modificator",
     var isChecked: Boolean = false,
@@ -122,4 +152,53 @@ class CheckModificator(
         if(modification > 0 ) "(+$modification)" else "($modification)"
     else ""
     }"
+}
+
+enum class Assessment(val clearName: String, val modification: Int) {
+    NO("No", 0),
+    ONE_ROUND("1 round", 1),
+    TWO_ROUNDS("2 rounds", 2),
+    THREE_ROUNDS("3 rounds", 3);
+}
+
+enum class AttackPose(val clearName: String, val modification: Int) {
+    STAND("Stand", 0),
+    KNEELING_ETC("Kneeling | Sitting | Crouching", -2),
+    LYING_DOWN ("Lying down (reach C weapon only)", -4);
+}
+
+enum class AttackTarget(val clearName: String, val modification: Int) {
+    BODY("Body", 0),
+    RANDOM("Random", 0),
+    HAND("Hand", -2),
+    SHIELD_HAND("Shield hand", -4),
+    LEG("Leg", -2),
+    FOOT("Foot", -4),
+    WRIST("Wrist", -4),
+    SHIELD_WRIST("Shield wrist", -8),
+    SKULL("Skull", -7),
+    FACE("Face", -8),
+    NECK("Neck", -5),
+    GROIN("Groin", -3),
+    EYE("Eye", -9),
+    VITAL_ORGANS("Vital organs", -3),
+    WING("Wing", -2),
+    TAIL("Tail", -3),
+    WEAPON_C("Weapon (reach C)", -5),
+    WEAPON_1("Weapon (reach 1)", -4),
+    WEAPON_2("Weapon (reach 2)", -3);
+}
+
+enum class EnvironmentVisibility(val clearName: String, val modification: Int) {
+    NORMAL("Normal", 0),
+    LOW_1("Low", -1),
+    LOW_2("Low", -2),
+    LOW_3("Low", -3),
+    BAD_1("Bad", -4),
+    BAD_2("Bad", -5),
+    BAD_3("Bad", -6),
+    DARK_1("Dark", -7),
+    DARK_2("Dark", -8),
+    DARK_3("Dark", -9),
+    FULL_DARK("Full dark", -10);
 }

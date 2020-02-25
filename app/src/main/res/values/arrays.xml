@@ -18,8 +18,8 @@
         <item>Wing (-2)</item>
         <item>Tail (-3)</item>
         <item>Weapon (reach C)(-5)</item>
-        <item>Weapon (reach C)(-4)</item>
-        <item>Weapon (reach C)(-3)</item>
+        <item>Weapon (reach 1)(-4)</item>
+        <item>Weapon (reach 2)(-3)</item>
     </string-array>
     <string-array name="attack_assessment">
         <item>No (0)</item>

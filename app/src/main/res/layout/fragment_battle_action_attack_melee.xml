@@ -8,6 +8,7 @@
         <import type="android.view.View"/>
         <import type="android.text.TextUtils"/>
         <import type="android.widget.RadioGroup.OnCheckedChangeListener"/>
+        <import type="com.example.testapp.ui.battle.actions.attack_melee.SpinnerEnumType"/>
 
         <variable
             name="meleeAttackData"
@@ -154,7 +155,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:entries="@array/attack_targets" />
+                android:onItemSelected='@{(paren, view, pos, id) -> meleeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_TARGET)}'
+                android:entries="@{meleeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_TARGET)}" />
 
         </LinearLayout>
 
@@ -225,11 +227,12 @@
                         android:text="@string/assessment" />
 
                     <Spinner
-                        android:id="@+id/battle_action_attack_melee_other_mod_0"
+                        android:id="@+id/battle_action_attack_melee_other_assessment"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:entries="@array/attack_assessment" />
+                        android:onItemSelected='@{(paren, view, pos, id) -> meleeAttackData.onItemSelected(pos, SpinnerEnumType.ASSESSMENT)}'
+                        android:entries="@{meleeAttackData.getStringListWithEnum(SpinnerEnumType.ASSESSMENT)}" />
 
                 </LinearLayout>
 
@@ -246,11 +249,12 @@
                         android:text="@string/attacker_pose" />
 
                     <Spinner
-                        android:id="@+id/battle_action_attack_melee_other_mod_01"
+                        android:id="@+id/battle_action_attack_melee_other_pose"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:entries="@array/attack_poses" />
+                        android:onItemSelected='@{(paren, view, pos, id) -> meleeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_POSE)}'
+                        android:entries="@{meleeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_POSE)}" />
 
                 </LinearLayout>
 
@@ -290,7 +294,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:checked="true"
                         android:text="@string/common_attack" />
 
                 </RadioGroup>
@@ -382,7 +385,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginEnd="8dp"
-                        android:text="@string/modificator" />
+                        android:text="@string/enemy_defence_penalty" />
 
                     <include
                         layout="@layout/stat_counter_int"
@@ -471,7 +474,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginEnd="8dp"
-                        android:text="@string/modificator" />
+                        android:text="@string/shield_db" />
 
                     <include
                         layout="@layout/stat_counter_int"
