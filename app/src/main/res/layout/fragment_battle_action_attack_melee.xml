@@ -8,7 +8,7 @@
         <import type="android.view.View"/>
         <import type="android.text.TextUtils"/>
         <import type="android.widget.RadioGroup.OnCheckedChangeListener"/>
-        <import type="com.example.testapp.ui.battle.actions.attack_melee.SpinnerEnumType"/>
+        <import type="com.example.testapp.ui.battle.actions.SpinnerEnumType"/>
 
         <variable
             name="meleeAttackData"
@@ -97,7 +97,7 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="8dp"
                 android:inputType="numberDecimal"
-                android:text="@={`` + meleeAttackData.handSt}" />
+                android:text="@={`` + meleeAttackData.weaponSt}" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -117,86 +117,6 @@
 
         </LinearLayout>
 
-
-        <LinearLayout
-            android:id="@+id/skill_value_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/weapon_layout">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="8dp"
-                android:text="@string/skill_value" />
-
-            <include
-                layout="@layout/stat_counter_int"
-                app:onClickMinus="@{onClickMinus}"
-                app:onClickPlus="@{onClickPlus}"
-                app:stat="@={meleeAttackData.skillValue}" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/target" />
-
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:onItemSelected='@{(paren, view, pos, id) -> meleeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_TARGET)}'
-                android:entries="@{meleeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_TARGET)}" />
-
-        </LinearLayout>
-
-
-        <CheckBox
-            android:id="@+id/battle_action_attack_mele_freehand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
-            android:checked="@{meleeAttackData.otherModifications.get(0).isChecked ? true : false}"
-            android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(0).name)}"
-            android:text="@{meleeAttackData.otherModifications.get(0).getFullName()}"
-            app:layout_constraintStart_toEndOf="@+id/skill_modif_layout"
-            app:layout_constraintTop_toBottomOf="@+id/skill_value_layout" />
-
-        <LinearLayout
-            android:id="@+id/skill_modif_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/skill_value_layout">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="8dp"
-                android:text="@string/modificator" />
-
-            <include
-                layout="@layout/stat_counter_int"
-                app:onClickMinus="@{onClickMinus}"
-                app:onClickPlus="@{onClickPlus}"
-                app:stat="@={meleeAttackData.modification}" />
-
-        </LinearLayout>
-
         <ScrollView
             android:id="@+id/battle_action_attack_melee_other"
             android:layout_width="match_parent"
@@ -207,7 +127,7 @@
             app:layout_constraintBottom_toTopOf="@+id/battle_action_attack_roll"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/skill_modif_layout">
+            app:layout_constraintTop_toBottomOf="@+id/weapon_layout">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -215,21 +135,111 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/skill_value_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
                     android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:paddingEnd="8dp"
+                        android:text="@string/skill_value" />
+
+                    <include
+                        layout="@layout/stat_counter_int"
+                        app:onClickMinus="@{onClickMinus}"
+                        app:onClickPlus="@{onClickPlus}"
+                        app:stat="@={meleeAttackData.skillValue}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/target" />
+
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:onItemSelected='@{(paren, view, pos, id) -> meleeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_TARGET)}'
+                        android:entries="@{meleeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_TARGET)}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/battle_action_attack_mele_freehand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:checked="@{meleeAttackData.otherModifications.get(0).isChecked ? true : false}"
+                        android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(0).name)}"
+                        android:text="@{meleeAttackData.otherModifications.get(0).getFullName()}" />
+
+                    <CheckBox
+                        android:id="@+id/battle_action_attack_melee_other_mod_23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_margin="4dp"
+                        android:visibility="@{meleeAttackData.stPenalty ? View.VISIBLE : View.GONE}"
+                        android:checked="@{meleeAttackData.otherModifications.get(23).isChecked ? true : false}"
+                        android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(23).name)}"
+                        android:text="@{meleeAttackData.otherModifications.get(23).getFullName()}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/skill_modif_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/modificator" />
+
+                    <include
+                        layout="@layout/stat_counter_int"
+                        app:onClickMinus="@{onClickMinus}"
+                        app:onClickPlus="@{onClickPlus}"
+                        app:stat="@={meleeAttackData.modification}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="4dp"
                         android:text="@string/assessment" />
 
                     <Spinner
                         android:id="@+id/battle_action_attack_melee_other_assessment"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_weight="1"
                         android:onItemSelected='@{(paren, view, pos, id) -> meleeAttackData.onItemSelected(pos, SpinnerEnumType.ASSESSMENT)}'
                         android:entries="@{meleeAttackData.getStringListWithEnum(SpinnerEnumType.ASSESSMENT)}" />
@@ -239,19 +249,21 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
                     android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_margin="4dp"
+                        android:padding="4dp"
                         android:text="@string/attacker_pose" />
 
                     <Spinner
                         android:id="@+id/battle_action_attack_melee_other_pose"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_weight="1"
                         android:onItemSelected='@{(paren, view, pos, id) -> meleeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_POSE)}'
                         android:entries="@{meleeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_POSE)}" />
@@ -262,9 +274,7 @@
                     android:id="@+id/settings_fragment_color_scheme_radio_group"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:orientation="vertical">
 <!--todo why this work??? Unknown attribute onCheckedChanged... -->
                     <RadioButton
                         android:id="@+id/battle_action_attack_melee_other_mod_1"
@@ -408,7 +418,10 @@
                     android:id="@+id/battle_action_attack_melee_other_mod_13"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="4dp"
                     android:visibility="@{meleeAttackData.otherModifications.get(12).isChecked ? View.VISIBLE : View.GONE}"
                     android:checked="@{meleeAttackData.otherModifications.get(13).isChecked ? true : false}"
                     android:onClick="@{() -> meleeAttackData.onItemChecked(meleeAttackData.otherModifications.get(13).name)}"
