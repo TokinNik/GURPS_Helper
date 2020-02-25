@@ -81,5 +81,12 @@
     <string name="common_attack">Common Attack</string>
     <string name="enemy_defence_penalty">Enemy defence penalty</string>
     <string name="shield_db">Shield DB</string>
+    <string name="block">Block</string>
+    <string name="parry">Parry</string>
+    <string name="dodge">Dodge</string>
+    <string name="shield">Shield</string>
+    <string name="position">Position</string>
+    <string name="defending_pose">Defending pose</string>
+    <string name="_attack_at_this_round">attack at this round</string>
 
 </resources>

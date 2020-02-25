@@ -7,15 +7,14 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
-import androidx.navigation.NavOptions
 import com.example.testapp.R
 import com.example.testapp.databinding.FragmentBattleActionAttackMeleeBinding
 import com.example.testapp.ui.battle.actions.attack_range.BattleActionAttackRangeFragmentViewModel
 import com.example.testapp.ui.character.edit.StatCounterIntMinusButtonListener
 import com.example.testapp.ui.character.edit.StatCounterIntPlusButtonListener
 import com.example.testapp.util.RollUtil
-import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.fragment_battle_action_attack_melee.*
+import kotlinx.android.synthetic.main.fragment_battle_action_defence.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
@@ -27,7 +26,7 @@ class BattleActionAttackMeleeFragment : DialogFragment() {
 
     private lateinit var binding: FragmentBattleActionAttackMeleeBinding
 
-    private var actionAttackMeleeDataV2 = ActionAttackMeleeDataV2{ binding.invalidateAll() }
+    private var actionAttackMeleeData = ActionAttackMeleeData{ binding.invalidateAll() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +34,7 @@ class BattleActionAttackMeleeFragment : DialogFragment() {
     ): View? {
         dialog?.setTitle(R.string.attack)
         binding = FragmentBattleActionAttackMeleeBinding.inflate(inflater, container, false)
-        binding.meleeAttackData = actionAttackMeleeDataV2
+        binding.meleeAttackData = actionAttackMeleeData
         binding.onClickPlus = StatCounterIntPlusButtonListener(100)
         binding.onClickMinus = StatCounterIntMinusButtonListener(-100)
         binding.onClickPlusZero = StatCounterIntPlusButtonListener(0)
@@ -72,7 +71,7 @@ class BattleActionAttackMeleeFragment : DialogFragment() {
     private fun initOnClick() {
         battle_action_attack_roll.setOnClickListener {
             val rollValue = rollUtil.roll3D6()
-            Toast.makeText(activity, "Roll on(${actionAttackMeleeDataV2.result}) Result = $rollValue (${rollValue <= actionAttackMeleeDataV2.result || rollValue == 3})", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "Roll on(${actionAttackMeleeData.result}) Result = $rollValue (${rollValue <= actionAttackMeleeData.result || rollValue == 3})", Toast.LENGTH_SHORT).show()
         }
     }
 

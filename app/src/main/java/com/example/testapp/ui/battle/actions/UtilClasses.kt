@@ -26,6 +26,9 @@ enum class SpinnerEnumType {
     ASSESSMENT,
     ATTACK_POSE,
     ATTACK_TARGET,
+    DEFENCE_POSE,
+    DEFENCE_SHIELD,
+    DEFENCE_POSITION_HIGHT_DIFFRENCE,
     ENVIRONMENT_VISIBILITY;
 }
 
@@ -40,6 +43,30 @@ enum class AttackPose(val clearName: String, val modification: Int) {
     STAND("Stand", 0),
     KNEELING_ETC("Kneeling | Sitting | Crouching", -2),
     LYING_DOWN ("Lying down (reach C weapon only)", -4);
+}
+
+enum class DefencePose(val clearName: String, val modification: Int) {
+    STAND("Stand", 0),
+    KNEELING_ETC("Kneeling | Sitting | Crouching", -2),
+    LYING_DOWN ("Lying down", -3);
+}
+
+enum class DefenceShield(val clearName: String, val modification: Int) {
+    NO("No", 0),
+    SMALL_DB1("Small | Improvised | Cloak (DB1)", 1),
+    MEDIUM_DB2("Medium | Heavy Cloak (DB2)", 2),
+    LARGE_DB3("Big | Force Shield (DB3)", 3),
+    MAGIC_DB4("Magic shield (DB4)", 4);
+}
+
+enum class DefencePositionHeightDifferent(val clearName: String, val modification: Int) {
+    SAME("Defending and attacking at the same height", 0),
+    ABOVE_1("Defending above the attacker (+0.9 m)", 1),
+    ABOVE_2("Defending above the attacker (+1.2 m)", 2),
+    ABOVE_3("Defending above the attacker (+1.5 m)", 3),
+    BELOW_1("Defending below the attacker (-1.5 m)", -1),
+    BELOW_2("Defending below the attacker (-1.2 m)", -2),
+    BELOW_3("Defending below the attacker (-0.9 m)", -3);
 }
 
 enum class AttackTarget(val clearName: String, val modification: Int) {
