@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.TranslateAnimation
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -85,7 +88,7 @@ class BattleFragment : Fragment() {
         )
 
         val radius = 32f
-        battle_actions_layout.outlineProvider = OutlineProviders(radius, OutlineProviders.OutlineType.ROUND_RECT_TOP)
+        battle_actions_layout.outlineProvider = OutlineProviders(radius, OutlineProviders.OutlineType.ROUND_RECT_LEFT)
         battle_actions_layout.clipToOutline = true
 
         observeCharacters()
@@ -124,10 +127,62 @@ class BattleFragment : Fragment() {
             if (isActionsCollapsed) {
                 isActionsCollapsed = false
                 battle_collapse_actions.text = getString(R.string.gt)//todo in image
+                ConstraintSet().apply {
+                    clone(battle_fragment_constraint)
+                    clear(R.id.battle_collapse_actions, ConstraintSet.END)
+                    connect(R.id.battle_collapse_actions, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START)
+                    applyTo(battle_fragment_constraint)
+                }
                 battle_actions_layout.visibility = View.VISIBLE
+                battle_actions_layout.startAnimation(//todo move this in res/anim
+                    TranslateAnimation(
+                        Animation.RELATIVE_TO_SELF, 1f,
+                        Animation.RELATIVE_TO_SELF, 0f,
+                        Animation.RELATIVE_TO_SELF, 0f,
+                        Animation.RELATIVE_TO_SELF, 0f
+                    ).apply {
+                        duration = 500
+                    }
+                )
+                battle_collapse_actions.startAnimation(//todo move this in res/anim
+                    TranslateAnimation(
+                        Animation.RELATIVE_TO_PARENT, 0.9f,
+                        Animation.RELATIVE_TO_PARENT, 0f,
+                        Animation.RELATIVE_TO_PARENT, 0f,
+                        Animation.RELATIVE_TO_PARENT, 0f
+                    ).apply {
+                        duration = 500
+                    }
+                )
             } else {
                 isActionsCollapsed = true
                 battle_collapse_actions.text = getString(R.string.lt)
+                ConstraintSet().apply {
+                    clone(battle_fragment_constraint)
+                    clear(R.id.battle_collapse_actions, ConstraintSet.START)
+                    connect(R.id.battle_collapse_actions, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END)
+                    applyTo(battle_fragment_constraint)
+                }
+                battle_actions_layout.startAnimation(//todo move this in res/anim
+                    TranslateAnimation(
+                        Animation.RELATIVE_TO_SELF, 0f,
+                        Animation.RELATIVE_TO_SELF, 1f,
+                        Animation.RELATIVE_TO_SELF, 0f,
+                        Animation.RELATIVE_TO_SELF, 0f
+                    ).apply {
+                        duration = 500
+                    }
+                )
+                battle_collapse_actions.startAnimation(//todo move this in res/anim
+                    TranslateAnimation(
+                        Animation.RELATIVE_TO_PARENT, -0.9f,
+                        Animation.RELATIVE_TO_PARENT, 0f,
+                        Animation.RELATIVE_TO_PARENT, 0f,
+                        Animation.RELATIVE_TO_PARENT, 0f
+                    ).apply {
+                        duration = 500
+                    }
+                )
                 battle_actions_layout.visibility = View.GONE
             }
         }

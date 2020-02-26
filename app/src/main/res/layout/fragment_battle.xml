@@ -11,6 +11,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/battle_fragment_constraint"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.battle.BattleFragment">
@@ -57,11 +58,23 @@
 
         </LinearLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/battle_collapse_actions"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/lt"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
         <HorizontalScrollView
             android:id="@+id/battle_actions_layout"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:layout_marginStart="45dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -111,16 +124,6 @@
                     android:text="@string/move" />
             </LinearLayout>
         </HorizontalScrollView>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/battle_collapse_actions"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="&lt;"
-            app:layout_constraintBottom_toTopOf="@+id/battle_actions_layout"
-            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
