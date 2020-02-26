@@ -63,14 +63,14 @@ class CharacterEditFragment : Fragment() {
                     //navController?.navigateUp()
                 }
             }
-        menu.findItem(R.id.menu_item_character_edit_cancel)
+        menu.findItem(R.id.menu_item_character_edit_cancel)//todo delete
             .actionView.findViewById<MaterialButton>(R.id.button_cancel)
             .setOnClickListener {
                 val bundle = Bundle()
                 bundle.putInt("id", character.id)
                 val optionsBuilder = NavOptions.Builder()
                 val options = optionsBuilder.setPopUpTo(R.id.startFragment, false).build()
-                navController?.navigate(R.id.characterFragment, bundle, options)
+                navController?.navigate(R.id.action_characterEditFragment_to_characterFragment, bundle, options)
             }
         super.onCreateOptionsMenu(menu, inflater)
     }

@@ -12,11 +12,11 @@
         <action
             android:id="@+id/action_startFragment_to_characterFragment"
             app:destination="@id/characterFragment"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:launchSingleTop="true" />
+            app:enterAnim="@anim/slide_in_right_enter"
+            app:exitAnim="@anim/slide_in_right_exit"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/slide_in_left_enter"
+            app:popExitAnim="@anim/slide_in_left_exit" />
         <action
             android:id="@+id/action_startFragment_to_characterEditFragment"
             app:destination="@id/characterEditFragment"
@@ -40,7 +40,11 @@
         <action
             android:id="@+id/action_characterFragment_to_characterEditFragment"
             app:destination="@id/characterEditFragment"
-            app:launchSingleTop="true" />
+            app:enterAnim="@anim/slide_in_right_enter"
+            app:exitAnim="@anim/slide_in_right_exit"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/slide_in_left_enter"
+            app:popExitAnim="@anim/slide_in_left_exit" />
         <action
             android:id="@+id/action_characterFragment_to_skillObserveSingleFragment"
             app:destination="@id/skillObserveSingleFragment"
@@ -57,6 +61,13 @@
         <action
             android:id="@+id/action_characterEditFragment_to_characterEditStatsFragment"
             app:destination="@id/characterEditStatsFragment" />
+        <action
+            android:id="@+id/action_characterEditFragment_to_characterFragment"
+            app:destination="@id/characterFragment"
+            app:enterAnim="@anim/slide_in_right_enter"
+            app:exitAnim="@anim/slide_in_right_exit"
+            app:popEnterAnim="@anim/slide_in_left_enter"
+            app:popExitAnim="@anim/slide_in_left_exit" />
     </fragment>
     <fragment
         android:id="@+id/editSkillFragment"
@@ -72,6 +83,9 @@
             android:id="@+id/action_skillObserveAllFragment_to_editSkillFragment"
             app:destination="@id/editSkillFragment"
             app:launchSingleTop="true" />
+        <action
+            android:id="@+id/action_skillObserveAllFragment_to_skillObserveSingleFragment"
+            app:destination="@id/skillObserveSingleFragment" />
     </fragment>
     <fragment
         android:id="@+id/choiceSkillFragment"
@@ -134,6 +148,9 @@
         <action
             android:id="@+id/action_characterEditSkillsFragment_to_choiceSkillFragment"
             app:destination="@id/choiceSkillFragment" />
+        <action
+            android:id="@+id/action_characterEditSkillsFragment_to_skillObserveSingleFragment"
+            app:destination="@id/skillObserveSingleFragment" />
     </fragment>
     <fragment
         android:id="@+id/characterEditStatsFragment"
