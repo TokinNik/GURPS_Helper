@@ -8,6 +8,7 @@
         <import type="android.text.TextUtils"/>
         <import type="android.widget.RadioGroup.OnCheckedChangeListener"/>
         <import type="com.example.testapp.ui.battle.actions.SpinnerEnumType"/>
+        <import type="com.example.testapp.ui.battle.actions.defence.ActionDefenceData.DefenceType"/>
 
         <variable
             name="defenceData"
@@ -70,6 +71,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
+                    android:checked="true"
+                    android:onCheckedChanged="@{(view, check) -> defenceData.changeDefenceType(DefenceType.DODGE, check)}"
                     android:text="@string/dodge" />
 
                 <RadioButton
@@ -77,6 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
+                    android:onCheckedChanged="@{(view, check) -> defenceData.changeDefenceType(DefenceType.PARRY, check)}"
                     android:text="@string/parry" />
 
                 <RadioButton
@@ -84,6 +88,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
+                    android:onCheckedChanged="@{(view, check) -> defenceData.changeDefenceType(DefenceType.BLOCK, check)}"
                     android:text="@string/block" />
 
             </RadioGroup>
@@ -132,7 +137,8 @@
                     android:id="@+id/battle_action_defence_other_mod_0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin="4dp"
+                    android:visibility="@{defenceData.defenceType == DefenceType.BLOCK ? View.GONE : View.VISIBLE}"
                     android:checked="@{defenceData.otherModifications.get(0).isChecked ? true : false}"
                     android:onClick="@{() -> defenceData.onItemChecked(defenceData.otherModifications.get(0).name)}"
                     android:text="@{defenceData.otherModifications.get(0).getFullName()}" />
@@ -141,7 +147,7 @@
                     android:id="@+id/battle_action_defence_other_mod_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin="4dp"
                     android:checked="@{defenceData.otherModifications.get(1).isChecked ? true : false}"
                     android:onClick="@{() -> defenceData.onItemChecked(defenceData.otherModifications.get(1).name)}"
                     android:text="@{defenceData.otherModifications.get(1).getFullName()}" />
@@ -150,7 +156,7 @@
                     android:id="@+id/battle_action_defence_other_mod_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin="4dp"
                     android:checked="@{defenceData.otherModifications.get(2).isChecked ? true : false}"
                     android:onClick="@{() -> defenceData.onItemChecked(defenceData.otherModifications.get(2).name)}"
                     android:text="@{defenceData.otherModifications.get(2).getFullName()}" />
@@ -159,7 +165,8 @@
                     android:id="@+id/battle_action_defence_other_mod_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin="4dp"
+                    android:visibility="@{defenceData.defenceType == DefenceType.PARRY ? View.VISIBLE : View.GONE}"
                     android:checked="@{defenceData.otherModifications.get(3).isChecked ? true : false}"
                     android:onClick="@{() -> defenceData.onItemChecked(defenceData.otherModifications.get(3).name)}"
                     android:text="@{defenceData.otherModifications.get(3).getFullName()}" />
@@ -169,18 +176,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
+                    android:visibility="@{defenceData.defenceType == DefenceType.PARRY ? View.VISIBLE : View.GONE}"
                     android:checked="@{defenceData.otherModifications.get(4).isChecked ? true : false}"
                     android:onClick="@{() -> defenceData.onItemChecked(defenceData.otherModifications.get(4).name)}"
                     android:text="@{defenceData.otherModifications.get(4).getFullName()}" />
-
-                <CheckBox
-                    android:id="@+id/battle_action_defence_other_mod_5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:checked="@{defenceData.otherModifications.get(5).isChecked ? true : false}"
-                    android:onClick="@{() -> defenceData.onItemChecked(defenceData.otherModifications.get(5).name)}"
-                    android:text="@{defenceData.otherModifications.get(5).getFullName()}" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -254,6 +253,34 @@
 
                 </LinearLayout>
 
+
+                <CheckBox
+                    android:id="@+id/battle_action_defence_other_mod_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="4dp"
+                    android:visibility="@{defenceData.parryNAttackAtRound == 1 ? View.GONE : View.VISIBLE}"
+                    android:checked="@{defenceData.otherModifications.get(5).isChecked ? true : false}"
+                    android:onClick="@{() -> defenceData.onItemChecked(defenceData.otherModifications.get(5).name)}"
+                    android:text="@{defenceData.otherModifications.get(5).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_defence_other_mod_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="4dp"
+                    android:visibility="@{defenceData.parryNAttackAtRound == 1 ? View.GONE : View.VISIBLE}"
+                    android:checked="@{defenceData.otherModifications.get(6).isChecked ? true : false}"
+                    android:onClick="@{() -> defenceData.onItemChecked(defenceData.otherModifications.get(6).name)}"
+                    android:text="@{defenceData.otherModifications.get(6).getFullName()}" />
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -301,15 +328,6 @@
                 </LinearLayout>
 
                 <CheckBox
-                    android:id="@+id/battle_action_defence_other_mod_6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:checked="@{defenceData.otherModifications.get(6).isChecked ? true : false}"
-                    android:onClick="@{() -> defenceData.onItemChecked(defenceData.otherModifications.get(6).name)}"
-                    android:text="@{defenceData.otherModifications.get(6).getFullName()}" />
-
-                <CheckBox
                     android:id="@+id/battle_action_defence_other_mod_7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -323,6 +341,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
+                    android:visibility="@{defenceData.defenceType == DefenceType.DODGE ? View.VISIBLE : View.GONE}"
                     android:checked="@{defenceData.otherModifications.get(8).isChecked ? true : false}"
                     android:onClick="@{() -> defenceData.onItemChecked(defenceData.otherModifications.get(8).name)}"
                     android:text="@{defenceData.otherModifications.get(8).getFullName()}" />
@@ -362,7 +381,36 @@
                     android:checked="@{defenceData.otherModifications.get(12).isChecked ? true : false}"
                     android:onClick="@{() -> defenceData.onItemChecked(defenceData.otherModifications.get(12).name)}"
                     android:text="@{defenceData.otherModifications.get(12).getFullName()}" />
-                
+
+                <CheckBox
+                    android:id="@+id/battle_action_defence_other_mod_13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:visibility="@{defenceData.defenceType == DefenceType.PARRY ? View.VISIBLE : View.GONE}"
+                    android:checked="@{defenceData.otherModifications.get(13).isChecked ? true : false}"
+                    android:onClick="@{() -> defenceData.onItemChecked(defenceData.otherModifications.get(13).name)}"
+                    android:text="@{defenceData.otherModifications.get(13).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_defence_other_mod_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:visibility="@{defenceData.defenceType == DefenceType.PARRY ? View.VISIBLE : View.GONE}"
+                    android:checked="@{defenceData.otherModifications.get(14).isChecked ? true : false}"
+                    android:onClick="@{() -> defenceData.onItemChecked(defenceData.otherModifications.get(14).name)}"
+                    android:text="@{defenceData.otherModifications.get(14).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_defence_other_mod_15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{defenceData.otherModifications.get(15).isChecked ? true : false}"
+                    android:onClick="@{() -> defenceData.onItemChecked(defenceData.otherModifications.get(15).name)}"
+                    android:text="@{defenceData.otherModifications.get(15).getFullName()}" />
+
             </LinearLayout>
         </ScrollView>
 

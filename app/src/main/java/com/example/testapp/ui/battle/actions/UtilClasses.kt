@@ -5,6 +5,7 @@ class CheckModificator(
     var isChecked: Boolean = false,
     var modification: Int = 0,
     var chainedMod: CheckModificator? = null,
+    var onCheckChanged: (check: Boolean) -> Unit = {},
     var secondModChanged: (value: Int) -> Unit = {}
 ) {
     var secondMod: Int = 0
@@ -15,6 +16,7 @@ class CheckModificator(
             field = value
             secondModChanged.invoke(value)
         }
+
     fun getFullName() = "$name ${
     if(modification != 0)
         if(modification > 0 ) "(+$modification)" else "($modification)"
