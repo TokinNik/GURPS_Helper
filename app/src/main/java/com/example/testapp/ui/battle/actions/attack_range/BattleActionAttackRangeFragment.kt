@@ -8,14 +8,13 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.example.testapp.R
-import kotlinx.android.synthetic.main.fragment_battle_action_attack_melee.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
 
 class BattleActionAttackRangeFragment : DialogFragment() {
 
-    private val viewModelRange: BattleActionAttackRangeFragmentViewModel by inject()
+    private val viewModel: BattleActionAttackRangeFragmentViewModel by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +31,7 @@ class BattleActionAttackRangeFragment : DialogFragment() {
         scope.installViewModelBinding<BattleActionAttackRangeFragmentViewModel>(this)
         scope.inject(this)
 
-        viewModelRange.clearEvents()
+        viewModel.clearEvents()
 
         observeErrors()
 
@@ -40,7 +39,7 @@ class BattleActionAttackRangeFragment : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModelRange.forceClear()
+        viewModel.forceClear()
     }
 
     private fun initOnClick() {
@@ -48,7 +47,7 @@ class BattleActionAttackRangeFragment : DialogFragment() {
     }
 
     private fun observeErrors() {
-        viewModelRange.error.observe(this, Observer {
+        viewModel.error.observe(this, Observer {
             Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
             println("ERROR!!! $it")
         })

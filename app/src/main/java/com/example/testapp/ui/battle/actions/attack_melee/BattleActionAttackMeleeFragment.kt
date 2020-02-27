@@ -9,19 +9,17 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.example.testapp.R
 import com.example.testapp.databinding.FragmentBattleActionAttackMeleeBinding
-import com.example.testapp.ui.battle.actions.attack_range.BattleActionAttackRangeFragmentViewModel
 import com.example.testapp.ui.character.edit.StatCounterIntMinusButtonListener
 import com.example.testapp.ui.character.edit.StatCounterIntPlusButtonListener
 import com.example.testapp.util.RollUtil
 import kotlinx.android.synthetic.main.fragment_battle_action_attack_melee.*
-import kotlinx.android.synthetic.main.fragment_battle_action_defence.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
 
 class BattleActionAttackMeleeFragment : DialogFragment() {
 
-    private val viewModelRange: BattleActionAttackRangeFragmentViewModel by inject()
+    private val viewModel: BattleActionAttackMeleeFragmentViewModel by inject()
     private val rollUtil: RollUtil by inject()
 
     private lateinit var binding: FragmentBattleActionAttackMeleeBinding
@@ -46,10 +44,10 @@ class BattleActionAttackMeleeFragment : DialogFragment() {
         super.onActivityCreated(savedInstanceState)
 
         val scope = Toothpick.openScope("APP")
-        scope.installViewModelBinding<BattleActionAttackRangeFragmentViewModel>(this)
+        scope.installViewModelBinding<BattleActionAttackMeleeFragmentViewModel>(this)
         scope.inject(this)
 
-        viewModelRange.clearEvents()
+        viewModel.clearEvents()
 
         observeErrors()
 
@@ -65,7 +63,7 @@ class BattleActionAttackMeleeFragment : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModelRange.forceClear()
+        viewModel.forceClear()
     }
 
     private fun initOnClick() {
@@ -76,7 +74,7 @@ class BattleActionAttackMeleeFragment : DialogFragment() {
     }
 
     private fun observeErrors() {
-        viewModelRange.error.observe(this, Observer {
+        viewModel.error.observe(this, Observer {
             Toast.makeText(activity, "error", Toast.LENGTH_SHORT).show()
             println("ERROR!!! $it")
         })
