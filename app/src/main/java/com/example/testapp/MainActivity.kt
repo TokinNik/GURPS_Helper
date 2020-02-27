@@ -11,8 +11,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.testapp.util.Base64RequestHandler
 import com.example.testapp.util.DataManager
 import com.google.android.material.navigation.NavigationView
+import com.squareup.picasso.Picasso
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 
@@ -56,6 +58,12 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        Picasso.setSingletonInstance (
+            Picasso.Builder(this)
+                .addRequestHandler(Base64RequestHandler())
+                .build()
+        )
     }
 
     override fun onResume() {

@@ -88,10 +88,6 @@ class StartFragment : Fragment() {
         recyclerViewInit()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
     override fun onResume() {
         super.onResume()
         showProgressBar()
@@ -104,31 +100,14 @@ class StartFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        //viewModel.clearEvents()
-    }
-
     override fun onStop() {
         super.onStop()
         disposeBag.clear()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.forceClear()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

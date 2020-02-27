@@ -3,10 +3,13 @@ package com.example.testapp.ui.character
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.view.View
+import android.widget.ImageView
 import com.example.testapp.R
 import com.example.testapp.custom_view.outline_corner.OutlineProviders
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
+import com.example.testapp.util.Base64RequestHandler
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.card_character_all.*
@@ -28,9 +31,13 @@ class CharacterItem(
             root.outlineProvider = OutlineProviders(8f, OutlineProviders.OutlineType.ROUND_RECT)
             root.clipToOutline = true
             root.item_character_id.text = character.data.id.toString()
-            val bytes = Base64.decode(character.data.portrait, Base64.DEFAULT)
-            val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-            root.item_character_image.setImageBitmap(image)
+            Picasso
+                .get()
+                .load("${Base64RequestHandler.BASE_64_SCHEME}${character.data.portrait}")
+                .placeholder(R.drawable.gm_logo_original)
+                .error(R.drawable.gm_logo_original)
+                .into(root.item_character_image)
+
             root.item_character_name.text = character.data.name
             root.item_character_button_observe.setOnClickListener {
                 onClick.invoke(character)

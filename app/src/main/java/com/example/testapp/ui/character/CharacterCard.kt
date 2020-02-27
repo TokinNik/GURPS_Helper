@@ -12,10 +12,14 @@ import com.example.testapp.ui.SelectableData
 import com.example.testapp.ui.character.observe.ViewPagerCharacterAdapter
 import com.example.testapp.ui.settings.ColorScheme
 import com.example.testapp.ui.skill.SkillItem
+import com.example.testapp.util.Base64RequestHandler
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.button.MaterialButton
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import kotlinx.android.synthetic.main.card_character_all.view.*
+import kotlinx.android.synthetic.main.item_character.view.*
 
 class CharacterCard(
     val cardRoot: View,
@@ -74,8 +78,11 @@ class CharacterCard(
     }
 
     fun setImage(portrait: String) {
-        val bytes = Base64.decode(portrait, Base64.DEFAULT)
-        val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-        cardRoot.findViewById<ImageView>(R.id.character_card_image).setImageBitmap(image)
+        Picasso
+            .get()
+            .load("${Base64RequestHandler.BASE_64_SCHEME}${portrait}")
+            .placeholder(R.drawable.gm_logo_original)
+            .error(R.drawable.gm_logo_original)
+            .into(cardRoot.character_card_image)
     }
 }

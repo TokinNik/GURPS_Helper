@@ -5,9 +5,11 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
 import android.view.*
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import com.example.testapp.R
 import com.example.testapp.databinding.PageCharacterEditStatsBinding
 import com.example.testapp.db.entity.Character
 import com.example.testapp.ui.character.edit.StatCounterFloatMinusButtonListener
@@ -15,9 +17,12 @@ import com.example.testapp.ui.character.edit.StatCounterFloatPlusButtonListener
 import com.example.testapp.ui.character.edit.StatCounterIntMinusButtonListener
 import com.example.testapp.ui.character.edit.StatCounterIntPlusButtonListener
 import com.example.testapp.ui.character.edit.pages.BindingCharacter
+import com.example.testapp.util.Base64RequestHandler
 import com.example.testapp.util.GurpsCalculations
+import com.squareup.picasso.Picasso
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.item_character.view.*
 import kotlinx.android.synthetic.main.page_character_edit_stats.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
@@ -136,8 +141,11 @@ class CharacterEditStatsFragment(val onSave: Observable<Boolean>) : Fragment() {
     }
 
     private fun setDataInFields(ch: Character) {
-        val bytes = Base64.decode(ch.portrait, Base64.DEFAULT)
-        val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-        character_edit_image.setImageBitmap(image)
+        Picasso
+            .get()
+            .load("${Base64RequestHandler.BASE_64_SCHEME}${ch.portrait}")
+            .placeholder(R.drawable.gm_logo_original)
+            .error(R.drawable.gm_logo_original)
+            .into(activity!!.findViewById<ImageView>(R.id.character_edit_image))
     }
 }

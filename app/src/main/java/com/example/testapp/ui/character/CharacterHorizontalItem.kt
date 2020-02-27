@@ -7,6 +7,8 @@ import com.example.testapp.R
 import com.example.testapp.custom_view.outline_corner.OutlineProviders
 import com.example.testapp.ui.SelectableData
 import com.example.testapp.db.entity.Character
+import com.example.testapp.util.Base64RequestHandler
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.card_character_all.*
@@ -27,9 +29,12 @@ class CharacterHorizontalItem(
 
         viewHolder.apply {
             root.item_horizontal_character_name.text = character.data.name
-            val bytes = Base64.decode(character.data.portrait, Base64.DEFAULT)
-            val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-            root.item_horizontal_character_image.setImageBitmap(image)
+            Picasso
+                .get()
+                .load("${Base64RequestHandler.BASE_64_SCHEME}${character.data.portrait}")
+                .placeholder(R.drawable.gm_logo_original)
+                .error(R.drawable.gm_logo_original)
+                .into(root.item_horizontal_character_image)
 
             root.outlineProvider = OutlineProviders(8f, OutlineProviders.OutlineType.ROUND_RECT)
             root.clipToOutline = true
