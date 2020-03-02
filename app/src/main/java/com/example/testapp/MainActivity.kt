@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.startFragment,
                 R.id.skillObserveAllFragment,
+                R.id.advantageObserveAllFragment,
                 R.id.battleFragment,
                 R.id.settingsFragment
             ), drawerLayout

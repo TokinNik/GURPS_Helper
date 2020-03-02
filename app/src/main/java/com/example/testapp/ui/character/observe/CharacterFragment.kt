@@ -1,10 +1,7 @@
 package com.example.testapp.ui.character.observe
 
 
-import android.annotation.SuppressLint
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Base64
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
@@ -13,14 +10,11 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.testapp.R
-import com.example.testapp.custom_view.outline_corner.OutlineProviders
 import com.example.testapp.databinding.FragmentCharacterBinding
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.getThemeColor
-import com.example.testapp.ui.SelectableData
 import com.example.testapp.ui.character.CharacterCard
-import com.example.testapp.ui.character.edit.pages.BindingCharacter
 import com.example.testapp.ui.skill.SkillItem
 import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
 import com.example.testapp.util.GCSXmlBuilder

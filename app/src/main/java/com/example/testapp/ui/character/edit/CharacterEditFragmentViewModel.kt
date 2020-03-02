@@ -3,12 +3,10 @@ package com.example.testapp.ui.character.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.testapp.db.entity.Character
-import com.example.testapp.db.entity.CharacterSkills
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.di.DBModelImpl
 import com.example.testapp.ui.RxViewModel
 import com.example.testapp.util.DataManager
-import com.example.testapp.util.RollUtil
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers

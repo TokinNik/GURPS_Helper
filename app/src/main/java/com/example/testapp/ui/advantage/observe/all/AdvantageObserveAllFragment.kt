@@ -1,4 +1,4 @@
-package com.example.testapp.ui.skill.observe.observeall
+package com.example.testapp.ui.advantage.observe.all
 
 import android.os.Bundle
 import android.view.*
@@ -11,26 +11,26 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
 import com.example.testapp.ui.SelectableData
-import com.example.testapp.db.entity.Skill.Skill
+import com.example.testapp.db.entity.advantage.Advantage
 import com.example.testapp.getThemeColor
-import com.example.testapp.ui.skill.SkillItem
+import com.example.testapp.ui.advantage.AdvantageItem
+import com.example.testapp.ui.advantage.observe.single.AdvantageObserveSingleFragment
 import com.example.testapp.ui.skill.SADQHeaderItem
-import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
-import kotlinx.android.synthetic.main.fragment_skill_all.*
+import kotlinx.android.synthetic.main.fragment_advantage_all.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding
 
-class SkillObserveAllFragment : Fragment() {
+class AdvantageObserveAllFragment : Fragment() {
 
-    private val viewModel: SkillObserveAllFragmentViewModel by inject()
+    private val viewModel: AdvantageObserveAllFragmentViewModel by inject()
 
-    private var currentSkill = Skill()
+    private var currentAdvantage = Advantage()
     private var currentSelect = -1
 
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
@@ -48,7 +48,7 @@ class SkillObserveAllFragment : Fragment() {
         val item = menu.findItem(R.id.menu_item_search)
             item.actionView.findViewById<MaterialButton>(R.id.button_search).setOnClickListener {
                 val query = item.actionView.findViewById<TextInputEditText>(R.id.search_query).text
-                viewModel.searchSkills(query.toString())
+                viewModel.searchAdvantages(query.toString())
             }
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -58,30 +58,30 @@ class SkillObserveAllFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_skill_all, container, false)
+        return inflater.inflate(R.layout.fragment_advantage_all, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         val scope = Toothpick.openScope("APP")
-        scope.installViewModelBinding<SkillObserveAllFragmentViewModel>(this)
+        scope.installViewModelBinding<AdvantageObserveAllFragmentViewModel>(this)
         scope.inject(this)
 
         viewModel.clearEvents()
 
         observeErrors()
-        observeSkillById()
-        observeSkills()
+        observeAdvantageById()
+        observeAdvantages()
         observeDeleteComplete()
-        observeSearchSkillComplete()
-        observeSearchSkillsComplete()
+        observeSearchAdvantageComplete()
+        observeSearchAdvantagesComplete()
 
         initOnClick()
         initRecyclerView()
 
         showProgressBar()
-        viewModel.getAllSkills()
+        viewModel.getAllAdvantages()
     }
 
     override fun onDestroyView() {
@@ -94,8 +94,8 @@ class SkillObserveAllFragment : Fragment() {
 
     }
 
-    private fun showSkillObserveSingleDialog(skill: Skill) {
-        val selectSkillDialog = SkillObserveSingleFragment(skill)
+    private fun showAdvantageObserveSingleDialog(advantage: Advantage) {
+        val selectSkillDialog = AdvantageObserveSingleFragment(advantage)
         selectSkillDialog.setTargetFragment(this, 1)
         selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)
         selectSkillDialog.show(fragmentManager!!, null)
@@ -103,31 +103,31 @@ class SkillObserveAllFragment : Fragment() {
 
     private fun initRecyclerView(){
         groupAdapter.setOnItemClickListener { item, view ->
-            if (item is SkillItem) {
-                showSkillObserveSingleDialog(item.skill.data)
+            if (item is AdvantageItem) {
+                showAdvantageObserveSingleDialog(item.advantage.data)
             }
         }
-        recyclerView_skills.apply {
+        recyclerView_advantage.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = groupAdapter
         }
 
     }
 
-    private fun setItems(skillList: List<Skill>) {
+    private fun setItems(skillList: List<Advantage>) {
         groupAdapter.clear()
         val section = Section()
         section.setHeader(SADQHeaderItem(
-            title = resources.getString(R.string.skills),
+            title = resources.getString(R.string.advantages),
             onClickAdd = {
-                val bundle = Bundle()
-                bundle.putString("mode", "add")
-                navController?.navigate(R.id.action_skillObserveAllFragment_to_editSkillFragment, bundle)
+//                val bundle = Bundle()
+//                bundle.putString("mode", "add")
+//                navController?.navigate(R.id.action_skillObserveAllFragment_to_editSkillFragment, bundle) todo edit fragment
             },
             onClickDelete = {
                 if (currentSelect >= 0) {
-                    viewModel.deleteSkill(currentSkill)
-                    currentSkill = Skill()
+                    viewModel.deleteAdvantage(currentAdvantage)
+                    currentAdvantage = Advantage()
                     currentSelect = -1
                 }
             }
@@ -136,8 +136,8 @@ class SkillObserveAllFragment : Fragment() {
         val colorInactive = activity!!.getThemeColor(R.attr.colorPrimaryVariant)
         for (item in skillList) {
             section.add(
-                SkillItem(
-                    skill = SelectableData(item),
+                AdvantageItem(
+                    advantage = SelectableData(item),
                     colorActive = colorActive,
                     colorInactive = colorInactive
                 )
@@ -146,29 +146,27 @@ class SkillObserveAllFragment : Fragment() {
         groupAdapter.add(section)
     }
 
-    private fun observeSkills()
-    {
-        viewModel.skills.observe(this, Observer {
+    private fun observeAdvantages() {
+        viewModel.getAllAdvantage.observe(this, Observer {
             setItems(it)
             hideProgressBar()
         })
     }
 
-    private fun observeSkillById()
-    {
+    private fun observeAdvantageById() {
         /*viewModel.skillById.observe(this, Observer {
 
         })*/
     }
 
-    private fun observeSearchSkillComplete() {
-        viewModel.searchSkillComplete.observe(this, Observer {
-            showSkillObserveSingleDialog(it)
+    private fun observeSearchAdvantageComplete() {
+        viewModel.searchAdvantageComplete.observe(this, Observer {
+            showAdvantageObserveSingleDialog(it)
         })
     }
 
-    private fun observeSearchSkillsComplete() {
-        viewModel.searchSkillsComplete.observe(this, Observer {
+    private fun observeSearchAdvantagesComplete() {
+        viewModel.searchAdvantagesComplete.observe(this, Observer {
             setItems(it)
             Toast.makeText(activity, "search complete", Toast.LENGTH_SHORT).show()
         })
@@ -188,10 +186,10 @@ class SkillObserveAllFragment : Fragment() {
     }
 
     private fun hideProgressBar() {
-        skill_all_fragment_progress_bar.visibility = View.GONE
+        advantage_all_fragment_progress_bar.visibility = View.GONE
     }
 
     private fun showProgressBar() {
-        skill_all_fragment_progress_bar.visibility = View.VISIBLE
+        advantage_all_fragment_progress_bar.visibility = View.VISIBLE
     }
 }

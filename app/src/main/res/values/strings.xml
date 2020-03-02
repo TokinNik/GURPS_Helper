@@ -88,5 +88,17 @@
     <string name="position">Position</string>
     <string name="defending_pose">Defending pose</string>
     <string name="_attack_at_this_round">attack at this round</string>
+    <string name="all_advantage">All Advantage</string>
+    <string name="advantages">Advantages</string>
+    <string name="type">Type</string>
+    <string name="point_cost">Point cost</string>
+    <string name="self_control">Self Control</string>
+    <string name="reference">Reference</string>
+    <string name="level">Level</string>
+    <string name="points_per_level">Points per level</string>
+    <string name="modifiers">Modifiers</string>
+    <string name="skills_bonuses">Skills bonuses</string>
+    <string name="attributes_bonuses">Attributes bonuses</string>
+    <string name="advantage_prereq">Advantage prereq</string>
 
 </resources>

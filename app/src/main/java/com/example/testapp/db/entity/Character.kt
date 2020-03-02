@@ -14,6 +14,7 @@ data class Character(
     var createdDate: String = "",
     var modifiedDate: String = "",
     var skillListSize: String = "0",
+    var advListSize: String = "0",
     //other
     var name: String = "",
     var playerName: String = "",

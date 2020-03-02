@@ -9,8 +9,6 @@ import com.example.testapp.di.DBModelImpl
 import com.example.testapp.ui.RxViewModel
 import com.example.testapp.ui.settings.ColorScheme
 import com.example.testapp.util.DataManager
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import toothpick.Toothpick

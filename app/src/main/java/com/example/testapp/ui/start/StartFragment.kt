@@ -2,7 +2,6 @@ package com.example.testapp.ui.start
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -71,13 +70,17 @@ class StartFragment : Fragment() {
 
 
         viewModel.clearEvents()
-        viewModel.initStandartLibrary(resources.assets.open("Mentor_Skills.gcs"))//todo move in appConstants
+        viewModel.initStandartLibrary(
+            resources.assets.open("Mentor_Skills.gcs"),
+            resources.assets.open("AdvTest.gcs")
+        )//todo move in appConstants
 
         button_rx.setOnClickListener { onClickRx() }
         button_add.setOnClickListener { onClickAdd() }
         button_delete.setOnClickListener { onClickDelete() }
 
-        observeStandartLibraryLoadComplete()
+        observeStandartSkillsLibraryLoadComplete()
+        observeStandartAdvantageLibraryLoadComplete()
         observeGetAllCharacters()
         observeErrors()
         observeDeleteComplete()
@@ -165,7 +168,7 @@ class StartFragment : Fragment() {
         val rxt = RxTest()
         rxt
 //            .rxTimerRoll()
-            .rxCreateRollWithTime(5)
+            .rxCreateRollWithTime(1)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             //.filter { it > 10 }
@@ -251,10 +254,18 @@ class StartFragment : Fragment() {
         })
     }
 
-    private fun observeStandartLibraryLoadComplete() {
-        viewModel.standartLibraryLoadComplete.observe(this, Observer {
+    private fun observeStandartSkillsLibraryLoadComplete() {
+        viewModel.standartSkillsLibraryLoadComplete.observe(this, Observer {
             if (it) {
-                Toast.makeText(activity, "all libs loaded", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Skills lib loaded", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun observeStandartAdvantageLibraryLoadComplete() {
+        viewModel.standartAdvantageLibraryLoadComplete.observe(this, Observer {
+            if (it) {
+                Toast.makeText(activity, "Advantages lib loaded", Toast.LENGTH_SHORT).show()
             }
         })
     }

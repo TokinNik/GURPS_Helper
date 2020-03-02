@@ -4,28 +4,41 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.testapp.db.converter.*
+import com.example.testapp.db.dao.AdvantageDao
 import com.example.testapp.db.dao.CharacterDao
 import com.example.testapp.db.dao.CharacterSkillsDao
 import com.example.testapp.db.dao.SkillDao
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.CharacterSkills
 import com.example.testapp.db.entity.Skill.Skill
+import com.example.testapp.db.entity.advantage.Advantage
 
 @Database(
     entities = [
         Character::class,
-        Skill::class,
+        Skill::class,                                                                                                                                            
+        Advantage::class,
         CharacterSkills::class
     ],
-    version = 38,
+    version = 41,
     exportSchema = false
 )
-@TypeConverters(IntListConverter::class, StringListConverter::class, SkillDefaultConverter::class, PrereqListConverter::class)
+@TypeConverters(
+    IntListConverter::class,
+    StringListConverter::class,
+    SkillDefaultConverter::class,
+    PrereqListConverter::class,
+    AttributeBonusConverter::class,
+    SkillBonusConverter::class,
+    ModifierConverter::class
+)
 abstract class MainDatabase: RoomDatabase()
 {
     abstract fun characterDao(): CharacterDao
 
     abstract fun skillDao(): SkillDao
+
+    abstract fun advantageDao(): AdvantageDao
 
     abstract fun characterSkillsDao(): CharacterSkillsDao
 

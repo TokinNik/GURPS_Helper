@@ -5,9 +5,10 @@ import com.example.testapp.R
 import com.example.testapp.custom_view.outline_corner.OutlineProviders
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
-import kotlinx.android.synthetic.main.item_header_skills.view.*
+import kotlinx.android.synthetic.main.item_header_sadq.view.*
 
-class SkillsHeaderItem(
+class SADQHeaderItem(
+    val title: String,
     val onClickAdd: () -> Unit,
     val onClickDelete: () -> Unit
 ): Item() {
@@ -18,11 +19,12 @@ class SkillsHeaderItem(
         viewHolder.apply {
             root.outlineProvider = OutlineProviders(32f, OutlineProviders.OutlineType.ROUND_RECT_BOTTOM)
             root.clipToOutline = true
-            root.button_add_skill.setOnClickListener{onClickAdd.invoke()}
-            root.button_delete_skill.setOnClickListener{onClickDelete.invoke()}
+            root.header_sadq_title.text = title
+            root.header_sadq_button_add.setOnClickListener{onClickAdd.invoke()}
+            root.header_sadq_button_delete.setOnClickListener{onClickDelete.invoke()}
             rootView = root
         }
     }
 
-    override fun getLayout(): Int = R.layout.item_header_skills
+    override fun getLayout(): Int = R.layout.item_header_sadq
 }

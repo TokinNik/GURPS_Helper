@@ -91,7 +91,7 @@ class CharacterEditSkillsFragment(private val onSave: Observable<Boolean>) : Fra
     }
 
     private fun initOnClick() {
-        button_add_skill.setOnClickListener {
+        header_sadq_button_add.setOnClickListener {
             val selectSkillDialog = ChoiceSkillFragment(characterSkillList)
             selectSkillDialog.setTargetFragment(this, 1)
             selectSkillDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.dialogFragmentStyle)

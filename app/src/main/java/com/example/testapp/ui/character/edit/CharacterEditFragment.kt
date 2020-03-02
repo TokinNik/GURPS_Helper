@@ -2,7 +2,6 @@ package com.example.testapp.ui.character.edit
 
 
 import android.os.Bundle
-import android.text.BoringLayout
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
@@ -13,7 +12,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.example.testapp.R
-import com.example.testapp.custom_view.outline_corner.OutlineProviders
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.Skill.Skill
 import com.google.android.material.button.MaterialButton

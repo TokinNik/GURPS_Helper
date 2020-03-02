@@ -1,9 +1,6 @@
 package com.example.testapp.ui.character
 
-import android.graphics.BitmapFactory
-import android.util.Base64
 import android.view.View
-import android.widget.ImageView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.testapp.R
 import com.example.testapp.custom_view.outline_corner.OutlineProviders
@@ -19,7 +16,6 @@ import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.card_character_all.view.*
-import kotlinx.android.synthetic.main.item_character.view.*
 
 class CharacterCard(
     val cardRoot: View,

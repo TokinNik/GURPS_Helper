@@ -6,8 +6,13 @@
     <group android:checkableBehavior="single">
         <item android:id="@+id/startFragment"
             android:title="@string/home"/>
+
         <item android:id="@+id/skillObserveAllFragment"
             android:title="@string/all_skills"
+            />
+
+        <item android:id="@+id/advantageObserveAllFragment"
+            android:title="@string/all_advantage"
             />
         <item android:id="@+id/battleFragment"
             android:title="@string/battle_manager"

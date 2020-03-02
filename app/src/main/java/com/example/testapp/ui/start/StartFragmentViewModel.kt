@@ -7,7 +7,7 @@ import com.example.testapp.di.DBModelImpl
 import com.example.testapp.ui.RxViewModel
 import com.example.testapp.util.DataManager
 import com.example.testapp.util.GCSParser
-import com.example.testapp.util.SkillsLibLoader
+import com.example.testapp.util.StandartLibLoader
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,7 +21,7 @@ class StartFragmentViewModel: RxViewModel() {
 
     private val dbm: DBModelImpl by inject()
     private val parser: GCSParser by inject()
-    private val skillsLibLoader: SkillsLibLoader by inject()
+    private val standartLibLoader: StandartLibLoader by inject()
     private val dataManager: DataManager by inject()
 
     val getAllCharactersComplete: LiveData<List<Character>>
@@ -39,8 +39,11 @@ class StartFragmentViewModel: RxViewModel() {
     val getLastCharacterIdComplete: LiveData<Int>
         get() = getLastCharacterIdEvent
 
-    val standartLibraryLoadComplete: LiveData<Boolean>
-        get() = standartLibraryLoadEvent
+    val standartSkillsLibraryLoadComplete: LiveData<Boolean>
+        get() = standartSkillsLibraryLoadEvent
+
+    val standartAdvantageLibraryLoadComplete: LiveData<Boolean>
+        get() = standartAdvantageLibraryLoadEvent
 
     val parseCharacterComplete: LiveData<Character>
         get() = parseCharacterEvent
@@ -55,7 +58,9 @@ class StartFragmentViewModel: RxViewModel() {
 
     private var getLastCharacterIdEvent: MutableLiveData<Int> = MutableLiveData()
 
-    private var standartLibraryLoadEvent: MutableLiveData<Boolean> = MutableLiveData()
+    private var standartSkillsLibraryLoadEvent: MutableLiveData<Boolean> = MutableLiveData()
+
+    private var standartAdvantageLibraryLoadEvent: MutableLiveData<Boolean> = MutableLiveData()
 
     private var parseCharacterEvent: MutableLiveData<Character> = MutableLiveData()
 
@@ -64,11 +69,11 @@ class StartFragmentViewModel: RxViewModel() {
         Toothpick.inject(this, appScope)
     }
 
-    fun initStandartLibrary(open: InputStream) {
+    fun initStandartLibrary(skillsInputStream: InputStream, advantageInputStream: InputStream) {
         Observable.create { emitter: ObservableEmitter<Int> ->
-            if (!dataManager.appSettingsVault.isSkilLibLoaded) {
-                skillsLibLoader.loadSkillLibrary(open)
-                dataManager.appSettingsVault.isSkilLibLoaded = true
+            if (!dataManager.appSettingsVault.isSkillLibLoaded) {
+                standartLibLoader.loadSkillLibrary(skillsInputStream)
+                dataManager.appSettingsVault.isSkillLibLoaded = true
                 emitter.onComplete()
             } else {
                 emitter.onError(Throwable("Skills Library already loaded"))
@@ -82,7 +87,28 @@ class StartFragmentViewModel: RxViewModel() {
                     println(it)
                 },
                 {
-                    standartLibraryLoadEvent.value = true
+                    standartSkillsLibraryLoadEvent.value = true
+                }
+            ).let(compositeDisposable::add)
+
+        Observable.create { emitter: ObservableEmitter<Int> ->
+            if (!dataManager.appSettingsVault.isAdvantageLibLoaded) {
+                standartLibLoader.loadAdvantageLibrary(advantageInputStream)
+                dataManager.appSettingsVault.isAdvantageLibLoaded = true
+                emitter.onComplete()
+            } else {
+                emitter.onError(Throwable("Advantage Library already loaded"))
+            }
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {},
+                {
+                    println(it)
+                },
+                {
+                    standartAdvantageLibraryLoadEvent.value = true
                 }
             ).let(compositeDisposable::add)
     }
@@ -169,7 +195,8 @@ class StartFragmentViewModel: RxViewModel() {
         getAllCharactersEvent =  MutableLiveData()
         addCompleteEvent = MutableLiveData()
         getLastCharacterIdEvent = MutableLiveData()
-        standartLibraryLoadEvent = MutableLiveData()
+        standartSkillsLibraryLoadEvent = MutableLiveData()
+        standartAdvantageLibraryLoadEvent = MutableLiveData()
         parseCharacterEvent = MutableLiveData()
     }
 

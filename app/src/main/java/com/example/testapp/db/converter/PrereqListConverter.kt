@@ -6,9 +6,10 @@ import com.example.testapp.db.entity.Skill.PrereqList
 class PrereqListConverter {
 
     private val skillConverter = SkillPrereqConverter()
+    private val advantageConverter = AdvantagePrereqConverter()
 
     @TypeConverter
-    fun fromList(list: List<PrereqList>): String = list.joinToString(","){ "${it.all}+${it.depth}+${it.parent}+${skillConverter.fromList(it.skillPrereqList)}"}
+    fun fromList(list: List<PrereqList>): String = list.joinToString(","){ "${it.all}+${it.depth}+${it.parent}+${skillConverter.fromList(it.skillPrereqList)}+${advantageConverter.fromList(it.advantagePrereqList)}"}
 
     @TypeConverter
     fun toList(data: String): List<PrereqList> = data.split(",").map { list ->
@@ -22,6 +23,10 @@ class PrereqListConverter {
                     2 -> prereqList.parent = it.toInt()
                     3 -> {
                         prereqList.skillPrereqList = skillConverter.toList(it)
+                        return@forEach
+                    }
+                    4 -> {
+                        prereqList.advantagePrereqList = advantageConverter.toList(it)
                         return@forEach
                     }
                 }

@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_startFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_advantageObserveAllFragment"
+            app:destination="@id/advantageObserveAllFragment" />
     </fragment>
     <fragment
         android:id="@+id/characterFragment"
@@ -160,4 +163,16 @@
         android:id="@+id/battleActionAttackMeleeFragment"
         android:name="com.example.testapp.ui.battle.actions.attack_melee.BattleActionAttackMeleeFragment"
         android:label="BattleActionAttackMeleeFragment" />
+    <fragment
+        android:id="@+id/advantageObserveAllFragment"
+        android:name="com.example.testapp.ui.advantage.observe.all.AdvantageObserveAllFragment"
+        android:label="AdvantageObserveAllFragment">
+        <action
+            android:id="@+id/action_advantageObserveAllFragment_to_advantageObserveSingleFragment"
+            app:destination="@id/advantageObserveSingleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/advantageObserveSingleFragment"
+        android:name="com.example.testapp.ui.advantage.observe.single.AdvantageObserveSingleFragment"
+        android:label="AdvantageObserveSingleFragment" />
 </navigation>

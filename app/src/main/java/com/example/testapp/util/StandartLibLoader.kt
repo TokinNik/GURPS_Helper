@@ -1,6 +1,7 @@
 package com.example.testapp.util
 
 import com.example.testapp.db.entity.Skill.Skill
+import com.example.testapp.db.entity.advantage.Advantage
 import com.example.testapp.di.DBModelImpl
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -13,7 +14,7 @@ import toothpick.ktp.delegate.inject
 import java.io.InputStream
 import javax.inject.Inject
 
-class SkillsLibLoader @Inject constructor(){
+class StandartLibLoader @Inject constructor(){
 
     private val dbm: DBModelImpl by inject()
     private val gcsParser: GCSParser by inject()
@@ -31,12 +32,26 @@ class SkillsLibLoader @Inject constructor(){
         }
     }
 
+    fun convertAdvantageListToDBFormat(advList: MutableList<Advantage>) {
+        advList.forEach {
+            getAdvanyageByName(it)
+        }
+    }
+
     fun loadSkillLibrary(open: InputStream) {
         val factory = XmlPullParserFactory.newInstance()
         val parser = factory.newPullParser()
         parser.setInput(open, "windows-1251")
 
         convertSkillListToDBFormat(gcsParser.parseSkillList(parser))
+    }
+
+    fun loadAdvantageLibrary(open: InputStream) {
+        val factory = XmlPullParserFactory.newInstance()
+        val parser = factory.newPullParser()
+        parser.setInput(open, "windows-1251")
+
+        convertAdvantageListToDBFormat(gcsParser.parseAdvantageList(parser))
     }
 
     private fun getSkillByName(skill: Skill) {
@@ -54,6 +69,21 @@ class SkillsLibLoader @Inject constructor(){
             ).let(compositeDisposable::add)
     }
 
+    private fun getAdvanyageByName(advantage: Advantage) {
+        dbm.getDB().advantageDao().getByName(advantage.name)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    println("This Advantage is already there  - ${it.name}")
+                },
+                {
+                    println("Insert advantage (${advantage.name}) error - $it")
+                    insertAdvantage(advantage)
+                }
+            ).let(compositeDisposable::add)
+    }
+
     private fun insertSkill(skill: Skill){
         Observable.create { emitter: ObservableEmitter<Int> ->
             dbm.db.skillDao().insert(skill)
@@ -65,6 +95,21 @@ class SkillsLibLoader @Inject constructor(){
             }
             .doOnComplete {
                 println("Insert skill ${skill.name} Complete")
+            }
+            .subscribe()
+    }
+
+    private fun insertAdvantage(advantage: Advantage){
+        Observable.create { emitter: ObservableEmitter<Int> ->
+            dbm.db.advantageDao().insert(advantage)
+            emitter.onComplete()
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnError {
+                println("In insert advantage (${advantage.name}) error - $it")
+            }
+            .doOnComplete {
+                println("Insert advantage ${advantage.name} Complete")
             }
             .subscribe()
     }

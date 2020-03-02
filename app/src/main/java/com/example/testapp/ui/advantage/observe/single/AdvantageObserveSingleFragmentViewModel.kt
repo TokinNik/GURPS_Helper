@@ -1,8 +1,8 @@
-package com.example.testapp.ui.skill.observe.observeall
+package com.example.testapp.ui.advantage.observe.single
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.testapp.db.entity.Skill.Skill
+import com.example.testapp.db.entity.advantage.Advantage
 import com.example.testapp.di.DBModelImpl
 import com.example.testapp.ui.RxViewModel
 import io.reactivex.Observable
@@ -13,47 +13,42 @@ import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 
 
-class SkillObserveAllFragmentViewModel : RxViewModel() {
+class AdvantageObserveSingleFragmentViewModel : RxViewModel() {
 
     private val dbm: DBModelImpl by inject()
 
     val error: LiveData<Throwable>
         get() = errorEvent
 
-    val skills: LiveData<List<Skill>>
+    val getAllAdvantagesComplete: LiveData<List<Advantage>>
         get() = skillsEvent
 
-    val searchSkillsComplete: LiveData<List<Skill>>
-        get() = searchSkillsEvent
-
-    val skillById: LiveData<Skill>
+    val getAdvantageByIdComplete: LiveData<Advantage>
         get() = skillByIdEvent
 
     val deleteComplete: LiveData<Boolean>
         get() = deleteCompleteEvent
 
-    val searchSkillComplete: LiveData<Skill>
-        get() = searchSkillEvent
+    val getAdvantageByNameComplete: LiveData<Advantage>
+        get() = getAdvantageByNameEvent
 
     private var errorEvent: MutableLiveData<Throwable> = MutableLiveData()
 
-    private var skillsEvent: MutableLiveData<List<Skill>> = MutableLiveData()
+    private var skillsEvent: MutableLiveData<List<Advantage>> = MutableLiveData()
 
-    private var skillByIdEvent: MutableLiveData<Skill> = MutableLiveData()
+    private var skillByIdEvent: MutableLiveData<Advantage> = MutableLiveData()
 
     private var deleteCompleteEvent: MutableLiveData<Boolean> = MutableLiveData()
 
-    private var searchSkillEvent: MutableLiveData<Skill> = MutableLiveData()
-
-    private var searchSkillsEvent: MutableLiveData<List<Skill>> = MutableLiveData()
+    private var getAdvantageByNameEvent: MutableLiveData<Advantage> = MutableLiveData()
 
     init {
         val appScope = Toothpick.openScope("APP")
         Toothpick.inject(this, appScope)
     }
 
-    fun getSkillById(id: Int) {
-        dbm.getDB().skillDao().getById(id)
+    fun getAdvantageById(id: Int) {
+        dbm.getDB().advantageDao().getById(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -62,59 +57,48 @@ class SkillObserveAllFragmentViewModel : RxViewModel() {
                 },
                 {
                     errorEvent.value = it
-                }).let(compositeDisposable::add)
+                }
+            ).let(compositeDisposable::add)
     }
 
-    fun getAllSkills()
+    fun getAllAdvantages()
     {
-        dbm.getDB().skillDao().getAll()
+        dbm.getDB().advantageDao().getAll()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 skillsEvent.value = it
             }.let(compositeDisposable::add)
     }
 
-    fun deleteSkill(currentSkill: Skill) {
+    fun deleteAdvantage(currentAdvantage: Advantage) {
         Observable.create { emitter: ObservableEmitter<Int> ->
-            dbm.db.skillDao().delete(currentSkill)
+            dbm.db.advantageDao().delete(currentAdvantage)
             emitter.onComplete()
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {},
-                {
-                    errorEvent.value = it
-                },
-                {
-                    deleteCompleteEvent.value = true
-                }).let(compositeDisposable::add)
+            .doOnError {
+                errorEvent.value = it
+            }
+            .doOnComplete {
+                deleteCompleteEvent.value = true
+            }
+            .subscribe()
+            .let(compositeDisposable::add)
     }
 
-    fun searchSkill(query: String) {
-        dbm.getDB().skillDao().searchSkill("%$query%")//part of
+    fun getAdvantageByName(name: String) {
+        dbm.getDB().advantageDao().getByName(name)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                    searchSkillEvent.value = it
+                    getAdvantageByNameEvent.value = it
                 },
                 {
                     errorEvent.value = it
-                }).let(compositeDisposable::add)
-    }
-
-    fun searchSkills(query: String) {
-        dbm.getDB().skillDao().searchSkills("$query%")//start with
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    searchSkillsEvent.value = it
-                },
-                {
-                    errorEvent.value = it
-                }).let(compositeDisposable::add)
+                }
+            ).let(compositeDisposable::add)
     }
 
     fun clearEvents()
@@ -123,7 +107,5 @@ class SkillObserveAllFragmentViewModel : RxViewModel() {
         deleteCompleteEvent =  MutableLiveData()
         skillByIdEvent =  MutableLiveData()
         skillsEvent =  MutableLiveData()
-        searchSkillEvent =  MutableLiveData()
-        searchSkillsEvent =  MutableLiveData()
     }
 }

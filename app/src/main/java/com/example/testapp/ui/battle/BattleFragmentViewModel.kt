@@ -2,7 +2,6 @@ package com.example.testapp.ui.battle
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.testapp.db.entity.Character
 import com.example.testapp.db.entity.CharacterSkills
 import com.example.testapp.db.entity.Skill.Skill
@@ -11,7 +10,6 @@ import com.example.testapp.ui.RxViewModel
 import com.example.testapp.ui.settings.ColorScheme
 import com.example.testapp.util.DataManager
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject

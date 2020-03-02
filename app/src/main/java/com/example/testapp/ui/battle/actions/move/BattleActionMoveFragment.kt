@@ -7,15 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import com.example.testapp.R
-import com.example.testapp.db.entity.Character
-import com.example.testapp.db.entity.Skill.Skill
-import com.example.testapp.ui.skill.observe.single.SkillObserveSingleFragmentViewModel
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.GroupieViewHolder
-import kotlinx.android.synthetic.main.fragment_skill_single.*
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
 import toothpick.smoothie.viewmodel.installViewModelBinding

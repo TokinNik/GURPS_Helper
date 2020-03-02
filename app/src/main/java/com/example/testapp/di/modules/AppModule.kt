@@ -14,7 +14,7 @@ class AppModule(application: Application) : SmoothieApplicationModule(applicatio
         bind(Context::class.java).toInstance(application.applicationContext)
         bind(RollUtil::class.java).to(RollUtil::class.java)
         bind(GCSParser::class.java).to(GCSParser::class.java)
-        bind(SkillsLibLoader::class.java).to(SkillsLibLoader::class.java)
+        bind(StandartLibLoader::class.java).to(StandartLibLoader::class.java)
         bind(GurpsCalculations::class.java).to(GurpsCalculations::class.java)
         bind(DataManager::class.java).toInstance(DataManager(application.applicationContext.getSharedPreferences(SETTINGS, Context.MODE_PRIVATE)))
     }
