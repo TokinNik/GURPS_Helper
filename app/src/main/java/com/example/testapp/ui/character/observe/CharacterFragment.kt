@@ -74,7 +74,7 @@ class CharacterFragment : Fragment() {
                 for (i in 0 until groupAdapter.itemCount){
                     skills.add((groupAdapter.getItem(i) as SkillItem).skill.data)
                 }
-                xmlb.saveInFile(character.name, xmlb.xmlTest(character, skills.toList()).toString())
+                xmlb.saveInFile(character.name, xmlb.xmlTest(character, skills.toList(), emptyList()).toString())//todo advantage
                 Toast.makeText(activity, "exported in file ${character.name}.gcs", Toast.LENGTH_SHORT).show()
         }
         super.onCreateOptionsMenu(menu, inflater)

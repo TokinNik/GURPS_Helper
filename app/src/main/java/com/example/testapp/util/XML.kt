@@ -66,6 +66,15 @@ open class XML(name: String) : TagWithText(name) {
         return tag
     }
 
+    fun xmlAttr2Tag(name: String, attr1: Pair<String, String>, attr2: Pair<String, String>, init: Attr2Tag.() -> Unit): Attr2Tag {
+        val tag = initTag(Attr2Tag(name, attr1, attr2), init)
+        tag.attr1Name = attr1.first
+        tag.attr1Value = attr1.second
+        tag.attr2Name = attr2.first
+        tag.attr2Value = attr2.second
+        return tag
+    }
+
     fun character(version: String, measure: String, init: CharacterTag.() -> Unit) {
         val ch = initTag(CharacterTag(), init)
         ch.version = version
@@ -87,6 +96,48 @@ open class AttrTag(name: String, attr: Pair<String, String>) : TagWithText(name)
         val tag = initTag(AttrTag(name, attr), init)
         tag.attrName = attr.first
         tag.attrValue = attr.second
+        return tag
+    }
+
+    fun xmlAttr2Tag(name: String, attr1: Pair<String, String>, attr2: Pair<String, String>, init: Attr2Tag.() -> Unit): Attr2Tag {
+        val tag = initTag(Attr2Tag(name, attr1, attr2), init)
+        tag.attr1Name = attr1.first
+        tag.attr1Value = attr1.second
+        tag.attr2Name = attr2.first
+        tag.attr2Value = attr2.second
+        return tag
+    }
+}
+
+open class Attr2Tag(name: String, attr1: Pair<String, String>, attr2: Pair<String, String>) : TagWithText(name) {
+    var attr1Name: String = attr1.first
+    var attr1Value: String
+        get() = attributes[attr1Name]!!
+        set(value) {
+            attributes[attr1Name] = value
+        }
+    var attr2Name: String = attr2.first
+    var attr2Value: String
+        get() = attributes[attr2Name]!!
+        set(value) {
+            attributes[attr2Name] = value
+        }
+
+    fun xmlTag(name: String, init: XML.() -> Unit) = initTag(XML(name), init)
+
+    fun xmlAttrTag(name: String, attr: Pair<String, String>, init: AttrTag.() -> Unit): AttrTag {
+        val tag = initTag(AttrTag(name, attr), init)
+        tag.attrName = attr.first
+        tag.attrValue = attr.second
+        return tag
+    }
+
+    fun xmlAttr2Tag(name: String, attr1: Pair<String, String>, attr2: Pair<String, String>, init: Attr2Tag.() -> Unit): Attr2Tag {
+        val tag = initTag(Attr2Tag(name, attr1, attr2), init)
+        tag.attr1Name = attr1.first
+        tag.attr1Value = attr1.second
+        tag.attr2Name = attr2.first
+        tag.attr2Value = attr2.second
         return tag
     }
 }

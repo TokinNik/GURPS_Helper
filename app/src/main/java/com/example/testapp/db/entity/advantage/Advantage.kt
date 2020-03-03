@@ -22,7 +22,7 @@ data class Advantage (
     var notes: String = "",
     var modifiers: List<Modifier> = emptyList(),
     var categories: List<String> = emptyList(),
-    var skillBonuses: List<SkillBonus> = emptyList(),//todo
-    var attributeBonuses: List<AttributeBonus> = emptyList(),//todo
+    var skillBonuses: List<SkillBonus> = emptyList(),
+    var attributeBonuses: List<AttributeBonus> = emptyList(),
     var prereqList: List<PrereqList> = emptyList()
 )

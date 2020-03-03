@@ -107,9 +107,8 @@ class GCSParser @Inject constructor(){
                             }
                             "profile" -> parseProfile(parser)
                             "advantage_list" -> {
-                                character.skillListSize = parser.getAttributeValue(0)
-                                val advList = parseAdvantageList(parser)
-                                print(advList.toString())
+                                character.advListSize = parser.getAttributeValue(0)
+                                dbm.saveCharacterAdvantage(parseAdvantageList(parser), character.id)
                             }
                             "skill_list" -> {
                                 character.skillListSize = parser.getAttributeValue(0)

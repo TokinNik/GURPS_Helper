@@ -3,8 +3,10 @@ package com.example.testapp.di
 import android.app.Application
 import androidx.room.Room
 import com.example.testapp.db.MainDatabase
+import com.example.testapp.db.entity.CharacterAdvantage
 import com.example.testapp.db.entity.CharacterSkills
 import com.example.testapp.db.entity.Skill.Skill
+import com.example.testapp.db.entity.advantage.Advantage
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -43,12 +45,35 @@ class DBModelImpl @Inject constructor(private val application: Application) : DB
             ).let(compositeDisposable::add)
     }
 
-    override fun saveCharacterAdvantage(adv: List<CharacterSkills>, characterId: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun saveCharacterAdvantage(adv: List<Advantage>, characterId: Int) {
+        Observable.create { emitter: ObservableEmitter<Int> ->
+            db.characterAdvantageDao().deleteAllById(characterId)
+            convertAndAddAdvantage(adv, characterId)
+            emitter.onComplete()
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {},
+                { println(it) },
+                {
+                    compositeDisposable.clear()
+                }
+            ).let(compositeDisposable::add)
     }
 
-    override fun saveCharacterDisadvantage(disadv: List<CharacterSkills>, characterId: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private fun convertAndAddAdvantage(adv: List<Advantage>, characterId: Int) {
+        adv.forEach {
+            db.characterAdvantageDao().insert(
+                CharacterAdvantage(
+                    characterId = characterId,
+                    advantageName = it.name,
+                    container = it.container,
+                    levels = it.levels,
+                    modifiers = it.modifiers
+                )
+            )
+        }
     }
 
     private fun convertAndAddSkills(skillsList: List<Skill>, characterId: Int){

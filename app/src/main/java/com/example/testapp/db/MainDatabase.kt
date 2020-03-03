@@ -4,11 +4,9 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.testapp.db.converter.*
-import com.example.testapp.db.dao.AdvantageDao
-import com.example.testapp.db.dao.CharacterDao
-import com.example.testapp.db.dao.CharacterSkillsDao
-import com.example.testapp.db.dao.SkillDao
+import com.example.testapp.db.dao.*
 import com.example.testapp.db.entity.Character
+import com.example.testapp.db.entity.CharacterAdvantage
 import com.example.testapp.db.entity.CharacterSkills
 import com.example.testapp.db.entity.Skill.Skill
 import com.example.testapp.db.entity.advantage.Advantage
@@ -42,5 +40,5 @@ abstract class MainDatabase: RoomDatabase()
 
     abstract fun characterSkillsDao(): CharacterSkillsDao
 
-
+    abstract fun characterAdvantageDao(): CharacterAdvantageDao
 }
