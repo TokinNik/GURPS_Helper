@@ -1,10 +1,941 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
+        <import type="android.widget.RadioGroup.OnCheckedChangeListener"/>
+        <import type="com.example.testapp.ui.battle.actions.SpinnerEnumType"/>
+
+        <variable
+            name="rangeAttackData"
+            type="com.example.testapp.ui.battle.actions.attack_range.ActionAttackRangeData" />
+
+        <variable
+            name="onClickPlus"
+            type="com.example.testapp.ui.character.edit.StatCounterIntPlusButtonListener" />
+
+        <variable
+            name="onClickMinus"
+            type="com.example.testapp.ui.character.edit.StatCounterIntMinusButtonListener" />
+
+        <variable
+            name="onClickPlusZero"
+            type="com.example.testapp.ui.character.edit.StatCounterIntPlusButtonListener" />
+
+        <variable
+            name="onClickMinusZero"
+            type="com.example.testapp.ui.character.edit.StatCounterIntMinusButtonListener" />
+
+        <variable
+            name="onClickMinusOne"
+            type="com.example.testapp.ui.character.edit.StatCounterIntMinusButtonListener" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/attack_range_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/attack"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/weapon_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            app:flexWrap="wrap"
+            app:alignItems="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/attack_range_title">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:textStyle="bold"
+                android:text="@string/weapon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:text="@string/dmg" />
+
+            <!--           todo add Text Formatter-->
+            <EditText
+                android:id="@+id/battle_action_attack_range_damage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:inputType="text"
+                android:text="@{`` + rangeAttackData.weaponDmg.toString()}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:text="@string/st" />
+
+            <EditText
+                android:id="@+id/battle_action_attack_mele_st"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:inputType="numberDecimal"
+                android:text="@={`` + rangeAttackData.weaponSt}" />
+
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="8dp"
+            android:text="@string/acc" />
+
+            <EditText
+                android:id="@+id/battle_action_attack_range_acc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:inputType="numberDecimal"
+                android:text="@={`` + rangeAttackData.weaponReach}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:text="@string/range" />
+
+            <EditText
+                android:id="@+id/battle_action_attack_range_range"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:inputType="numberDecimal"
+                android:text="@={`` + rangeAttackData.weaponReach}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:text="@string/rof" />
+
+            <EditText
+                android:id="@+id/battle_action_attack_range_rof"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:inputType="numberDecimal"
+                android:text="@={`` + rangeAttackData.weaponReach}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:text="@string/bulk" />
+
+            <EditText
+                android:id="@+id/battle_action_attack_range_bulk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:inputType="numberDecimal"
+                android:text="@={`` + rangeAttackData.weaponReach}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:text="@string/rcl" />
+
+            <EditText
+                android:id="@+id/battle_action_attack_range_rcl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:inputType="numberDecimal"
+                android:text="@={`` + rangeAttackData.weaponReach}" />
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+        <ScrollView
+            android:id="@+id/battle_action_attack_range_other"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/battle_action_attack_range_roll"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/weapon_layout">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingEnd="8dp"
+                        android:text="@string/skill_value" />
+
+                    <include
+                        layout="@layout/stat_counter_int"
+                        app:onClickMinus="@{onClickMinus}"
+                        app:onClickPlus="@{onClickPlus}"
+                        app:stat="@={rangeAttackData.skillValue}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/target" />
+
+                    <Spinner
+                        android:id="@+id/spinner_target"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_TARGET)}'
+                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_TARGET)}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingEnd="8dp"
+                        android:text="@string/range" />
+
+                    <include
+                        layout="@layout/stat_counter_int"
+                        app:onClickMinus="@{onClickMinus}"
+                        app:onClickPlus="@{onClickPlus}"
+                        app:stat="@={rangeAttackData.skillValue}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/meters" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingEnd="8dp"
+                        android:text="@string/target_speed" />
+
+                    <include
+                        layout="@layout/stat_counter_int"
+                        app:onClickMinus="@{onClickMinus}"
+                        app:onClickPlus="@{onClickPlus}"
+                        app:stat="@={rangeAttackData.skillValue}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingEnd="8dp"
+                        android:text="m/s (" />
+
+                    <include
+                        layout="@layout/stat_counter_int"
+                        app:onClickMinus="@{onClickMinus}"
+                        app:onClickPlus="@{onClickPlus}"
+                        app:stat="@={rangeAttackData.skillValue}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingEnd="8dp"
+                        android:text="km/h)" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingEnd="8dp"
+                        android:text="@string/shoots_count" />
+
+                    <include
+                        layout="@layout/stat_counter_int"
+                        app:onClickMinus="@{onClickMinus}"
+                        app:onClickPlus="@{onClickPlus}"
+                        app:stat="@={rangeAttackData.skillValue}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/aiming" />
+
+                    <Spinner
+                        android:id="@+id/spinner_aiming"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_TARGET)}'
+                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_TARGET)}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/battle_action_attack_range_freehand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_gravity="center"
+                        android:checked="@{rangeAttackData.otherModifications.get(0).isChecked ? true : false}"
+                        android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(0).name)}"
+                        android:text="@{rangeAttackData.otherModifications.get(0).getFullName()}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/plus" />
+
+                    <include
+                        layout="@layout/stat_counter_int"
+                        app:onClickMinus="@{onClickMinusOne}"
+                        app:onClickPlus="@{onClickPlus}"
+                        app:stat="@={rangeAttackData.skillValue}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/with" />
+
+                    <Spinner
+                        android:id="@+id/spinner_optic_scale_type"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_TARGET)}'
+                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_TARGET)}" />
+
+
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:visibility="@{rangeAttackData.otherModifications.get(0).isChecked ? View.VISIBLE : View.GONE}"
+                    android:checked="@{rangeAttackData.otherModifications.get(1).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(1).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(1).getFullName()}" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/modificator" />
+
+                    <include
+                        layout="@layout/stat_counter_int"
+                        app:onClickMinus="@{onClickMinus}"
+                        app:onClickPlus="@{onClickPlus}"
+                        app:stat="@={rangeAttackData.modification}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="4dp"
+                        android:text="@string/target_position" />
+
+                    <Spinner
+                        android:id="@+id/battle_action_attack_range_other_assessment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ASSESSMENT)}'
+                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ASSESSMENT)}" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="4dp"
+                        android:text="@string/target_size" />
+
+                    <Spinner
+                        android:id="@+id/battle_action_attack_range_other_pose"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_POSE)}'
+                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_POSE)}" />
+
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(2).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(2).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(2).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(3).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(3).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(3).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(4).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(4).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(4).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(5).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(5).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(5).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(6).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(6).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(6).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(7).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(7).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(7).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(8).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(8).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(8).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(9).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(9).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(9).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(10).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(10).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(10).getFullName()}" />
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="@{rangeAttackData.otherModifications.get(11).isChecked ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/skill_value_layout">
+
+                    <CheckBox
+                        android:id="@+id/battle_action_attack_range_other_mod_11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:layout_gravity="center"
+                        android:checked="@{rangeAttackData.otherModifications.get(11).isChecked ? true : false}"
+                        android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(11).name)}"
+                        android:text="@{rangeAttackData.otherModifications.get(11).getFullName()}" />
+
+                    <include
+                        layout="@layout/stat_counter_int"
+                        app:onClickMinus="@{onClickMinus}"
+                        app:onClickPlus="@{onClickPlusZero}"
+                        app:stat="@={rangeAttackData.otherModifications.get(11).secondMod}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/peoples" />
+
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(12).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(12).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(12).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(13).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(13).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(13).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(14).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(14).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(14).getFullName()}" />
+
+<!--                -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/visibility" />
+
+                    <Spinner
+                        android:id="@+id/spinner_visibility"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_TARGET)}'
+                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_TARGET)}" />
+
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(15).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(15).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(15).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(16).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(16).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(16).getFullName()}" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="@{rangeAttackData.otherModifications.get(11).isChecked ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/skill_value_layout">
+
+                    <CheckBox
+                        android:id="@+id/battle_action_attack_range_other_mod_17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:checked="@{rangeAttackData.otherModifications.get(17).isChecked ? true : false}"
+                        android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(17).name)}"
+                        android:text="@{rangeAttackData.otherModifications.get(17).getFullName()}" />
+
+                    <Spinner
+                        android:id="@+id/spinner_shooting_possible"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_TARGET)}'
+                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_TARGET)}" />
+
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_18"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="4dp"
+                    android:visibility="@{rangeAttackData.otherModifications.get(17).isChecked ? View.VISIBLE : View.GONE}"
+                    android:checked="@{rangeAttackData.otherModifications.get(18).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(18).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(18).getFullName()}" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingEnd="8dp"
+                        android:text="@string/venchie_drive_skill_fail_count" />
+
+                    <include
+                        layout="@layout/stat_counter_int"
+                        app:onClickMinus="@{onClickMinusZero}"
+                        app:onClickPlus="@{onClickPlus}"
+                        app:stat="@={rangeAttackData.skillValue}" />
+
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(19).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(19).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(19).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(20).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(20).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(20).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(21).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(21).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(21).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(22).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(22).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(22).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(23).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(23).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(23).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(24).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(24).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(24).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(25).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(25).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(25).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_26"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(26).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(26).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(26).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_27"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(27).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(27).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(27).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_28"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(28).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(28).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(28).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_29"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(29).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(29).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(29).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_30"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(30).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(30).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(30).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_31"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(31).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(31).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(31).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_32"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(32).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(32).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(32).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_33"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(33).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(33).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(33).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_34"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(34).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(34).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(34).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_35"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(35).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(35).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(35).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_36"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(36).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(36).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(36).getFullName()}" />
+
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_37"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(37).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(37).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(37).getFullName()}" />
+                <CheckBox
+                    android:id="@+id/battle_action_attack_range_other_mod_38"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:checked="@{rangeAttackData.otherModifications.get(38).isChecked ? true : false}"
+                    android:onClick="@{() -> rangeAttackData.onItemChecked(rangeAttackData.otherModifications.get(38).name)}"
+                    android:text="@{rangeAttackData.otherModifications.get(38).getFullName()}" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/battle_action_attack_range_roll"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text='@{"Roll (" + rangeAttackData.result + ")"}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/battle_action_attack_range_other" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+

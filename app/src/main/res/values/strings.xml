@@ -100,5 +100,19 @@
     <string name="skills_bonuses">Skills bonuses</string>
     <string name="attributes_bonuses">Attributes bonuses</string>
     <string name="advantage_prereq">Advantage prereq</string>
+    <string name="acc">Acc</string>
+    <string name="rcl">Rcl</string>
+    <string name="bulk">Bulk</string>
+    <string name="rof">ROF</string>
+    <string name="meters">meters</string>
+    <string name="target_speed">Target speed</string>
+    <string name="shoots_count">Shoots count</string>
+    <string name="aiming">Aiming</string>
+    <string name="with">with</string>
+    <string name="target_position">Target position</string>
+    <string name="target_size">Target size</string>
+    <string name="peoples">peoples</string>
+    <string name="visibility">Visibility</string>
+    <string name="venchie_drive_skill_fail_count">Venchie drive skill fail count</string>
 
 </resources>

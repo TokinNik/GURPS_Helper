@@ -16,9 +16,10 @@ import com.example.testapp.db.entity.advantage.Advantage
         Character::class,
         Skill::class,                                                                                                                                            
         Advantage::class,
-        CharacterSkills::class
+        CharacterSkills::class,
+        CharacterAdvantage::class
     ],
-    version = 41,
+    version = 42,
     exportSchema = false
 )
 @TypeConverters(
