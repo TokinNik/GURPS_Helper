@@ -114,5 +114,9 @@
     <string name="peoples">peoples</string>
     <string name="visibility">Visibility</string>
     <string name="venchie_drive_skill_fail_count">Venchie drive skill fail count</string>
+    <string name="distance">Distance</string>
+    <string name="on_largest_side">on largest side</string>
+    <string name="target_sm">target SM</string>
+    <string name="on">on</string>
 
 </resources>

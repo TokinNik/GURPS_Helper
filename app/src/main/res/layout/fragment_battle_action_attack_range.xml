@@ -121,23 +121,30 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="8dp"
                 android:inputType="numberDecimal"
-                android:text="@={`` + rangeAttackData.weaponReach}" />
+                android:text="@={`` + rangeAttackData.acc}" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="8dp"
-                android:text="@string/range" />
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/battle_action_attack_range_range"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="8dp"
-                android:inputType="numberDecimal"
-                android:text="@={`` + rangeAttackData.weaponReach}" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/range" />
+                <!--todo input filter 'num/num'-->
+                <EditText
+                    android:id="@+id/battle_action_attack_range_range"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:inputType="numberDecimal"
+                    android:text='@={rangeAttackData.rangeOut}' />
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -153,7 +160,7 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="8dp"
                 android:inputType="numberDecimal"
-                android:text="@={`` + rangeAttackData.weaponReach}" />
+                android:text="@={`` + rangeAttackData.rof}" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -169,7 +176,7 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="8dp"
                 android:inputType="numberDecimal"
-                android:text="@={`` + rangeAttackData.weaponReach}" />
+                android:text="@={`` + rangeAttackData.bulk}" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -185,7 +192,7 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="8dp"
                 android:inputType="numberDecimal"
-                android:text="@={`` + rangeAttackData.weaponReach}" />
+                android:text="@={`` + rangeAttackData.rcl}" />
 
         </com.google.android.flexbox.FlexboxLayout>
 
@@ -255,13 +262,13 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:paddingEnd="8dp"
-                        android:text="@string/range" />
+                        android:text="@string/distance" />
 
                     <include
                         layout="@layout/stat_counter_int"
                         app:onClickMinus="@{onClickMinus}"
                         app:onClickPlus="@{onClickPlus}"
-                        app:stat="@={rangeAttackData.skillValue}" />
+                        app:stat="@={rangeAttackData.distance}" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -290,7 +297,7 @@
                         layout="@layout/stat_counter_int"
                         app:onClickMinus="@{onClickMinus}"
                         app:onClickPlus="@{onClickPlus}"
-                        app:stat="@={rangeAttackData.skillValue}" />
+                        app:stat="@={rangeAttackData.targetSpeedM}" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -303,7 +310,7 @@
                         layout="@layout/stat_counter_int"
                         app:onClickMinus="@{onClickMinus}"
                         app:onClickPlus="@{onClickPlus}"
-                        app:stat="@={rangeAttackData.skillValue}" />
+                        app:stat="@={rangeAttackData.targetSpeedKM}" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -331,7 +338,7 @@
                         layout="@layout/stat_counter_int"
                         app:onClickMinus="@{onClickMinus}"
                         app:onClickPlus="@{onClickPlus}"
-                        app:stat="@={rangeAttackData.skillValue}" />
+                        app:stat="@={rangeAttackData.shootsCount}" />
 
                 </LinearLayout>
 
@@ -354,8 +361,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_TARGET)}'
-                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_TARGET)}" />
+                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_AIMING)}'
+                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_AIMING)}" />
 
                 </LinearLayout>
 
@@ -403,8 +410,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_TARGET)}'
-                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_TARGET)}" />
+                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_OPTIC_TYPE)}'
+                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_OPTIC_TYPE)}" />
 
 
                 </LinearLayout>
@@ -460,8 +467,28 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ASSESSMENT)}'
-                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ASSESSMENT)}" />
+                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_POSITION_HIGHT_DIFFRENCE)}'
+                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_POSITION_HIGHT_DIFFRENCE)}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="4dp"
+                        android:text="@string/on" />
+
+                    <include
+                        layout="@layout/stat_counter_int"
+                        app:onClickMinus="@{onClickMinus}"
+                        app:onClickPlus="@{onClickPlus}"
+                        app:stat="@={rangeAttackData.targetPositionHeightDifferent}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="4dp"
+                        android:text="@string/meters" />
 
                 </LinearLayout>
 
@@ -484,8 +511,28 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_POSE)}'
-                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_POSE)}" />
+                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_TARGET_SIZE)}'
+                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_TARGET_SIZE)}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="4dp"
+                        android:text="@string/target_sm" />
+
+                    <include
+                        layout="@layout/stat_counter_int"
+                        app:onClickMinus="@{onClickMinus}"
+                        app:onClickPlus="@{onClickPlus}"
+                        app:stat="@={rangeAttackData.targetSM}" />
+<!--todo visibility it text-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="4dp"
+                        android:text="@string/on_largest_side" />
 
                 </LinearLayout>
 
@@ -653,8 +700,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_TARGET)}'
-                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_TARGET)}" />
+                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ENVIRONMENT_VISIBILITY)}'
+                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ENVIRONMENT_VISIBILITY)}" />
 
                 </LinearLayout>
 
@@ -679,10 +726,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="@{rangeAttackData.otherModifications.get(11).isChecked ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/skill_value_layout">
+                    android:orientation="horizontal">
 
                     <CheckBox
                         android:id="@+id/battle_action_attack_range_other_mod_17"
@@ -698,9 +742,10 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:visibility="@{rangeAttackData.otherModifications.get(17).isChecked ? View.VISIBLE : View.GONE}"
                         android:layout_weight="1"
-                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_TARGET)}'
-                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_TARGET)}" />
+                        android:onItemSelected='@{(paren, view, pos, id) -> rangeAttackData.onItemSelected(pos, SpinnerEnumType.ATTACK_SHOOTING_POSSIBLE)}'
+                        android:entries="@{rangeAttackData.getStringListWithEnum(SpinnerEnumType.ATTACK_SHOOTING_POSSIBLE)}" />
 
                 </LinearLayout>
 

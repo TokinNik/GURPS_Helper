@@ -6,8 +6,25 @@ import com.example.testapp.util.Dice
 class ActionAttackRangeData(private val onItemCheck: () -> Unit) {
 
     var result: Int = 10
-    var weaponDmg: Dice = Dice(1, 0)
+    var weaponDmg: Dice = Dice(2, 0)
     var handSt: Int = 0
+    var acc: Int = 1
+    var range: Int = 100
+    var rangeMax: Int = 500
+    var rangeOut: String
+        get() {
+            return "$range/$rangeMax"
+        }
+        set(value) {
+            value.split('/').apply {
+                range = first().toInt()
+                rangeMax = last().toInt()
+            }
+        }
+    var rof: Int = 1
+    var bulk: Int = -1
+    var rcl: Int = 1
+
     var weaponSt: Int = 0
         set(value) {
             field = value
@@ -17,7 +34,6 @@ class ActionAttackRangeData(private val onItemCheck: () -> Unit) {
         get() {
         return handSt < weaponSt
     }
-    var weaponReach: Int = 1
     var skillValue: Int = 10
         set(value) {
             result -= field
@@ -32,6 +48,41 @@ class ActionAttackRangeData(private val onItemCheck: () -> Unit) {
         result += value
         onItemCheck.invoke()
     }
+    var distance: Int = 0
+    set(value) {
+        result -= field
+        field = value
+        result += value
+        onItemCheck.invoke()
+    }
+    var targetSpeedM: Int = 0
+    set(value) {
+        result -= field
+        field = value
+        result += value
+        onItemCheck.invoke()
+    }
+    var targetSpeedKM: Int = 0
+        set(value) {
+            result -= field
+            field = value
+            result += value
+            onItemCheck.invoke()
+        }
+    var shootsCount: Int = 0
+        set(value) {
+            result -= field
+            field = value
+            result += value
+            onItemCheck.invoke()
+        }
+    var opticType: Int = 0
+        set(value) {
+            result -= field
+            field = value
+            result += value
+            onItemCheck.invoke()
+        }
     var modification: Int = 0
     set(value) {
         result -= field
@@ -39,20 +90,48 @@ class ActionAttackRangeData(private val onItemCheck: () -> Unit) {
         result += value
         onItemCheck.invoke()
     }
-    var assessment: Int = 0
+    var targetSM: Int = 0
         set(value) {
             result -= field
             field = value
             result += value
             onItemCheck.invoke()
         }
-    var attackerPose: Int = 0
-    set(value) {
-        result -= field
-        field = value
-        result += value
-        onItemCheck.invoke()
-    }
+    var targetPositionHeightDifferent: Int = 0
+        set(value) {
+            result -= field
+            field = value
+            result += value
+            onItemCheck.invoke()
+        }
+    var aiming: Int = 0
+        set(value) {
+            result -= field
+            field = value
+            result += value
+            onItemCheck.invoke()
+        }
+    var positionDifference: Int = 0
+        set(value) {
+            result -= field
+            field = value
+            result += value
+            onItemCheck.invoke()
+        }
+    var targetSize: Int = 0
+        set(value) {
+            result -= field
+            field = value
+            result += value
+            onItemCheck.invoke()
+        }
+    var shootingPossible: Int = 0
+        set(value) {
+            result -= field
+            field = value
+            result += value
+            onItemCheck.invoke()
+        }
     var visibility: Int = 0
     set(value) {
         result -= field
@@ -92,7 +171,7 @@ class ActionAttackRangeData(private val onItemCheck: () -> Unit) {
             CheckModificator("Shooting throw light cover", false, -2),
             CheckModificator("Unknown weapon or system", false, -2),
             CheckModificator("Enemy Out Of View", false, -6),
-            CheckModificator("Known Enemy Position", false, -4),
+            CheckModificator("Enemy Out Of View, but you known his position", false, -4),
             CheckModificator("Shooting on possible", false, -2),//todo
             CheckModificator("Check target bwfore shooting", false, -2),
             CheckModificator("Hanging outside, shoots under / over vehicles", false, -6),
@@ -137,9 +216,12 @@ class ActionAttackRangeData(private val onItemCheck: () -> Unit) {
 
     fun onItemSelected(selectedItemPosition: Int, spinnerEnumType: SpinnerEnumType) {
         when(spinnerEnumType) {
-            SpinnerEnumType.ASSESSMENT -> assessment = Assessment.values()[selectedItemPosition].modification
-            SpinnerEnumType.ATTACK_POSE -> attackerPose = AttackPose.values()[selectedItemPosition].modification
+            SpinnerEnumType.ATTACK_AIMING -> aiming = Aiming.values()[selectedItemPosition].modification
             SpinnerEnumType.ATTACK_TARGET -> target = AttackTarget.values()[selectedItemPosition].modification
+            SpinnerEnumType.ATTACK_TARGET_SIZE -> targetSize = TargetSize.values()[selectedItemPosition].modification
+            SpinnerEnumType.ATTACK_OPTIC_TYPE -> opticType = OpticType.values()[selectedItemPosition].modification
+            SpinnerEnumType.ATTACK_SHOOTING_POSSIBLE -> shootingPossible = ShootingPossible.values()[selectedItemPosition].modification
+            SpinnerEnumType.ATTACK_POSITION_HIGHT_DIFFRENCE -> positionDifference = AttackerPositionHeightDifferent.values()[selectedItemPosition].modification
             SpinnerEnumType.ENVIRONMENT_VISIBILITY -> visibility = EnvironmentVisibility.values()[selectedItemPosition].modification
             else -> println()
         }
@@ -147,9 +229,12 @@ class ActionAttackRangeData(private val onItemCheck: () -> Unit) {
 
     fun getStringListWithEnum(spinnerEnumType: SpinnerEnumType): List<String> {
         return when(spinnerEnumType) {
-            SpinnerEnumType.ASSESSMENT -> Assessment.values().map { "${it.clearName} ${if(it.modification > 0 ) "(+${it.modification})" else "(${it.modification})"}" }
-            SpinnerEnumType.ATTACK_POSE -> AttackPose.values().map { "${it.clearName} ${if(it.modification > 0 ) "(+${it.modification})" else "(${it.modification})"}" }
+            SpinnerEnumType.ATTACK_AIMING -> Aiming.values().map { "${it.clearName} ${if(it.modification > 0 ) "(+${it.modification + acc})" else "(+${acc})"}" }
             SpinnerEnumType.ATTACK_TARGET -> AttackTarget.values().map { "${it.clearName} ${if(it.modification > 0 ) "(+${it.modification})" else "(${it.modification})"}" }
+            SpinnerEnumType.ATTACK_TARGET_SIZE -> TargetSize.values().map { it.clearName }
+            SpinnerEnumType.ATTACK_OPTIC_TYPE -> OpticType.values().map { it.clearName }
+            SpinnerEnumType.ATTACK_SHOOTING_POSSIBLE -> ShootingPossible.values().map { "${it.clearName} ${if(it.modification > 0 ) "(+${it.modification})" else "(${it.modification})"}" }
+            SpinnerEnumType.ATTACK_POSITION_HIGHT_DIFFRENCE -> AttackerPositionHeightDifferent.values().map { it.clearName }
             SpinnerEnumType.ENVIRONMENT_VISIBILITY -> EnvironmentVisibility.values().map { "${it.clearName} ${if(it.modification > 0 ) "(+${it.modification})" else "(${it.modification})"}" }
             else -> emptyList()
         }

@@ -28,10 +28,44 @@ enum class SpinnerEnumType {
     ASSESSMENT,
     ATTACK_POSE,
     ATTACK_TARGET,
+    ATTACK_TARGET_SIZE,
+    ATTACK_AIMING,
+    ATTACK_OPTIC_TYPE,
+    ATTACK_SHOOTING_POSSIBLE,
     DEFENCE_POSE,
     DEFENCE_SHIELD,
     DEFENCE_POSITION_HIGHT_DIFFRENCE,
+    ATTACK_POSITION_HIGHT_DIFFRENCE,
     ENVIRONMENT_VISIBILITY;
+}
+
+enum class OpticType(val clearName: String, val modification: Int) {
+    FIXED_SCALE("Fixed scale", 0),
+    DYNAMIC_SCALE("Dynamic scale", 0);
+}
+
+enum class TargetSize(val clearName: String, val modification: Int) {
+    SAME_HUMAN("Same human", 0),
+    CUSTOM_SIZE("Set custom size", 0),
+    SM_SIZE("Set target SM", 0);
+}
+
+enum class Aiming(val clearName: String, val modification: Int) {
+    NO("No", 0),
+    ONE_ROUND("1 round (+Acc)", 0),
+    TWO_ROUNDS("2 rounds (+Acc+1)", 1),
+    THREE_ROUNDS("3 rounds (+Acc+2)", 2),
+    MORE_ROUNDS("3+ rounds (+Acc+2)", 2);
+}
+
+enum class ShootingPossible(val clearName: String, val modification: Int) {
+    ONE_CELL("view 1 cell", 0),
+    TWO_CELL("view 2 cell", -1),
+    THREE_FOUR__CELL("view 3-4 cell", -2),
+    FIVE_SIX__CELL("view 5-6 cell", -3),
+    SEVEN_TEN_CELL("view 7-10 cell", -4),
+    TEM_AND_MORE_CELL("view 10+ cell", -5),
+    LINE_OF_CELLS("view line of cells", -2),
 }
 
 enum class Assessment(val clearName: String, val modification: Int) {
@@ -69,6 +103,12 @@ enum class DefencePositionHeightDifferent(val clearName: String, val modificatio
     BELOW_1("Defending below the attacker (-1.5 m)", -1),
     BELOW_2("Defending below the attacker (-1.2 m)", -2),
     BELOW_3("Defending below the attacker (-0.9 m)", -3);
+}
+
+enum class AttackerPositionHeightDifferent(val clearName: String, val modification: Int) {
+    SAME("Defending and attacking at the same height", 0),
+    ABOVE("Defending above the attacker", 0),
+    BELOW("Defending below the attacker", 0),
 }
 
 enum class AttackTarget(val clearName: String, val modification: Int) {
