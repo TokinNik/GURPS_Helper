@@ -17,6 +17,7 @@ import com.google.android.material.navigation.NavigationView
 import com.squareup.picasso.Picasso
 import toothpick.Toothpick
 import toothpick.ktp.delegate.inject
+import java.lang.IllegalStateException
 
 class MainActivity : AppCompatActivity() {
 
@@ -60,11 +61,17 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        Picasso.setSingletonInstance (
-            Picasso.Builder(this)
-                .addRequestHandler(Base64RequestHandler())
-                .build()
-        )
+        try {
+            Picasso.setSingletonInstance (
+                Picasso.Builder(this)
+                    .addRequestHandler(Base64RequestHandler())
+                    .build()
+            )
+        } catch (e: IllegalStateException)
+        {
+            println(e.stackTrace)
+        }
+
     }
 
     override fun onResume() {
