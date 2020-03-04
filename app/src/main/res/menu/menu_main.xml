@@ -10,7 +10,6 @@
         <item android:id="@+id/skillObserveAllFragment"
             android:title="@string/all_skills"
             />
-
         <item android:id="@+id/advantageObserveAllFragment"
             android:title="@string/all_advantage"
             />
@@ -19,6 +18,10 @@
             />
         <item android:id="@+id/settingsFragment"
             android:title="@string/settings"
+            />
+
+        <item android:id="@+id/testGroundFragment"
+            android:title="@string/test_ground"
             />
     </group>
 </menu>

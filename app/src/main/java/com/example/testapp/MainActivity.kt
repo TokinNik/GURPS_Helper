@@ -55,7 +55,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.skillObserveAllFragment,
                 R.id.advantageObserveAllFragment,
                 R.id.battleFragment,
-                R.id.settingsFragment
+                R.id.settingsFragment,
+                R.id.testGroundFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

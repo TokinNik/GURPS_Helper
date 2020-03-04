@@ -118,5 +118,6 @@
     <string name="on_largest_side">on largest side</string>
     <string name="target_sm">target SM</string>
     <string name="on">on</string>
+    <string name="test_ground">Test Ground</string>
 
 </resources>

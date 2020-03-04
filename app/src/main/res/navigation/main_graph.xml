@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_startFragment_to_advantageObserveAllFragment"
             app:destination="@id/advantageObserveAllFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_testGroundFragment"
+            app:destination="@id/testGroundFragment" />
     </fragment>
     <fragment
         android:id="@+id/characterFragment"
@@ -175,4 +178,8 @@
         android:id="@+id/advantageObserveSingleFragment"
         android:name="com.example.testapp.ui.advantage.observe.single.AdvantageObserveSingleFragment"
         android:label="AdvantageObserveSingleFragment" />
+    <fragment
+        android:id="@+id/testGroundFragment"
+        android:name="com.example.testapp.ui.test_ground.TestGroundFragment"
+        android:label="TestGroundFragment" />
 </navigation>

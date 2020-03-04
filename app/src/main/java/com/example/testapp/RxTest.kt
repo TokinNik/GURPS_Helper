@@ -15,7 +15,6 @@ class RxTest {
     init {
         val appScope = Toothpick.openScope("APP")
         Toothpick.inject(this, appScope)
-        println(rollUtil.roll3D6())
     }
 
     fun rxCreateRollWithTime(count: Int): Observable<Int> = Observable.create<Int> {
