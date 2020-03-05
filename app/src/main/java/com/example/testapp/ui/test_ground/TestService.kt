@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.ComponentName
 import android.content.Intent
+import android.os.Binder
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -13,6 +14,7 @@ import com.example.testapp.RxTest
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+
 
 class TestService : Service() {
 
@@ -28,6 +30,7 @@ class TestService : Service() {
     }
 
     private val rx = RxTest()
+    private val binder = TestBinder()
     private var notifNum = 0
     private var lastOnNext = 0
     private var notifMessage = ""
@@ -38,28 +41,26 @@ class TestService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        //init (call once)
         Log.d(TAG, "onCreate")
 
         createNotification()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        //do something
         Log.d(TAG, "onStartCommand |${intent?.getIntExtra(COMMAND_KEY, Command.UNKNOWN.id) ?: "null"}|")
         when(intent?.getIntExtra(COMMAND_KEY, Command.UNKNOWN.id)) {
             Command.STOP.id -> {
                 disposeRx.dispose()
                 stopSelf()
-                return START_STICKY
+                return START_REDELIVER_INTENT
             }
             Command.PAUSE.id -> {
                 disposeRx.dispose()
-                return START_STICKY
+                return START_REDELIVER_INTENT
             }
             Command.CONTINUE.id -> {}
             Command.UNKNOWN.id -> {
-                return START_STICKY
+                return START_REDELIVER_INTENT
             }
         }
 
@@ -80,33 +81,31 @@ class TestService : Service() {
                     Log.d(TAG, "RXT - onComplete")
                 }
             )
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        //clear resources (call once)
         Log.d(TAG, "onDestroy")
-        disposeRx.dispose()
+        if (this::disposeRx.isInitialized) disposeRx.dispose()
     }
 
     override fun startService(service: Intent?): ComponentName? {
         Log.d(TAG, "startService")
-
         return super.startService(service)
     }
 
     override fun stopService(name: Intent?): Boolean {
         Log.d(TAG, "stopService")
-
         return super.stopService(name)
     }
 
     override fun onBind(intent: Intent?): IBinder? {
         Log.d(TAG, "onBind")
-
-        return null
+        return binder
     }
+
+    fun getText() = notifMessage
 
     private fun createNotification() {
         val intent = Intent(this, TestService::class.java)
@@ -132,5 +131,11 @@ class TestService : Service() {
             .build()
 
         startForeground(1, notification)
+    }
+
+   inner class TestBinder : Binder() {
+        fun getService(): TestService {
+            return this@TestService
+        }
     }
 }

@@ -1,10 +1,15 @@
 package com.example.testapp.ui.test_ground
 
 import android.app.NotificationManager
+import android.content.ComponentName
+import android.content.Context.BIND_AUTO_CREATE
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,9 +28,26 @@ import toothpick.smoothie.viewmodel.installViewModelBinding
 class TestGroundFragment : Fragment() {
 
     private val viewModel: TestGroundFragmentViewModel by inject()
+    private val sc = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+            Log.d("TEST_FRAGMENT", "onServiceDisconnected")
+            isBind = false
+        }
 
+        override fun onServiceConnected(name: ComponentName?, serviceBind: IBinder?) {
+            val binder = serviceBind as TestService.TestBinder
+            service = binder.getService()
+            Log.d("TEST_FRAGMENT", "onServiceConnected")
+            isBind = true
+        }
+
+    }
     private val navController: NavController?
         get() = activity?.let { Navigation.findNavController(it, R.id.nav_host_fragment) }
+
+    private var isBind = false
+
+    private lateinit var service: TestService
 
 
     override fun onCreateView(
@@ -66,7 +88,18 @@ class TestGroundFragment : Fragment() {
                 hideProgressBar()
             else
                 showProgressBar()
-
+            if (this::service.isInitialized) textView.text = service.getText() else "service not bind"
+        }
+        button_4.setOnClickListener {
+            val intent = Intent(activity, TestService::class.java)
+            activity!!.bindService(intent, sc, BIND_AUTO_CREATE)
+        }
+        button_5.setOnClickListener {
+           if (isBind) {
+               activity!!.unbindService(sc)
+               isBind = false
+               Log.d("TEST_FRAGMENT", "onClick unbind")
+           }
         }
     }
 
